@@ -1,0 +1,96 @@
+.button{
+    -fx-background-color: #253256;
+}
+
+.button:hover{
+    -fx-background-color: #5299D3;
+}
+
+.button:pressed{
+    -fx-background-color: #314272;
+}
+
+#topRightMenu .button{
+    -fx-background-color: #253256;
+    -fx-background-radius: 0;
+}
+
+#topRightMenu .button:hover{
+    -fx-background-color: #5299D3;
+
+}
+
+#topRightMenu #exitButton:hover{
+    -fx-background-color: #CF5C36;
+}
+
+#navigationMenu .button{
+    -fx-background-color: #253256;
+    -fx-background-radius :  30 0 0 30;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+#navigationMenu .button:hover{
+    -fx-background-color: #5299D3;
+}
+
+#navigationMenu .button:pressed{
+    -fx-background-color: #314272;
+}
+
+#titleLabelToDoList{
+    -fx-background-color: #ADF1D2;
+    -fx-font-size: 18;
+    -fx-background-radius :  30 0 0 30;
+    /*-fx-background-radius :  15 15 15 15;*/
+    -fx-label-padding: 10;
+    /*-fx-alignment: center;*/
+    -fx-font-weight: bold;
+}
+
+#goToTaskButton{
+    -fx-background-radius :  30 30 30 30;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-min-width: 100;
+}
+
+/*Formatting for inventory list*/
+#titleLabelInventoryList{
+    -fx-background-color: #ADF1D2;
+    -fx-font-size: 18;
+    -fx-background-radius :  30 0 0 30;
+    -fx-label-padding: 10;
+    -fx-font-weight: bold;
+}
+
+
+/*Formatting for employee list*/
+#titleLabelEmployeeList{
+    -fx-background-color: #ADF1D2;
+    -fx-font-size: 18;
+    -fx-background-radius :  30 0 0 30;
+    -fx-label-padding: 10;
+    -fx-font-weight: bold;
+}
+
+/*Formatting for location list*/
+#titleLabelLocationList{
+    -fx-background-color: #ADF1D2;
+    -fx-font-size: 18;
+    -fx-background-radius :  30 0 0 30;
+    -fx-label-padding: 10;
+    -fx-font-weight: bold;
+}
+
+/*Formatting for loadout editor*/
+#titleLabelLoadoutEditor{
+    -fx-background-color: #ADF1D2;
+    -fx-font-size: 18;
+    -fx-background-radius :  30 0 0 30;
+    -fx-label-padding: 10;
+    -fx-font-weight: bold;
+}
