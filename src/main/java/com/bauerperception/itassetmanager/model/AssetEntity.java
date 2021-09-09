@@ -1,5 +1,7 @@
 package com.bauerperception.itassetmanager.model;
 
+import java.util.Calendar;
+
 public class AssetEntity {
     private int assetID;
     private String assetName;
@@ -8,9 +10,103 @@ public class AssetEntity {
     private String assetModel;
     
     private String assetDescription;
-    private int assignedTo;
-    //private String accessories;
+    private int assignedToID;
+    private String assignedToName;
+
     private String location;
-    private String purchasedDate;
+    private Calendar purchasedDate;
     private float purchasedPrice;
+
+    public AssetEntity(int assetID, String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, String assignedToName, String location, Calendar purchasedDate, float purchasedPrice) {
+        this.assetID = assetID;
+        this.assetName = assetName;
+        this.assetType = assetType;
+        this.assetModel = assetModel;
+        this.assetDescription = assetDescription;
+        this.assignedToID = assignedToID;
+        this.assignedToName = assignedToName;
+        this.location = location;
+        this.purchasedDate = purchasedDate;
+        this.purchasedPrice = purchasedPrice;
+    }
+
+    public int getAssetID() {
+        return assetID;
+    }
+
+    public void setAssetID(int assetID) {
+        this.assetID = assetID;
+    }
+
+    public String getAssetName() {
+        return assetName;
+    }
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
+    }
+
+    public String getAssetType() {
+        return assetType;
+    }
+
+    public void setAssetType(String assetType) {
+        this.assetType = assetType;
+    }
+
+    public String getAssetModel() {
+        return assetModel;
+    }
+
+    public void setAssetModel(String assetModel) {
+        this.assetModel = assetModel;
+    }
+
+    public String getAssetDescription() {
+        return assetDescription;
+    }
+
+    public void setAssetDescription(String assetDescription) {
+        this.assetDescription = assetDescription;
+    }
+
+    public int getAssignedToID() {
+        return assignedToID;
+    }
+
+    public void setAssignedToID(int assignedToID) {
+        this.assignedToID = assignedToID;
+    }
+
+    public String getAssignedToName() {
+        return assignedToName;
+    }
+
+    public void setAssignedToName(String assignedToName) {
+        this.assignedToName = assignedToName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Calendar getPurchasedDate() {
+        return purchasedDate;
+    }
+
+    public void setPurchasedDate(Calendar purchasedDate) {
+        this.purchasedDate = purchasedDate;
+    }
+
+    public float getPurchasedPrice() {
+        return purchasedPrice;
+    }
+
+    public void setPurchasedPrice(float purchasedPrice) {
+        this.purchasedPrice = purchasedPrice;
+    }
 }
