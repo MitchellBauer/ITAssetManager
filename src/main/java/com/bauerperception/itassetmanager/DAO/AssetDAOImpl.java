@@ -5,9 +5,8 @@ import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -28,14 +27,13 @@ public class AssetDAOImpl {
             String assetModel = result.getString("model_num");
             String assetDescription = result.getString("description");
             int assignedToID = result.getInt("assigned_to");
-            String assignedToName = result.getString("assigned_name");
-            String location = result.getString("location");
+            int location = result.getInt("location");
             String purchasedDateString = result.getString("purchased_date");
             float purchasedPrice = result.getFloat("purchased_price");
 
-            Calendar purchasedDate = TimeUtil.importUTCMySQLToCal(purchasedDateString);
+            LocalDate purchasedDate = TimeUtil.importMySQLToLocalDate(purchasedDateString);
 
-            AssetEntity assetResult = new AssetEntity(assetID, assetName, assetType, assetModel, assetDescription, assignedToID, assignedToName, location, purchasedDate, purchasedPrice);
+            AssetEntity assetResult = new AssetEntity(assetID, assetName, assetType, assetModel, assetDescription, assignedToID, location, purchasedDate, purchasedPrice);
             allAssets.add(assetResult);
         }
         DBConn.closeConn();
@@ -58,5 +56,50 @@ public class AssetDAOImpl {
         }
         DBConn.closeConn();
         return allAssetTypes;
+    }
+
+    public static void addAsset(AssetEntity assetEntity) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "INSERT INTO asset (name, type, model_num, description, assigned_to, location, purchased_date, purchased_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setString(1, assetEntity.getAssetName());
+        ps.setString(2, assetEntity.getAssetType());
+        ps.setString(3, assetEntity.getAssetModel());
+        ps.setString(4, assetEntity.getAssetDescription());
+        ps.setInt(5, assetEntity.getAssignedToID());
+        ps.setInt(6, assetEntity.getLocationID());
+        ps.setString(7, TimeUtil.exportLocalDateToMySQL(assetEntity.getPurchasedDate()));
+        ps.setFloat(8, assetEntity.getPurchasedPrice());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    public static void updateAsset(AssetEntity assetEntity) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "UPDATE asset SET name = ?, type = ?, model_num = ?, description = ?, assigned_to = ?, location = ?, purchased_date = ?, purchased_price = ? WHERE idasset = ?;";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setString(1, assetEntity.getAssetName());
+        ps.setString(2, assetEntity.getAssetType());
+        ps.setString(3, assetEntity.getAssetModel());
+        ps.setString(4, assetEntity.getAssetDescription());
+        ps.setInt(5, assetEntity.getAssignedToID());
+        ps.setInt(6, assetEntity.getLocationID());
+        ps.setString(7, TimeUtil.exportLocalDateToMySQL(assetEntity.getPurchasedDate()));
+        ps.setFloat(8, assetEntity.getPurchasedPrice());
+        ps.setInt(9, assetEntity.getAssetID());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    public static void deleteAsset(AssetEntity selectedAsset) throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "DELETE FROM asset WHERE idasset  = '" + selectedAsset.getAssetID() + "'";
+        stmt = DBConn.conn.createStatement();
+        stmt.executeUpdate(sqlStatement);
+        DBConn.closeConn();
     }
 }

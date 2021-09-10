@@ -1,8 +1,9 @@
 package com.bauerperception.itassetmanager.model;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
-public class AssetEntity {
+public class AssetEntity implements Entity{
     private int assetID;
     private String assetName;
 
@@ -11,21 +12,30 @@ public class AssetEntity {
     
     private String assetDescription;
     private int assignedToID;
-    private String assignedToName;
 
-    private String location;
-    private Calendar purchasedDate;
+    private int locationID;
+    private LocalDate purchasedDate;
     private float purchasedPrice;
 
-    public AssetEntity(int assetID, String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, String assignedToName, String location, Calendar purchasedDate, float purchasedPrice) {
+    public AssetEntity(int assetID, String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
         this.assetID = assetID;
         this.assetName = assetName;
         this.assetType = assetType;
         this.assetModel = assetModel;
         this.assetDescription = assetDescription;
         this.assignedToID = assignedToID;
-        this.assignedToName = assignedToName;
-        this.location = location;
+        this.locationID = locationID;
+        this.purchasedDate = purchasedDate;
+        this.purchasedPrice = purchasedPrice;
+    }
+
+    public AssetEntity(String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
+        this.assetName = assetName;
+        this.assetType = assetType;
+        this.assetModel = assetModel;
+        this.assetDescription = assetDescription;
+        this.assignedToID = assignedToID;
+        this.locationID = locationID;
         this.purchasedDate = purchasedDate;
         this.purchasedPrice = purchasedPrice;
     }
@@ -78,27 +88,19 @@ public class AssetEntity {
         this.assignedToID = assignedToID;
     }
 
-    public String getAssignedToName() {
-        return assignedToName;
+    public int getLocationID() {
+        return locationID;
     }
 
-    public void setAssignedToName(String assignedToName) {
-        this.assignedToName = assignedToName;
+    public void setLocationID(int locationID) {
+        this.locationID = locationID;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Calendar getPurchasedDate() {
+    public LocalDate getPurchasedDate() {
         return purchasedDate;
     }
 
-    public void setPurchasedDate(Calendar purchasedDate) {
+    public void setPurchasedDate(LocalDate purchasedDate) {
         this.purchasedDate = purchasedDate;
     }
 
@@ -108,5 +110,10 @@ public class AssetEntity {
 
     public void setPurchasedPrice(float purchasedPrice) {
         this.purchasedPrice = purchasedPrice;
+    }
+
+    @Override
+    public int getID() {
+        return assetID;
     }
 }

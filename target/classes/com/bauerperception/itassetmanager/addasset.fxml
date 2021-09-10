@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.AddAssetController">
+   <children>
+      <Label fx:id="wizardTitle" text="Add Asset" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </Label>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Name" textFill="WHITE" />
+                  <TextField fx:id="inventoryAssetNameTxtBox" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Type" textFill="WHITE" />
+                  <ChoiceBox fx:id="inventoryAssetType" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Model Num." textFill="WHITE" />
+                  <TextField fx:id="inventoryAssetModelNum" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Description" textFill="WHITE" />
+                  <TextField fx:id="inventoryAssetDesc" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Assigned To" textFill="WHITE" />
+                  <ChoiceBox fx:id="inventoryAssetAssignedTo" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Location" textFill="WHITE" />
+                  <ChoiceBox fx:id="inventoryAssetLocation" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Purchased Date" textFill="WHITE" />
+                  <DatePicker fx:id="inventoryAssetPurchasedDate" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </DatePicker>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Purchased Price" textFill="WHITE" />
+                  <TextField fx:id="inventoryAssetPurchasedPrice" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="25.0" top="25.0" />
+         </padding>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <children>
+            <Button fx:id="addAssetButton" mnemonicParsing="false" onAction="#saveAddAsset" text="Save" textFill="WHITE" />
+            <Button fx:id="cancelAddAssetButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -20,7 +20,7 @@ public class main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("main.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("mainstyles.css").toExternalForm());
 
         //TODO: https://stackoverflow.com/questions/13206193/how-to-make-an-undecorated-window-movable-draggable-in-javafx
         scene.setOnMousePressed(event -> {
@@ -32,7 +32,7 @@ public class main extends Application {
             stage.setY(event.getScreenY() - yOffset);
         });
 
-        stage.setTitle("Hello!");
+        stage.setTitle("IT Asset Manager");
         stage.setScene(scene);
         stage.show();
     }

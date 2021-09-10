@@ -1,6 +1,6 @@
 package com.bauerperception.itassetmanager.model;
 
-public class EmployeeEntity {
+public class EmployeeEntity implements Entity{
     private int employeeID;
     private String firstName;
     private String middleName;
@@ -63,5 +63,16 @@ public class EmployeeEntity {
 
     public void setAssignedWorkLocation(int assignedWorkLocation) {
         this.assignedWorkLocation = assignedWorkLocation;
+    }
+
+    @Override
+    public String toString() {
+        //TODO Reduce middle name if it exists to middle letter
+        return "ID: " + employeeID + ' ' + firstName + ' ' + middleName + ' ' + lastName;
+    }
+
+    @Override
+    public int getID() {
+        return employeeID;
     }
 }

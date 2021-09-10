@@ -1,6 +1,6 @@
 package com.bauerperception.itassetmanager.model;
 
-public class LocationEntity {
+public class LocationEntity implements Entity{
     private int locationID;
     private String locationName;
 
@@ -23,5 +23,15 @@ public class LocationEntity {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    @Override
+    public int getID() {
+        return locationID;
+    }
+
+    @Override
+    public String toString() {
+        return locationName;
     }
 }

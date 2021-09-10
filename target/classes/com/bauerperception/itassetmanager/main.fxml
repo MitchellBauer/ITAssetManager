@@ -16,9 +16,26 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.MainController">
    <children>
-      <StackPane layoutX="129.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="0.0" />
+      <StackPane fx:id="controlsPane" layoutX="129.0" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane fx:id="toDoControls" prefHeight="200.0" prefWidth="200.0" />
+            <HBox fx:id="inventoryControls" alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Button fx:id="inventoryAddButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#addAssetToInventory" text="Add" />
+                  <Button fx:id="inventorySaveButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#saveAssetChanges" text="Save" />
+                  <Button fx:id="inventoryEditButton" alignment="CENTER" layoutX="96.0" layoutY="22.0" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#editAsset" text="Edit" />
+                  <Button fx:id="inventoryDeleteButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#deleteAsset" text="Delete" />
+               </children>
+               <StackPane.margin>
+                  <Insets left="25.0" />
+               </StackPane.margin>
+            </HBox>
+            <BorderPane fx:id="employeeControls" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane fx:id="loadoutControls" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane fx:id="locationControls" prefHeight="200.0" prefWidth="200.0" />
+         </children></StackPane>
       <HBox fx:id="topRightMenu" alignment="CENTER_RIGHT" layoutX="792.0" maxHeight="35.0" maxWidth="140.0" minHeight="35.0" minWidth="140.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#goToSettings" HBox.hgrow="NEVER">
@@ -53,7 +70,7 @@
       </HBox>
       <AnchorPane fx:id="navigationMenu" layoutX="-2.0" layoutY="273.0" prefHeight="600.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
                <children>
                   <Button maxWidth="90000.0" mnemonicParsing="false" onAction="#openToDo" text="ToDo">
                      <VBox.margin>
@@ -70,7 +87,7 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button maxWidth="90000.0" mnemonicParsing="false" onAction="#openLoadouts" text="Loadouts">
+                  <Button maxWidth="90000.0" mnemonicParsing="false" onAction="#openLoadOuts" text="Loadouts">
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>
@@ -127,23 +144,42 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="ID" textFill="WHITE" />
+                                    <Label fx:id="inventoryLblIDTitle" text="ID:" textFill="WHITE" />
                                     <Label fx:id="inventoryIDLbl" text="Label" textFill="WHITE" />
-                                    <Label text="Name" textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetNameTxtBox" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Type" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetType" prefWidth="150.0" />
-                                    <Label text="Model Num." textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetModelNum" />
+                                    <Label fx:id="inventoryLblName" text="Name" textFill="WHITE" />
+                                    <TextField fx:id="inventoryAssetNameTxtBox" HBox.hgrow="SOMETIMES">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin>
+                                    </TextField>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Description" textFill="WHITE" />
+                                    <Label fx:id="inventoryLblType" text="Type" textFill="WHITE" />
+                                    <ChoiceBox fx:id="inventoryAssetType" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></ChoiceBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="inventoryLblModelNum" text="Model Num." textFill="WHITE" />
+                                    <TextField fx:id="inventoryAssetModelNum" HBox.hgrow="SOMETIMES">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="inventoryLblDesc" text="Description" textFill="WHITE" />
                                     <TextField fx:id="inventoryAssetDesc" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets right="25.0" />
@@ -153,24 +189,38 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Assigned To" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetAssignedTo" prefWidth="150.0" />
-                                    <Label text="Location" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetLocation" prefWidth="150.0" />
+                                    <Label fx:id="inventoryLblAssignedTo" text="Assigned To" textFill="WHITE" />
+                                    <ChoiceBox fx:id="inventoryAssetAssignedTo" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></ChoiceBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Purchased Date" textFill="WHITE" />
-                                    <DatePicker fx:id="inventoryAssetPurchasedDate" />
-                                    <Label text="Purchased Price" textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetPurchasedPrice" />
+                                    <Label fx:id="inventoryLblLocation" text="Location" textFill="WHITE" />
+                                    <ChoiceBox fx:id="inventoryAssetLocation" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></ChoiceBox>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Button fx:id="inventoryAddButton" mnemonicParsing="false" onAction="#addAssetToInventory" text="Button" />
-                                    <Button fx:id="inventorySaveButton" mnemonicParsing="false" onAction="#saveAssetChanges" text="Button" />
+                                    <Label fx:id="inventoryLblPurchasedDate" text="Purchased Date" textFill="WHITE" />
+                                    <DatePicker fx:id="inventoryAssetPurchasedDate" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></DatePicker>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="inventoryLblPurchasedPrice" text="Purchased Price" textFill="WHITE" />
+                                    <TextField fx:id="inventoryAssetPurchasedPrice" HBox.hgrow="SOMETIMES">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></TextField>
                                  </children>
                               </HBox>
                            </children>

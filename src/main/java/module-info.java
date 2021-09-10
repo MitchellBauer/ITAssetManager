@@ -10,6 +10,8 @@ module com.bauerperception.itassetmanager {
     exports com.bauerperception.itassetmanager;
     exports com.bauerperception.itassetmanager.DAO;
     exports com.bauerperception.itassetmanager.model;
+    exports com.bauerperception.itassetmanager.controller;
+    opens com.bauerperception.itassetmanager.controller to javafx.fxml;
 
     //TODO: Add if necessary
     //exports com.bauerperception.itassetmanager.util;
