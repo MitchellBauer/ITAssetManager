@@ -21,19 +21,16 @@
       <StackPane fx:id="controlsPane" layoutX="129.0" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane fx:id="toDoControls" prefHeight="200.0" prefWidth="200.0" />
-            <HBox fx:id="inventoryControls" alignment="CENTER_LEFT" spacing="10.0">
+            <HBox fx:id="generalControls" alignment="CENTER_LEFT" spacing="10.0" visible="false">
                <children>
-                  <Button fx:id="inventoryAddButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#addAssetToInventory" text="Add" />
-                  <Button fx:id="inventorySaveButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#saveAssetChanges" text="Save" />
-                  <Button fx:id="inventoryDeleteButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#deleteAsset" text="Delete" />
+                  <Button fx:id="addEntityButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#addEntity" text="Add" />
+                  <Button fx:id="saveEntityButton" alignment="CENTER" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#saveEntity" text="Save" />
+                  <Button fx:id="deleteEntityButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" minHeight="75.0" minWidth="75.0" mnemonicParsing="false" onAction="#deleteEntity" text="Delete" />
                </children>
                <StackPane.margin>
                   <Insets left="25.0" />
                </StackPane.margin>
             </HBox>
-            <BorderPane fx:id="employeeControls" prefHeight="200.0" prefWidth="200.0" />
-            <BorderPane fx:id="loadoutControls" prefHeight="200.0" prefWidth="200.0" />
-            <BorderPane fx:id="locationControls" prefHeight="200.0" prefWidth="200.0" />
          </children></StackPane>
       <HBox fx:id="topRightMenu" alignment="CENTER_RIGHT" layoutX="792.0" maxHeight="35.0" maxWidth="140.0" minHeight="35.0" minWidth="140.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -135,7 +132,7 @@
                   </Button>
                </bottom>
             </BorderPane>
-            <BorderPane fx:id="inventoryPane" prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="inventoryPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -251,7 +248,7 @@
                      </columnResizePolicy>
                   </TableView>
                </left></BorderPane>
-            <BorderPane fx:id="employeePane" layoutX="10.0" layoutY="10.0" visible="false">
+            <BorderPane fx:id="employeePane" layoutX="10.0" layoutY="10.0">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -259,22 +256,23 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="ID" textFill="WHITE" />
-                                    <Label text="Label" textFill="WHITE" />
+                                    <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" />
+                                    <Label fx:id="employeeIDLbl" text="Label" textFill="WHITE" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="First Name" textFill="WHITE" />
-                                    <TextField />
-                                    <Label text="Last Name" textFill="WHITE" />
-                                    <TextField />
+                                    <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" />
+                                    <TextField fx:id="employeeFirstNameTxt" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin></TextField>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Email Address" textFill="WHITE" />
-                                    <TextField HBox.hgrow="ALWAYS">
+                                    <Label fx:id="employeeMiddleNameLbl" text="Middle Name" textFill="WHITE" />
+                                    <TextField fx:id="employeeMiddleNameTxt" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets right="25.0" />
                                        </HBox.margin>
@@ -283,8 +281,28 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label text="Assigned Work Location" textFill="WHITE" />
-                                    <ChoiceBox prefWidth="150.0" />
+                                    <Label fx:id="employeeLastNameLbl" text="Last Name" textFill="WHITE" />
+                                    <TextField fx:id="employeeLastNameTxt" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="employeEmailLbl" text="Email Address" textFill="WHITE" />
+                                    <TextField fx:id="employeeEmailTxt" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets right="25.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" />
+                                    <ChoiceBox fx:id="employeeWorkLocTxt" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>
@@ -306,10 +324,10 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView minWidth="275.0" BorderPane.alignment="CENTER">
+                  <TableView fx:id="employeeTblView" minWidth="275.0" BorderPane.alignment="CENTER">
                      <columns>
-                        <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn prefWidth="75.0" text="Full Name" />
+                        <TableColumn fx:id="employeeIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                        <TableColumn fx:id="employeeNameCol" prefWidth="75.0" text="Full Name" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

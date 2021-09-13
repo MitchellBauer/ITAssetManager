@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import javax.xml.stream.Location;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -62,15 +63,25 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane navigationMenu;
 
+
+    @FXML
+    private HBox generalControls;
+
+    @FXML
+    private Button addEntityButton;
+
+    @FXML
+    private Button saveEntityButton;
+
+    @FXML
+    private Button deleteEntityButton;
+
     /*
     Task/Todoo Pane
      */
 
     @FXML
     private BorderPane toDoPane;
-
-    @FXML
-    private BorderPane toDoControls;
 
     @FXML
     private Label titleLabelToDoList;
@@ -86,15 +97,54 @@ public class MainController implements Initializable {
     private BorderPane employeePane;
 
     @FXML
-    private BorderPane employeeControls;
+    private Label employeeIDTitleLbl;
+
+    @FXML
+    private Label employeeIDLbl;
+
+    @FXML
+    private Label employeeFirstNameLbl;
+
+    @FXML
+    private TextField employeeFirstNameTxt;
+
+    @FXML
+    private Label employeeMiddleNameLbl;
+
+    @FXML
+    private TextField employeeMiddleNameTxt;
+
+    @FXML
+    private Label employeeLastNameLbl;
+
+    @FXML
+    private TextField employeeLastNameTxt;
+
+    @FXML
+    private Label employeeEmailLbl;
+
+    @FXML
+    private TextField employeeEmailTxt;
+
+    @FXML
+    private Label employeeWorkLocLbl;
+
+    @FXML
+    private ChoiceBox<LocationEntity> employeeWorkLocTxt;
+
+    @FXML
+    private TableView<EmployeeEntity> employeeTblView;
+
+    @FXML
+    private TableColumn<EmployeeEntity, Integer> employeeIDCol;
+
+    @FXML
+    private TableColumn<EmployeeEntity, String> employeeNameCol;
 
 
     /*
     LoadOut Pane
      */
-
-    @FXML
-    private BorderPane loadoutControls;
 
     @FXML
     private BorderPane loadoutPane;
@@ -106,15 +156,9 @@ public class MainController implements Initializable {
     @FXML
     private BorderPane locationsPane;
 
-    @FXML
-    private BorderPane locationControls;
-
     /*
      Inventory Pane
      */
-
-    @FXML
-    private HBox inventoryControls;
 
     @FXML
     private BorderPane inventoryPane;
@@ -145,18 +189,6 @@ public class MainController implements Initializable {
 
     @FXML
     private Label inventoryLblPurchasedPrice;
-
-    @FXML
-    private Button inventoryAddButton;
-
-    @FXML
-    private Button inventorySaveButton;
-
-    @FXML
-    private Button inventoryEditButton;
-
-    @FXML
-    private Button inventoryDeleteButton;
 
     @FXML
     private Label inventoryIDLbl;
@@ -209,6 +241,12 @@ public class MainController implements Initializable {
             }
         });
 
+        employeeTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+            if (newSelection != null){
+                loadEmployeeData();
+            }
+        });
+
         /*
         Load defaults
          */
@@ -241,11 +279,8 @@ public class MainController implements Initializable {
         toDoPane.setVisible(true);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(false);
-        loadoutControls.setVisible(false);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(false);
+        //TODO Todo controls
+        //toDoControls.setVisible(true);
     }
 
     @FXML
@@ -293,11 +328,30 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(false);
-        loadoutPane.setVisible(false);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(true);
+        generalControls.setVisible(true);
+
+        //Disable delete button so no one accidentally clicks
+        deleteEntityButton.setDisable(true);
+        saveEntityButton.setDisable(true);
+
+        //Hide editable
+        //setVisibilityEmployeeEditable(false);
+
+        //Populate Inventory Table View
+        try{
+            employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
+            employeeList = EmployeeDAOImpl.getAllEmployees();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //employeeIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
+        //employeeNameCol.setCellValueFactory(cellData -> cellData.getValue().toString());
+        //TODO Not using Assigned To lol
+    }
+
+    private void loadEmployeeData(){
+
     }
 
     @FXML
@@ -310,17 +364,11 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(false);
-        loadoutControls.setVisible(false);
-        inventoryControls.setVisible(true);
-        employeeControls.setVisible(false);
+        generalControls.setVisible(true);
 
-        //TODO possible enable edit button
-        inventoryEditButton.setDisable(true);
         //Disable delete button so no one accidentally clicks
-        inventoryDeleteButton.setDisable(true);
-        inventorySaveButton.setDisable(true);
+        deleteEntityButton.setDisable(true);
+        saveEntityButton.setDisable(true);
 
         //Hide editable
         setVisibilityInventoryEditable(false);
@@ -366,8 +414,8 @@ public class MainController implements Initializable {
             setVisibilityInventoryEditable(true);
 
             //Re-enable delete and save button
-            inventoryDeleteButton.setDisable(false);
-            inventorySaveButton.setDisable(false);
+            deleteEntityButton.setDisable(false);
+            saveEntityButton.setDisable(false);
 
             inventoryIDLbl.setText(Integer.toString(selectedAsset.getID()));
             inventoryAssetNameTxtBox.setText(selectedAsset.getAssetName());
@@ -412,11 +460,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(false);
-        loadoutControls.setVisible(true);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(false);
+        generalControls.setVisible(true);
     }
 
     @FXML
@@ -429,11 +473,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(true);
-        loadoutControls.setVisible(false);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(false);
+        generalControls.setVisible(true);
     }
 
     @FXML
@@ -447,11 +487,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        toDoControls.setVisible(false);
-        locationControls.setVisible(false);
-        loadoutControls.setVisible(false);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(false);
+        generalControls.setVisible(true);
     }
 
     @FXML
@@ -464,11 +500,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(true);
 
         //Show Specific Controls
-        toDoControls.setVisible(true);
-        locationControls.setVisible(false);
-        loadoutControls.setVisible(false);
-        inventoryControls.setVisible(false);
-        employeeControls.setVisible(false);
+        generalControls.setVisible(true);
     }
 
     private void throwAlert(String header, String contents) {
@@ -479,45 +511,51 @@ public class MainController implements Initializable {
         Optional<ButtonType> confirmationResult = cancelConfirmation.showAndWait();
     }
 
-    public void addAssetToInventory(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addasset.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
+    public void addEntity(ActionEvent actionEvent) throws IOException {
+        if (inventoryPane.isVisible()){
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addasset.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
-    public void saveAssetChanges(ActionEvent actionEvent) throws Exception {
-        int assetID = Integer.parseInt(inventoryIDLbl.getText());
-        String assetName = inventoryAssetNameTxtBox.getText();
-        String assetModelNum = inventoryAssetModelNum.getText();
-        String assetDescription = inventoryAssetDesc.getText();
-        //TODO Need to add validation
-        Float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
-        String assetType = inventoryAssetType.getValue();
-        int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
-        int locationID = inventoryAssetLocation.getValue().getLocationID();
-        LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
-        AssetDAOImpl.updateAsset(new AssetEntity(assetID,assetName, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
-        inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+    public void saveEntity(ActionEvent actionEvent) throws Exception {
+        if (inventoryPane.isVisible()) {
+            int assetID = Integer.parseInt(inventoryIDLbl.getText());
+            String assetName = inventoryAssetNameTxtBox.getText();
+            String assetModelNum = inventoryAssetModelNum.getText();
+            String assetDescription = inventoryAssetDesc.getText();
+            //TODO Need to add validation
+            Float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
+            String assetType = inventoryAssetType.getValue();
+            int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
+            int locationID = inventoryAssetLocation.getValue().getLocationID();
+            LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
+            AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetName, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
+            inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+        }
     }
 
-    public void deleteAsset(ActionEvent actionEvent) throws Exception {
-        //TODO Convert actual deletion to "inactive" for accounting like deletion
-        AssetEntity selectedAsset = inventoryTblView.getSelectionModel().getSelectedItem();
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+    public void deleteEntity(ActionEvent actionEvent) throws Exception {
+        if (inventoryPane.isVisible()){
+            //TODO Convert actual deletion to "inactive" for accounting like deletion
+            AssetEntity selectedAsset = inventoryTblView.getSelectionModel().getSelectedItem();
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
 
-        if (selectedAsset != null) {
-            Alert deleteConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            deleteConfirmation.setTitle("");
-            deleteConfirmation.setHeaderText("Delete Confirmation");
-            deleteConfirmation.setContentText("Do you really want to delete this asset?");
-            Optional<ButtonType> confirmationResult = deleteConfirmation.showAndWait();
+            if (selectedAsset != null) {
+                Alert deleteConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                deleteConfirmation.setTitle("");
+                deleteConfirmation.setHeaderText("Delete Confirmation");
+                deleteConfirmation.setContentText("Do you really want to delete this asset?");
+                Optional<ButtonType> confirmationResult = deleteConfirmation.showAndWait();
 
-            if (confirmationResult.get() == ButtonType.OK) {
-                AssetDAOImpl.deleteAsset(selectedAsset);
-                inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+                if (confirmationResult.get() == ButtonType.OK) {
+                    AssetDAOImpl.deleteAsset(selectedAsset);
+                    inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+                }
             }
         }
     }
