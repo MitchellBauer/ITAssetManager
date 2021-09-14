@@ -63,6 +63,13 @@ public class AssetDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "INSERT INTO asset (name, type, model_num, description, assigned_to, location, purchased_date, purchased_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        ps = getPreparedAssetStatement(assetEntity, conn, sqlStatement);
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    private static PreparedStatement getPreparedAssetStatement(AssetEntity assetEntity, Connection conn, String sqlStatement) throws SQLException {
+        PreparedStatement ps;
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, assetEntity.getAssetName());
         ps.setString(2, assetEntity.getAssetType());
@@ -72,8 +79,7 @@ public class AssetDAOImpl {
         ps.setInt(6, assetEntity.getLocationID());
         ps.setString(7, TimeUtil.exportLocalDateToMySQL(assetEntity.getPurchasedDate()));
         ps.setFloat(8, assetEntity.getPurchasedPrice());
-        ps.executeUpdate();
-        DBConn.closeConn();
+        return ps;
     }
 
     public static void updateAsset(AssetEntity assetEntity) throws Exception {
@@ -81,15 +87,7 @@ public class AssetDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "UPDATE asset SET name = ?, type = ?, model_num = ?, description = ?, assigned_to = ?, location = ?, purchased_date = ?, purchased_price = ? WHERE idasset = ?;";
-        ps = conn.prepareStatement(sqlStatement);
-        ps.setString(1, assetEntity.getAssetName());
-        ps.setString(2, assetEntity.getAssetType());
-        ps.setString(3, assetEntity.getAssetModel());
-        ps.setString(4, assetEntity.getAssetDescription());
-        ps.setInt(5, assetEntity.getAssignedToID());
-        ps.setInt(6, assetEntity.getLocationID());
-        ps.setString(7, TimeUtil.exportLocalDateToMySQL(assetEntity.getPurchasedDate()));
-        ps.setFloat(8, assetEntity.getPurchasedPrice());
+        ps = getPreparedAssetStatement(assetEntity, conn, sqlStatement);
         ps.setInt(9, assetEntity.getAssetID());
         ps.executeUpdate();
         DBConn.closeConn();

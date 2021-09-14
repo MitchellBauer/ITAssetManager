@@ -291,7 +291,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Label fx:id="employeEmailLbl" text="Email Address" textFill="WHITE" />
+                                    <Label fx:id="employeeEmailLbl" text="Email Address" textFill="WHITE" />
                                     <TextField fx:id="employeeEmailTxt" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets right="25.0" />

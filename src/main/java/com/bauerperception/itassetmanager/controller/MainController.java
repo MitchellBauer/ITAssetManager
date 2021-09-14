@@ -7,6 +7,8 @@ import com.bauerperception.itassetmanager.model.Entity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
 import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import javax.xml.stream.Location;
 import java.io.IOException;
@@ -156,6 +159,30 @@ public class MainController implements Initializable {
     @FXML
     private BorderPane locationsPane;
 
+    @FXML
+    private Label locationIDTitle;
+
+    @FXML
+    private Label locationIDLbl;
+
+    @FXML
+    private Label locationNameLbl;
+
+    @FXML
+    private TextField locationNameTxt;
+
+    @FXML
+    private Label titleLabelLocationList;
+
+    @FXML
+    private TableView<LocationEntity> locationTblView;
+
+    @FXML
+    private TableColumn<LocationEntity, Integer> locationIDCol;
+
+    @FXML
+    private TableColumn<LocationEntity, String> locationNameCol;
+
     /*
      Inventory Pane
      */
@@ -218,9 +245,6 @@ public class MainController implements Initializable {
     private TextField inventoryAssetPurchasedPrice;
 
     @FXML
-    private Label titleLabelLocationList;
-
-    @FXML
     private TableView<AssetEntity> inventoryTblView;
 
     @FXML
@@ -244,6 +268,12 @@ public class MainController implements Initializable {
         employeeTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
             if (newSelection != null){
                 loadEmployeeData();
+            }
+        });
+
+        locationTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+            if (newSelection != null){
+                loadLocationData();
             }
         });
 
@@ -335,7 +365,7 @@ public class MainController implements Initializable {
         saveEntityButton.setDisable(true);
 
         //Hide editable
-        //setVisibilityEmployeeEditable(false);
+        setVisibilityEmployeeEditable(false);
 
         //Populate Inventory Table View
         try{
@@ -345,13 +375,51 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
-        //employeeIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
-        //employeeNameCol.setCellValueFactory(cellData -> cellData.getValue().toString());
-        //TODO Not using Assigned To lol
+        //TODO https://stackoverflow.com/questions/19209155/populating-a-javafx-tableview-when-not-all-the-properties-are-in-the-same-class
+        employeeIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
+        employeeNameCol.setCellValueFactory(employee -> {
+            if(employee.getValue().getMiddleName().isEmpty()) {
+                return new SimpleStringProperty(employee.getValue().getFirstName() + " " + employee.getValue().getLastName());
+            } else {
+                String shortenedMiddleName = employee.getValue().getMiddleName().charAt(0) + ".";
+                return new SimpleStringProperty(employee.getValue().getFirstName() + " " + shortenedMiddleName + " " + employee.getValue().getLastName());
+            }
+        });
+    }
+
+    void setVisibilityEmployeeEditable(boolean b) {
+        employeeIDLbl.setVisible(b);
+        employeeIDTitleLbl.setVisible(b);
+        employeeFirstNameLbl.setVisible(b);
+        employeeFirstNameTxt.setVisible(b);
+        employeeMiddleNameLbl.setVisible(b);
+        employeeMiddleNameTxt.setVisible(b);
+        employeeLastNameLbl.setVisible(b);
+        employeeLastNameTxt.setVisible(b);
+        employeeEmailLbl.setVisible(b);
+        employeeEmailTxt.setVisible(b);
+        employeeWorkLocLbl.setVisible(b);
+        employeeWorkLocTxt.setVisible(b);
     }
 
     private void loadEmployeeData(){
+        //TODO load selected employee into fields
+        EmployeeEntity selectedEmployee = employeeTblView.getSelectionModel().getSelectedItem();
+        if (selectedEmployee != null){
+            setVisibilityEmployeeEditable(true);
 
+            //Re-enable delete and save button
+            deleteEntityButton.setDisable(false);
+            saveEntityButton.setDisable(false);
+
+            //Assign selected data to fields
+            employeeIDLbl.setText(Integer.toString(selectedEmployee.getEmployeeID()));
+            employeeFirstNameTxt.setText(selectedEmployee.getFirstName());
+            employeeMiddleNameTxt.setText(selectedEmployee.getMiddleName());
+            employeeLastNameTxt.setText(selectedEmployee.getLastName());
+            employeeEmailTxt.setText(selectedEmployee.getEmailAddress());
+            employeeWorkLocTxt.setValue(getEntityByID(locationList, selectedEmployee.getAssignedWorkLocation()));
+        }
     }
 
     @FXML
@@ -386,7 +454,7 @@ public class MainController implements Initializable {
         //TODO Not using Assigned To lol
     }
 
-    private void setVisibilityInventoryEditable(boolean b) {
+    void setVisibilityInventoryEditable(boolean b) {
         inventoryIDLbl.setVisible(b);
         inventoryAssetNameTxtBox.setVisible(b);
         inventoryAssetModelNum.setVisible(b);
@@ -408,7 +476,7 @@ public class MainController implements Initializable {
         inventoryLblIDTitle.setVisible(b);
     }
 
-    private void loadAssetData() {
+    void loadAssetData() {
         AssetEntity selectedAsset = inventoryTblView.getSelectionModel().getSelectedItem();
         if (selectedAsset != null){
             setVisibilityInventoryEditable(true);
@@ -439,7 +507,7 @@ public class MainController implements Initializable {
     }
 
     //TODO Might make more sense to send this over to a Util module
-    private <T extends Entity> T getEntityByID(ObservableList<T> genericList, int entityID) {
+    <T extends Entity> T getEntityByID(ObservableList<T> genericList, int entityID) {
         for (T i : genericList) {
             if (i.getID() == entityID){
                 return i;
@@ -474,6 +542,35 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(true);
+
+        //Disable delete button so no one accidentally clicks
+        deleteEntityButton.setDisable(true);
+        saveEntityButton.setDisable(true);
+
+        //Hide editable
+        setVisibilityLocationEditable(false);
+
+        //Populate Inventory Table View
+        try{
+            locationTblView.setItems(LocationDAOImpl.getAllLocations());
+            locationList = LocationDAOImpl.getAllLocations();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        locationIDCol.setCellValueFactory(new PropertyValueFactory<>("locationID"));
+        locationNameCol.setCellValueFactory(new PropertyValueFactory<>("locationName"));
+    }
+
+    private void setVisibilityLocationEditable(boolean b) {
+        locationIDLbl.setVisible(b);
+        locationNameLbl.setVisible(b);
+        locationIDTitle.setVisible(b);
+        locationNameTxt.setVisible(b);
+    }
+
+    private void loadLocationData() {
+        //TODO load location data
     }
 
     @FXML
@@ -520,6 +617,33 @@ public class MainController implements Initializable {
             stage.setScene(scene);
             stage.show();
         }
+
+        if (employeePane.isVisible()){
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addemployee.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        }
+
+        if (loadoutPane.isVisible()){
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        }
+
+        if (locationsPane.isVisible()){
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addlocation.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void saveEntity(ActionEvent actionEvent) throws Exception {
@@ -536,6 +660,27 @@ public class MainController implements Initializable {
             LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
             AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetName, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
             inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+            assetList = AssetDAOImpl.getAllAssets();
+        }
+
+        if (employeePane.isVisible()){
+            int employeeID = Integer.parseInt(employeeIDLbl.getText());
+            String firstName = employeeFirstNameTxt.getText();
+            String middleName = employeeMiddleNameTxt.getText();
+            String lastName = employeeLastNameTxt.getText();
+            String emailAddress = employeeEmailTxt.getText();
+            int assignedWorkLocation = employeeWorkLocTxt.getValue().getLocationID();
+            EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation));
+            employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
+            employeeList = EmployeeDAOImpl.getAllEmployees();
+        }
+
+        if (locationsPane.isVisible()){
+            int locationID = Integer.parseInt(locationIDLbl.getText());
+            String locationName = locationNameTxt.getText();
+            LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName));
+            locationTblView.setItems(LocationDAOImpl.getAllLocations());
+            locationList = LocationDAOImpl.getAllLocations();
         }
     }
 
@@ -555,8 +700,11 @@ public class MainController implements Initializable {
                 if (confirmationResult.get() == ButtonType.OK) {
                     AssetDAOImpl.deleteAsset(selectedAsset);
                     inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+                    assetList = AssetDAOImpl.getAllAssets();
                 }
             }
         }
+
+        //TODO Delete employee
     }
 }

@@ -1,11 +1,11 @@
 package com.bauerperception.itassetmanager.DAO;
 
 import com.bauerperception.itassetmanager.model.EmployeeEntity;
+import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class EmployeeDAOImpl {
@@ -31,5 +31,47 @@ public class EmployeeDAOImpl {
         }
         DBConn.closeConn();
         return allEmployees;
+    }
+
+    public static void updateEmployee(EmployeeEntity employeeEntity) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "UPDATE employees SET first_name = ?, middle_name = ?, last_name = ?, " +
+                "email_address = ?, work_location = ? WHERE idasset = ?;";
+        ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
+        ps.setInt(6, employeeEntity.getEmployeeID());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    public static void addEmployee(EmployeeEntity employeeEntity) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "INSERT INTO employees (first_name, middle_name, last_name, email_address, work_location) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    private static PreparedStatement getPreparedEmployeeStatement(EmployeeEntity employeeEntity, Connection conn, String sqlStatement) throws SQLException {
+        PreparedStatement ps;
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setString(1, employeeEntity.getFirstName());
+        ps.setString(2, employeeEntity.getMiddleName());
+        ps.setString(3, employeeEntity.getLastName());
+        ps.setString(4, employeeEntity.getEmailAddress());
+        ps.setInt(5, employeeEntity.getAssignedWorkLocation());
+        return ps;
+    }
+
+    public static void deleteEmployee(EmployeeEntity employeeEntity) throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "DELETE FROM employees WHERE idemployees  = '" + employeeEntity.getEmployeeID() + "'";
+        stmt = DBConn.conn.createStatement();
+        stmt.executeUpdate(sqlStatement);
+        DBConn.closeConn();
     }
 }

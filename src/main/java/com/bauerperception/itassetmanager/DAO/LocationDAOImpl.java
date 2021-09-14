@@ -1,11 +1,12 @@
 package com.bauerperception.itassetmanager.DAO;
 
+import com.bauerperception.itassetmanager.model.AssetEntity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
+import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class LocationDAOImpl {
     private static Statement stmt;
@@ -26,5 +27,36 @@ public class LocationDAOImpl {
         }
         DBConn.closeConn();
         return allLocations;
+    }
+
+    public static void addLocation(LocationEntity newLocation) throws Exception{
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "INSERT INTO locations (name) VALUES (?)";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setString(1, newLocation.getLocationName());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    public static void deleteLocation(LocationEntity selectedLocation) throws Exception{
+        DBConn.makeConn();
+        String sqlStatement = "DELETE FROM locations WHERE idlocations  = '" + selectedLocation.getLocationID() + "'";
+        stmt = DBConn.conn.createStatement();
+        stmt.executeUpdate(sqlStatement);
+        DBConn.closeConn();
+    }
+
+    public static void updateLocation(LocationEntity selectedLocation) throws Exception{
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "UPDATE locations SET name = ? WHERE idlocations = ?;";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setString(1, selectedLocation.getLocationName());
+        ps.setInt(2, selectedLocation.getLocationID());
+        ps.executeUpdate();
+        DBConn.closeConn();
     }
 }

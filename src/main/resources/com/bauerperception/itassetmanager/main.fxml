@@ -12,7 +12,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -136,94 +139,47 @@
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblIDTitle" text="ID:" textFill="WHITE" />
-                                    <Label fx:id="inventoryIDLbl" text="Label" textFill="WHITE" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblName" text="Name" textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetNameTxtBox" HBox.hgrow="SOMETIMES">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblType" text="Type" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetType" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></ChoiceBox>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblModelNum" text="Model Num." textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetModelNum" HBox.hgrow="SOMETIMES">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblDesc" text="Description" textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetDesc" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblAssignedTo" text="Assigned To" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetAssignedTo" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></ChoiceBox>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblLocation" text="Location" textFill="WHITE" />
-                                    <ChoiceBox fx:id="inventoryAssetLocation" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></ChoiceBox>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblPurchasedDate" text="Purchased Date" textFill="WHITE" />
-                                    <DatePicker fx:id="inventoryAssetPurchasedDate" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></DatePicker>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="inventoryLblPurchasedPrice" text="Purchased Price" textFill="WHITE" />
-                                    <TextField fx:id="inventoryAssetPurchasedPrice" HBox.hgrow="SOMETIMES">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></TextField>
-                                 </children>
-                              </HBox>
+                              <Label fx:id="inventoryLblDesc" text="Description" textFill="WHITE" GridPane.rowIndex="4" />
+                              <TextField fx:id="inventoryAssetDesc" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="inventoryLblAssignedTo" text="Assigned To" textFill="WHITE" GridPane.rowIndex="5" />
+                              <ChoiceBox fx:id="inventoryAssetAssignedTo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label fx:id="inventoryLblLocation" text="Location" textFill="WHITE" GridPane.rowIndex="6" />
+                              <ChoiceBox fx:id="inventoryAssetLocation" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label fx:id="inventoryLblPurchasedDate" text="Purchased Date" textFill="WHITE" GridPane.rowIndex="7" />
+                              <DatePicker fx:id="inventoryAssetPurchasedDate" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label fx:id="inventoryLblPurchasedPrice" text="Purchased Price" textFill="WHITE" GridPane.rowIndex="8">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <TextField fx:id="inventoryAssetPurchasedPrice" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="inventoryLblIDTitle" text="ID:" textFill="WHITE" />
+                              <Label fx:id="inventoryIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label fx:id="inventoryLblName" text="Name" textFill="WHITE" GridPane.rowIndex="1" />
+                              <TextField fx:id="inventoryAssetNameTxtBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="inventoryLblType" text="Type" textFill="WHITE" GridPane.rowIndex="3" />
+                              <ChoiceBox fx:id="inventoryAssetType" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="inventoryLblModelNum" text="Model Num." textFill="WHITE" GridPane.rowIndex="2" />
+                              <TextField fx:id="inventoryAssetModelNum" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
-                           <padding>
-                              <Insets left="25.0" top="25.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                      </children></AnchorPane>
                </right>
                <top>
@@ -248,68 +204,42 @@
                      </columnResizePolicy>
                   </TableView>
                </left></BorderPane>
-            <BorderPane fx:id="employeePane" layoutX="10.0" layoutY="10.0">
+            <BorderPane fx:id="employeePane" layoutX="10.0" layoutY="10.0" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" />
-                                    <Label fx:id="employeeIDLbl" text="Label" textFill="WHITE" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" />
-                                    <TextField fx:id="employeeFirstNameTxt" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin></TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeeMiddleNameLbl" text="Middle Name" textFill="WHITE" />
-                                    <TextField fx:id="employeeMiddleNameTxt" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeeLastNameLbl" text="Last Name" textFill="WHITE" />
-                                    <TextField fx:id="employeeLastNameTxt" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeEmailLbl" text="Email Address" textFill="WHITE" />
-                                    <TextField fx:id="employeeEmailTxt" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets right="25.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" />
-                                    <ChoiceBox fx:id="employeeWorkLocTxt" prefWidth="150.0" HBox.hgrow="ALWAYS" />
-                                 </children>
-                              </HBox>
+                              <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" GridPane.rowIndex="1" />
+                              <TextField fx:id="employeeFirstNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="employeeMiddleNameLbl" text="Middle Name" textFill="WHITE" GridPane.rowIndex="2" />
+                              <TextField fx:id="employeeMiddleNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="employeeLastNameLbl" text="Last Name" textFill="WHITE" GridPane.rowIndex="3" />
+                              <TextField fx:id="employeeLastNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="employeeEmailLbl" text="Email Address" textFill="WHITE" GridPane.rowIndex="4" />
+                              <TextField fx:id="employeeEmailTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" GridPane.rowIndex="5">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ChoiceBox fx:id="employeeWorkLocTxt" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" />
+                              <Label fx:id="employeeIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
                            </children>
-                           <padding>
-                              <Insets left="25.0" top="25.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                      </children>
                   </AnchorPane>
                </right>
@@ -417,25 +347,26 @@
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label text="ID" textFill="WHITE" />
-                                    <Label text="Label" textFill="WHITE" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Label text="Location Name" textFill="WHITE" />
-                                    <TextField />
-                                 </children>
-                              </HBox>
+                              <Label fx:id="locationIDTitle" text="ID" textFill="WHITE" />
+                              <Label fx:id="locationIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label fx:id="locationNameLbl" text="Location Name" textFill="WHITE" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <TextField fx:id="locationNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
-                           <padding>
-                              <Insets left="25.0" top="25.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                      </children>
                   </AnchorPane>
                </right>
@@ -450,10 +381,10 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView minWidth="275.0" BorderPane.alignment="CENTER">
+                  <TableView fx:id="locationTblView" minWidth="275.0" BorderPane.alignment="CENTER">
                      <columns>
-                        <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn prefWidth="75.0" text="Location Name" />
+                        <TableColumn fx:id="locationIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                        <TableColumn fx:id="locationNameCol" prefWidth="75.0" text="Location Name" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
