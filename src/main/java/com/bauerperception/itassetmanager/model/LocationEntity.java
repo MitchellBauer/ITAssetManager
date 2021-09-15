@@ -9,6 +9,10 @@ public class LocationEntity implements Entity{
         this.locationName = locationName;
     }
 
+    public LocationEntity(String workLocationName) {
+        this.locationName = workLocationName;
+    }
+
     public int getLocationID() {
         return locationID;
     }

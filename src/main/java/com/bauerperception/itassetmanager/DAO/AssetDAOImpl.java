@@ -7,8 +7,6 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AssetDAOImpl {
     private static Statement stmt;

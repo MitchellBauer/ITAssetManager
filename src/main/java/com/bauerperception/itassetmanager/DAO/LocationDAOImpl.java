@@ -19,8 +19,8 @@ public class LocationDAOImpl {
         ResultSet result = stmt.executeQuery(sqlStatement);
 
         while(result.next()){
-            int locationID = result.getInt("idlocations");
-            String locationName = result.getString("location_name");
+            int locationID = result.getInt("id");
+            String locationName = result.getString("name");
 
             LocationEntity LocationResult = new LocationEntity(locationID, locationName);
             allLocations.add(LocationResult);
@@ -42,7 +42,7 @@ public class LocationDAOImpl {
 
     public static void deleteLocation(LocationEntity selectedLocation) throws Exception{
         DBConn.makeConn();
-        String sqlStatement = "DELETE FROM locations WHERE idlocations  = '" + selectedLocation.getLocationID() + "'";
+        String sqlStatement = "DELETE FROM locations WHERE id  = '" + selectedLocation.getLocationID() + "'";
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
@@ -52,7 +52,7 @@ public class LocationDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "UPDATE locations SET name = ? WHERE idlocations = ?;";
+        String sqlStatement = "UPDATE locations SET name = ? WHERE id = ?";
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, selectedLocation.getLocationName());
         ps.setInt(2, selectedLocation.getLocationID());

@@ -1,5 +1,7 @@
 package com.bauerperception.itassetmanager.model;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class EmployeeEntity implements Entity{
     private int employeeID;
     private String firstName;
@@ -15,6 +17,14 @@ public class EmployeeEntity implements Entity{
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.assignedWorkLocation = assignedWorkLocation;
+    }
+
+    public EmployeeEntity(String firstName, String middleName, String lastName, String emailAddress, int assignedWorkLocationID) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.emailAddress = emailAddress;
+        this.assignedWorkLocation = assignedWorkLocationID;
     }
 
     public int getEmployeeID() {
@@ -67,8 +77,12 @@ public class EmployeeEntity implements Entity{
 
     @Override
     public String toString() {
-        //TODO Reduce middle name if it exists to middle letter
-        return "ID: " + employeeID + ' ' + firstName + ' ' + middleName + ' ' + lastName;
+        if(middleName.isEmpty()) {
+            return "ID: " + employeeID + ' ' + firstName + ' ' + lastName;
+        } else {
+            String shortenedMiddleName = middleName.charAt(0) + ".";
+            return "ID: " + employeeID + ' ' + firstName + ' ' + shortenedMiddleName + ' ' + lastName;
+        }
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -403,7 +404,6 @@ public class MainController implements Initializable {
     }
 
     private void loadEmployeeData(){
-        //TODO load selected employee into fields
         EmployeeEntity selectedEmployee = employeeTblView.getSelectionModel().getSelectedItem();
         if (selectedEmployee != null){
             setVisibilityEmployeeEditable(true);
@@ -451,10 +451,21 @@ public class MainController implements Initializable {
 
         inventoryTblID.setCellValueFactory(new PropertyValueFactory<>("assetID"));
         inventoryTblAssetName.setCellValueFactory(new PropertyValueFactory<>("assetName"));
-        //TODO Not using Assigned To lol
+
+        //Takes the passed in AssetEntity and extracts the employee's ID that is assigned to it. Then returns the name of the employee in the column.
+        inventoryTblAssignedTo.setCellValueFactory(asset -> {
+            EmployeeEntity assignedEmployee = getEntityByID(employeeList, asset.getValue().getAssignedToID());
+            if(assignedEmployee.getMiddleName().isEmpty()) {
+                return new SimpleStringProperty(assignedEmployee.getFirstName() + " " + assignedEmployee.getLastName());
+            } else {
+                String shortenedMiddleName = assignedEmployee.getMiddleName().charAt(0) + ".";
+                return new SimpleStringProperty(assignedEmployee.getFirstName() + " " + shortenedMiddleName + " " + assignedEmployee.getLastName());
+            }
+        });
     }
 
     void setVisibilityInventoryEditable(boolean b) {
+        //TODO condense this https://stackoverflow.com/questions/29061483/grouping-objects-in-javafx
         inventoryIDLbl.setVisible(b);
         inventoryAssetNameTxtBox.setVisible(b);
         inventoryAssetModelNum.setVisible(b);
@@ -513,8 +524,7 @@ public class MainController implements Initializable {
                 return i;
             }
         }
-
-        //TODO throw an expection?
+        //If this returns null the ID for an entity in the list
         return null;
     }
 
@@ -532,7 +542,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void openLocations(ActionEvent event) {
+    void openLocations() {
         //Show Panel
         employeePane.setVisible(false);
         inventoryPane.setVisible(false);
@@ -570,7 +580,17 @@ public class MainController implements Initializable {
     }
 
     private void loadLocationData() {
-        //TODO load location data
+        LocationEntity selectedLocation = locationTblView.getSelectionModel().getSelectedItem();
+        if (selectedLocation != null){
+            setVisibilityLocationEditable(true);
+
+            //Re-enable delete and save button
+            deleteEntityButton.setDisable(false);
+            saveEntityButton.setDisable(false);
+
+            locationIDLbl.setText(Integer.toString(selectedLocation.getLocationID()));
+            locationNameTxt.setText(selectedLocation.getLocationName());
+        }
     }
 
     @FXML
@@ -584,7 +604,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        generalControls.setVisible(true);
+        generalControls.setVisible(false);
     }
 
     @FXML
@@ -597,7 +617,7 @@ public class MainController implements Initializable {
         toDoPane.setVisible(true);
 
         //Show Specific Controls
-        generalControls.setVisible(true);
+        generalControls.setVisible(false);
     }
 
     private void throwAlert(String header, String contents) {
@@ -613,7 +633,7 @@ public class MainController implements Initializable {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addasset.fxml"));
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         }
@@ -622,7 +642,7 @@ public class MainController implements Initializable {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addemployee.fxml"));
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         }
@@ -631,7 +651,7 @@ public class MainController implements Initializable {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         }
@@ -640,20 +660,20 @@ public class MainController implements Initializable {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addlocation.fxml"));
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         }
     }
 
-    public void saveEntity(ActionEvent actionEvent) throws Exception {
+    public void saveEntity() throws Exception {
         if (inventoryPane.isVisible()) {
             int assetID = Integer.parseInt(inventoryIDLbl.getText());
             String assetName = inventoryAssetNameTxtBox.getText();
             String assetModelNum = inventoryAssetModelNum.getText();
             String assetDescription = inventoryAssetDesc.getText();
             //TODO Need to add validation
-            Float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
+            float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
             String assetType = inventoryAssetType.getValue();
             int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
             int locationID = inventoryAssetLocation.getValue().getLocationID();

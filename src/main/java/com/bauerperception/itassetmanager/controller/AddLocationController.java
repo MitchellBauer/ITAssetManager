@@ -1,10 +1,6 @@
 package com.bauerperception.itassetmanager.controller;
 
-import com.bauerperception.itassetmanager.DAO.AssetDAOImpl;
-import com.bauerperception.itassetmanager.DAO.EmployeeDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LocationDAOImpl;
-import com.bauerperception.itassetmanager.model.AssetEntity;
-import com.bauerperception.itassetmanager.model.EmployeeEntity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,13 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AddEmployeeController implements Initializable {
+public class AddLocationController {
 
     Stage stage;
 
@@ -28,53 +24,19 @@ public class AddEmployeeController implements Initializable {
     private Label wizardTitle;
 
     @FXML
-    private Label employeeFirstNameLbl;
+    private Label locationNameLbl;
 
     @FXML
-    private TextField employeeFirstNameTxt;
+    private TextField locationNameTxt;
 
     @FXML
-    private Label employeeMiddleNameLbl;
+    private Button addLocationButton;
 
     @FXML
-    private TextField employeeMiddleNameTxt;
+    private Button cancelAddLocationButton;
 
     @FXML
-    private Label employeeLastNameLbl;
-
-    @FXML
-    private TextField employeeLastNameTxt;
-
-    @FXML
-    private Label employeeEmailLbl;
-
-    @FXML
-    private TextField employeeEmailTxt;
-
-    @FXML
-    private Label employeeWorkLocLbl;
-
-    @FXML
-    private ChoiceBox<LocationEntity> employeeWorkLocTxt;
-
-    @FXML
-    private Button addSaveButton;
-
-    @FXML
-    private Button cancelAddEmployeeButton;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //Load all locations and set values
-        try {
-            employeeWorkLocTxt.setItems(LocationDAOImpl.getAllLocations());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void cancelAdd(ActionEvent event) throws Exception {
+    void cancelAdd(ActionEvent event) throws IOException {
         Alert cancelConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
         cancelConfirmation.setTitle("");
         cancelConfirmation.setHeaderText("Cancel Confirmation");
@@ -87,14 +49,10 @@ public class AddEmployeeController implements Initializable {
     }
 
     @FXML
-    void saveAddEmployee(ActionEvent event) throws Exception {
+    void saveAddLocation(ActionEvent event) throws Exception {
         //TODO Need to add validation
-        String firstName = employeeFirstNameTxt.getText();
-        String middleName = employeeMiddleNameTxt.getText();
-        String lastName = employeeLastNameTxt.getText();
-        String emailAddress = employeeEmailTxt.getText();
-        int assignedWorkLocationID = employeeWorkLocTxt.getValue().getLocationID();
-        EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, assignedWorkLocationID));
+        String workLocationName = locationNameTxt.getText();
+        LocationDAOImpl.addLocation(new LocationEntity(workLocationName));
 
         goToMainScene(event);
     }
