@@ -2,6 +2,8 @@ package com.bauerperception.itassetmanager.model;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
+
 public class EmployeeEntity implements Entity{
     private int employeeID;
     private String firstName;
