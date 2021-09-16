@@ -1,10 +1,7 @@
 package com.bauerperception.itassetmanager.controller;
 
-import com.bauerperception.itassetmanager.model.AssetEntity;
+import com.bauerperception.itassetmanager.model.*;
 import com.bauerperception.itassetmanager.DAO.*;
-import com.bauerperception.itassetmanager.model.EmployeeEntity;
-import com.bauerperception.itassetmanager.model.Entity;
-import com.bauerperception.itassetmanager.model.LocationEntity;
 import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,6 +39,7 @@ public class MainController implements Initializable {
     ObservableList<EmployeeEntity> employeeList;
     ObservableList<LocationEntity> locationList;
     ObservableList<AssetEntity> assetList;
+    ObservableList<LoadOutEntity> loadOutList;
 
     Stage stage;
 
@@ -147,11 +145,59 @@ public class MainController implements Initializable {
 
 
     /*
-    LoadOut Pane
+    LoadOut Pane and Controls
      */
 
     @FXML
+    private HBox loadOutControls;
+
+    @FXML
+    private Button addLoadOutButton;
+
+    @FXML
+    private Button editEquipment;
+
+    @FXML
+    private Button deleteLoadOutButton;
+
+    @FXML
+    private Button deleteEquipmentButton;
+
+    @FXML
     private BorderPane loadoutPane;
+
+    @FXML
+    private TableView<LoadOutEntity> loadOutTblView;
+
+    @FXML
+    private TableColumn<LoadOutEntity, Integer> loadOutIDCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, String> loadOutNameCol;
+
+    @FXML
+    private TableView<LoadOutEntity> equipmentTblView;
+
+    @FXML
+    private TableColumn<LoadOutEntity, Integer> loadOutEquipSlotCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, String> loadOutEquipNameCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, String> loadOutEquipModelNumCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, String> loadOutEquipTypeCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, Float> loadOutEquipPriceCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, String> loadOutEquipPurchaseURLCol;
+
+    @FXML
+    private TableColumn<LoadOutEntity, Integer> loadOutEquipQuantityCol;
 
     /*
     Location Pane
@@ -278,6 +324,12 @@ public class MainController implements Initializable {
             }
         });
 
+        loadOutTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+            if (newSelection != null){
+                loadLoadOutEquipmentData();
+            }
+        });
+
         /*
         Load defaults
          */
@@ -312,6 +364,8 @@ public class MainController implements Initializable {
         //Show Specific Controls
         //TODO Todo controls
         //toDoControls.setVisible(true);
+        generalControls.setVisible(false);
+        loadOutControls.setVisible(false);
     }
 
     @FXML
@@ -360,6 +414,7 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(true);
+        loadOutControls.setVisible(false);
 
         //Disable delete button so no one accidentally clicks
         deleteEntityButton.setDisable(true);
@@ -433,6 +488,7 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(true);
+        loadOutControls.setVisible(false);
 
         //Disable delete button so no one accidentally clicks
         deleteEntityButton.setDisable(true);
@@ -538,7 +594,33 @@ public class MainController implements Initializable {
         toDoPane.setVisible(false);
 
         //Show Specific Controls
-        generalControls.setVisible(true);
+        generalControls.setVisible(false);
+        loadOutControls.setVisible(true);
+
+        //Hide unneeded controls
+        equipmentTblView.setVisible(false);
+        editEquipment.setVisible(false);
+        deleteEquipmentButton.setVisible(false);
+
+        //Populate LoadOut table
+        //Populate Inventory Table View
+        try{
+            loadOutTblView.setItems(LoadOutDAOImpl.getAllLoadOuts());
+            loadOutList = LoadOutDAOImpl.getAllLoadOuts();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        loadOutIDCol.setCellValueFactory(new PropertyValueFactory<>("loadOutID"));
+        loadOutNameCol.setCellValueFactory(new PropertyValueFactory<>("loadOutName"));
+    }
+
+    private void loadLoadOutEquipmentData() {
+        //TODO Load equipment data
+        //Show needed controls
+        equipmentTblView.setVisible(true);
+        editEquipment.setVisible(true);
+        deleteEquipmentButton.setVisible(true);
     }
 
     @FXML
@@ -552,6 +634,7 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(true);
+        loadOutControls.setVisible(false);
 
         //Disable delete button so no one accidentally clicks
         deleteEntityButton.setDisable(true);
@@ -559,6 +642,7 @@ public class MainController implements Initializable {
 
         //Hide editable
         setVisibilityLocationEditable(false);
+        loadOutControls.setVisible(false);
 
         //Populate Inventory Table View
         try{
@@ -605,6 +689,7 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(false);
+        loadOutControls.setVisible(false);
     }
 
     @FXML
@@ -618,6 +703,7 @@ public class MainController implements Initializable {
 
         //Show Specific Controls
         generalControls.setVisible(false);
+        loadOutControls.setVisible(false);
     }
 
     private void throwAlert(String header, String contents) {
@@ -630,6 +716,7 @@ public class MainController implements Initializable {
 
     public void addEntity(ActionEvent actionEvent) throws IOException {
         if (inventoryPane.isVisible()){
+            //TODO Make a popup wizard
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addasset.fxml"));
             Scene scene = new Scene(loader.load());
@@ -726,5 +813,17 @@ public class MainController implements Initializable {
         }
 
         //TODO Delete employee
+    }
+
+    public void addLoadOut(ActionEvent actionEvent) {
+    }
+
+    public void editEquipment(ActionEvent actionEvent) {
+    }
+
+    public void deleteLoadOut(ActionEvent actionEvent) {
+    }
+
+    public void deleteEquipmentFromLoadout(ActionEvent actionEvent) {
     }
 }

@@ -1,12 +1,10 @@
 package com.bauerperception.itassetmanager.DAO;
 
 import com.bauerperception.itassetmanager.model.EmployeeEntity;
-import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class EmployeeDAOImpl {
     private static Statement stmt;

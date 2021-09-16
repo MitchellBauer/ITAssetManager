@@ -5,7 +5,28 @@ import java.util.ArrayList;
 public class LoadOutEntity implements Entity{
     private int loadOutID;
 
+    private String loadOutName;
+
     private ArrayList<EquipmentEntity> equipmentList;
+
+    public LoadOutEntity(int loadOutID, String loadOutName, ArrayList<EquipmentEntity> equipmentList) {
+        this.loadOutID = loadOutID;
+        this.loadOutName = loadOutName;
+        this.equipmentList = equipmentList;
+    }
+
+    public LoadOutEntity(int loadOutID, String name) {
+        this.loadOutID = loadOutID;
+        this.loadOutName = name;
+    }
+
+    public String getLoadOutName() {
+        return loadOutName;
+    }
+
+    public void setLoadOutName(String loadOutName) {
+        this.loadOutName = loadOutName;
+    }
 
     public int getLoadOutID() {
         return loadOutID;
@@ -20,11 +41,6 @@ public class LoadOutEntity implements Entity{
     }
 
     public void setEquipmentList(ArrayList<EquipmentEntity> equipmentList) {
-        this.equipmentList = equipmentList;
-    }
-
-    public LoadOutEntity(int loadOutID, ArrayList<EquipmentEntity> equipmentList) {
-        this.loadOutID = loadOutID;
         this.equipmentList = equipmentList;
     }
 

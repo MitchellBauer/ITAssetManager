@@ -13,7 +13,7 @@ public class EquipmentEntity {
     //TODO Probably need to convert type to an actual OO?
     private String equipmentType;
 
-    public EquipmentEntity(int equipmentID, int assignedLoadOutID, int loadOutSlotNum, String name, String modelNum, float purchasePrice, float lastPurchasedPrice, String whereToPurchaseURL, int quantityNeeded, String equipmentType) {
+    public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int loadOutSlotNum, int quantity, float purchasePrice, float lastPurchasePrice, String purchaseUrl) {
         this.equipmentID = equipmentID;
         this.assignedLoadOutID = assignedLoadOutID;
         this.loadOutSlotNum = loadOutSlotNum;

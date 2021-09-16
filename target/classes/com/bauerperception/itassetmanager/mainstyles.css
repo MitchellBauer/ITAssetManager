@@ -11,7 +11,7 @@
 }
 
 #topRightMenu .button{
-    -fx-background-color: #253256;
+    -fx-background-color: #ADF1D2;
     -fx-background-radius: 0;
 }
 
@@ -26,7 +26,7 @@
 
 #navigationMenu .button{
     -fx-background-color: #253256;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
     -fx-font-weight: bold;
@@ -48,7 +48,7 @@ Controls Panel Formatting
         #5299d3,
         linear-gradient(#5299d3, #eff1f3);*/
     -fx-background-color: #5299d3;
-    -fx-background-radius :  5 5 5 5;
+    -fx-background-radius :  0 0 0 0;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
     -fx-font-weight: bold;
@@ -61,7 +61,7 @@ ToDoo Pane Formatting
 #titleLabelToDoList{
     -fx-background-color: #ADF1D2;
     -fx-font-size: 18;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     /*-fx-background-radius :  15 15 15 15;*/
     -fx-label-padding: 10;
     /*-fx-alignment: center;*/
@@ -80,7 +80,7 @@ ToDoo Pane Formatting
 #titleLabelInventoryList{
     -fx-background-color: #ADF1D2;
     -fx-font-size: 18;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-label-padding: 10;
     -fx-font-weight: bold;
 }
@@ -90,7 +90,7 @@ ToDoo Pane Formatting
 #titleLabelEmployeeList{
     -fx-background-color: #ADF1D2;
     -fx-font-size: 18;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-label-padding: 10;
     -fx-font-weight: bold;
 }
@@ -99,7 +99,7 @@ ToDoo Pane Formatting
 #titleLabelLocationList{
     -fx-background-color: #ADF1D2;
     -fx-font-size: 18;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-label-padding: 10;
     -fx-font-weight: bold;
 }
@@ -108,7 +108,14 @@ ToDoo Pane Formatting
 #titleLabelLoadoutEditor{
     -fx-background-color: #ADF1D2;
     -fx-font-size: 18;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-label-padding: 10;
     -fx-font-weight: bold;
+}
+
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: #18243A;
+    -fx-background-color: #18243A;
 }
