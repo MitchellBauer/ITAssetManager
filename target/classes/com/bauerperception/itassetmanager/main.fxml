@@ -20,11 +20,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.MainController">
+<AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.MainController">
    <children>
-      <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #374B81;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+      <Label fx:id="titleLbl" alignment="CENTER" text="Default Title" textFill="WHITE" AnchorPane.bottomAnchor="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="toDoPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <BorderPane fx:id="toDoPane">
                <center>
                   <TableView prefWidth="825.0" BorderPane.alignment="CENTER">
                     <columns>
@@ -40,27 +41,21 @@
                </center>
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="3.0" />
-                     </BorderPane.margin>
                      <children>
-                        <Label fx:id="titleLabelToDoList" alignment="CENTER" text="ToDo List" textAlignment="JUSTIFY" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <HBox fx:id="toDoControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="goToTaskButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#goToTask" text="Go To Task" />
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
                </top>
-               <bottom>
-                  <Button fx:id="goToTaskButton" alignment="CENTER" mnemonicParsing="false" onAction="#goToTask" text="Go To Task" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="25.0" top="25.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
             </BorderPane>
-            <BorderPane fx:id="inventoryPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <BorderPane fx:id="inventoryPane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
                             <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -129,12 +124,18 @@
                </right>
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="titleLabelInventoryList" alignment="CENTER" text="Inventory List" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                     </children>
                      <BorderPane.margin>
                         <Insets bottom="3.0" />
                      </BorderPane.margin>
+                     <children>
+                        <HBox fx:id="inventoryControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="addAssetButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#addEntity" text="Add" />
+                              <Button fx:id="saveAssetButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveEntity" text="Save" />
+                              <Button fx:id="deleteAssetButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#deleteEntity" text="Delete" />
+                           </children>
+                        </HBox>
+                     </children>
                   </AnchorPane>
                </top>
                <left>
@@ -149,11 +150,11 @@
                      </columnResizePolicy>
                   </TableView>
                </left></BorderPane>
-            <BorderPane fx:id="employeePane" layoutX="10.0" layoutY="10.0" visible="false">
+            <BorderPane fx:id="employeePane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -167,21 +168,36 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></Label>
                               <TextField fx:id="employeeFirstNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="employeeMiddleNameLbl" text="Middle Name" textFill="WHITE" GridPane.rowIndex="2" />
+                              <Label fx:id="employeeMiddleNameLbl" text="Middle Name" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></Label>
                               <TextField fx:id="employeeMiddleNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label fx:id="employeeLastNameLbl" text="Last Name" textFill="WHITE" GridPane.rowIndex="3" />
+                              <Label fx:id="employeeLastNameLbl" text="Last Name" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></Label>
                               <TextField fx:id="employeeLastNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label fx:id="employeeEmailLbl" text="Email Address" textFill="WHITE" GridPane.rowIndex="4" />
+                              <Label fx:id="employeeEmailLbl" text="Email Address" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></Label>
                               <TextField fx:id="employeeEmailTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" GridPane.rowIndex="5">
+                              <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </Label>
                               <ChoiceBox fx:id="employeeWorkLocTxt" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" />
+                              <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" GridPane.halignment="RIGHT">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></Label>
                               <Label fx:id="employeeIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
@@ -190,12 +206,18 @@
                </right>
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="titleLabelEmployeeList" alignment="CENTER" text="Employee List" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                     </children>
                      <BorderPane.margin>
                         <Insets bottom="3.0" />
                      </BorderPane.margin>
+                     <children>
+                        <HBox fx:id="employeeControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="addEmployeeButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#addEntity" text="Add" />
+                              <Button fx:id="saveEmployeeButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveEntity" text="Save" />
+                              <Button fx:id="deleteEmployeeButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#deleteEntity" text="Delete" />
+                           </children>
+                        </HBox>
+                     </children>
                   </AnchorPane>
                </top>
                <left>
@@ -210,7 +232,7 @@
                   </TableView>
                </left>
             </BorderPane>
-            <BorderPane fx:id="loadoutPane">
+            <BorderPane fx:id="loadoutPane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -234,24 +256,24 @@
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                        <HBox fx:id="controlsPane" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox fx:id="loadOutControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button fx:id="addLoadOutButton1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addLoadOut" text="Add&#10;Loadout" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="addLoadOutButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addLoadOut" text="Add&#10;Loadout" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="editEquipment1" alignment="CENTER" mnemonicParsing="false" onAction="#editEquipment" text="Edit&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="deleteLoadOutButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" mnemonicParsing="false" onAction="#deleteLoadOut" text="Delete&#10;Loadout" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="deleteLoadOutButton1" alignment="CENTER" layoutX="181.0" layoutY="22.0" mnemonicParsing="false" onAction="#deleteLoadOut" text="Delete&#10;Loadout" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="editEquipment" alignment="CENTER" mnemonicParsing="false" onAction="#editEquipment" text="Edit&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="deleteEquipmentButton1" alignment="CENTER" layoutX="217.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteEquipmentFromLoadout" text="Delete&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="deleteEquipmentButton" alignment="CENTER" layoutX="217.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteEquipmentFromLoadout" text="Delete&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>
@@ -260,7 +282,7 @@
                         </HBox>
                      </children>
                      <BorderPane.margin>
-                        <Insets bottom="3.0" />
+                        <Insets />
                      </BorderPane.margin>
                   </AnchorPane>
                </top>
@@ -280,7 +302,7 @@
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <GridPane vgap="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                        <GridPane vgap="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -290,7 +312,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="locationIDTitle" text="ID" textFill="WHITE" />
+                              <Label fx:id="locationIDTitle" text="ID" textFill="WHITE" GridPane.halignment="RIGHT">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
                               <Label fx:id="locationIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
                               <Label fx:id="locationNameLbl" text="Location Name" textFill="WHITE" GridPane.rowIndex="1">
                                  <GridPane.margin>
@@ -305,12 +331,18 @@
                </right>
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="titleLabelLocationList" alignment="CENTER" text="Location List" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                     </children>
                      <BorderPane.margin>
                         <Insets bottom="3.0" />
                      </BorderPane.margin>
+                     <children>
+                        <HBox fx:id="locationControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="addLocationButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#addEntity" text="Add" />
+                              <Button fx:id="saveLocationButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveEntity" text="Save" />
+                              <Button fx:id="deleteLocationButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#deleteEntity" text="Delete" />
+                           </children>
+                        </HBox>
+                     </children>
                   </AnchorPane>
                </top>
                <left>
@@ -325,72 +357,14 @@
                   </TableView>
                </left>
                <StackPane.margin>
-                  <Insets bottom="3.0" />
+                  <Insets />
                </StackPane.margin>
             </BorderPane>
          </children>
       </StackPane>
-      <StackPane fx:id="controlsPane" layoutX="129.0" layoutY="30.0" prefHeight="70.0" prefWidth="1000.0" visible="false" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+      <AnchorPane fx:id="navigationMenu" layoutX="-2.0" layoutY="273.0" prefHeight="600.0" prefWidth="173.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="toDoControls" prefHeight="200.0" prefWidth="200.0" />
-            <HBox fx:id="generalControls" alignment="CENTER_LEFT" spacing="10.0">
-               <children>
-                  <Button fx:id="addEntityButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#addEntity" text="Add" />
-                  <Button fx:id="saveEntityButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveEntity" text="Save" />
-                  <Button fx:id="deleteEntityButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#deleteEntity" text="Delete" />
-               </children>
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </HBox>
-            <HBox fx:id="loadOutControls" alignment="CENTER_LEFT" layoutX="35.0" layoutY="10.0" prefHeight="70.0" prefWidth="846.0" spacing="10.0" visible="false">
-               <children>
-                  <Button fx:id="addLoadOutButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addLoadOut" text="Add&#10;Loadout" textAlignment="CENTER" />
-                  <Button fx:id="editEquipment" alignment="CENTER" mnemonicParsing="false" onAction="#editEquipment" text="Edit&#10;Equipment" textAlignment="CENTER" />
-                  <Button fx:id="deleteLoadOutButton" alignment="CENTER" layoutX="181.0" layoutY="22.0" mnemonicParsing="false" onAction="#deleteLoadOut" text="Delete&#10;Loadout" textAlignment="CENTER" />
-                  <Button fx:id="deleteEquipmentButton" alignment="CENTER" layoutX="217.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteEquipmentFromLoadout" text="Delete&#10;Equipment" textAlignment="CENTER" />
-               </children>
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </HBox>
-         </children></StackPane>
-      <HBox fx:id="topRightMenu" alignment="CENTER_RIGHT" layoutX="792.0" minHeight="35.0" minWidth="140.0" style="-fx-background-color: #ADF1D2;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="titleLabelLoadoutEditor" alignment="CENTER" minWidth="600.0" text="Loadout Editor" HBox.hgrow="ALWAYS" />
-            <Button minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#goToSettings" HBox.hgrow="NEVER">
-               <graphic>
-                  <ImageView fx:id="settingsButton" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/cog-outline.png" />
-                     </image></ImageView>
-               </graphic></Button>
-            <Button minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#minimize" HBox.hgrow="NEVER">
-               <graphic>
-                  <ImageView fx:id="minimizeButton" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/minus.png" />
-                     </image></ImageView>
-               </graphic></Button>
-            <Button minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#maximize" HBox.hgrow="NEVER">
-               <graphic>
-                  <ImageView fx:id="maximizeButton" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/crop-square.png" />
-                     </image></ImageView>
-               </graphic></Button>
-            <Button fx:id="exitButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#exitApplication" HBox.hgrow="NEVER">
-               <graphic>
-                  <ImageView pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/close.png" />
-                     </image></ImageView>
-               </graphic></Button>
-         </children>
-      </HBox>
-      <AnchorPane fx:id="navigationMenu" layoutX="-2.0" layoutY="273.0" prefHeight="600.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="35.0">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="85.0">
                <children>
                   <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openToDo" text="ToDo">
                      <VBox.margin>
@@ -430,5 +404,45 @@
             </VBox>
          </children>
       </AnchorPane>
+      <HBox fx:id="topRightMenu" alignment="CENTER_RIGHT" maxHeight="35.0" maxWidth="140.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
+         <children>
+            <Button fx:id="settingsButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#goToSettings" HBox.hgrow="NEVER">
+               <graphic>
+                  <ImageView fx:id="settingsImg" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/cog-outline.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="minimizeButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#minimize" HBox.hgrow="NEVER">
+               <graphic>
+                  <ImageView fx:id="minimizeImg" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/minus.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="maximizeButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#maximize" HBox.hgrow="NEVER">
+               <graphic>
+                  <ImageView fx:id="maximizeImg" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/crop-square.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="exitButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#exitApplication" HBox.hgrow="NEVER">
+               <graphic>
+                  <ImageView fx:id="exitImg" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

@@ -51,13 +51,13 @@ public class MainController implements Initializable {
     private HBox topRightMenu;
 
     @FXML
-    private ImageView settingsButton;
+    private Button settingsButton;
 
     @FXML
-    private ImageView minimizeButton;
+    private Button minimizeButton;
 
     @FXML
-    private ImageView maximizeButton;
+    private Button maximizeButton;
 
     @FXML
     private Button exitButton;
@@ -65,18 +65,8 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane navigationMenu;
 
-
     @FXML
-    private HBox generalControls;
-
-    @FXML
-    private Button addEntityButton;
-
-    @FXML
-    private Button saveEntityButton;
-
-    @FXML
-    private Button deleteEntityButton;
+    private Label titleLbl;
 
     /*
     Task/Todoo Pane
@@ -84,9 +74,6 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane toDoPane;
-
-    @FXML
-    private Label titleLabelToDoList;
 
     @FXML
     private Button goToTaskButton;
@@ -97,6 +84,15 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane employeePane;
+
+    @FXML
+    private Button addEmployeeButton;
+
+    @FXML
+    private Button saveEmployeeButton;
+
+    @FXML
+    private Button deleteEmployeeButton;
 
     @FXML
     private Label employeeIDTitleLbl;
@@ -207,6 +203,15 @@ public class MainController implements Initializable {
     private BorderPane locationsPane;
 
     @FXML
+    private Button addLocationButton;
+
+    @FXML
+    private Button saveLocationButton;
+
+    @FXML
+    private Button deleteLocationButton;
+
+    @FXML
     private Label locationIDTitle;
 
     @FXML
@@ -217,9 +222,6 @@ public class MainController implements Initializable {
 
     @FXML
     private TextField locationNameTxt;
-
-    @FXML
-    private Label titleLabelLocationList;
 
     @FXML
     private TableView<LocationEntity> locationTblView;
@@ -236,6 +238,15 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane inventoryPane;
+
+    @FXML
+    private Button addAssetButton;
+
+    @FXML
+    private Button saveAssetButton;
+
+    @FXML
+    private Button deleteAssetButton;
 
     @FXML
     private Label inventoryLblIDTitle;
@@ -354,18 +365,8 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
-        //Show Panel
-        employeePane.setVisible(false);
-        inventoryPane.setVisible(false);
-        loadoutPane.setVisible(false);
-        locationsPane.setVisible(false);
-        toDoPane.setVisible(true);
-
-        //Show Specific Controls
-        //TODO Todo controls
-        //toDoControls.setVisible(true);
-        generalControls.setVisible(false);
-        loadOutControls.setVisible(false);
+        //Call initial open
+        openToDo(new ActionEvent());
     }
 
     @FXML
@@ -412,13 +413,13 @@ public class MainController implements Initializable {
         locationsPane.setVisible(false);
         toDoPane.setVisible(false);
 
-        //Show Specific Controls
-        generalControls.setVisible(true);
-        loadOutControls.setVisible(false);
+        //Set Title
+        titleLbl.setText("Employee Module");
+
 
         //Disable delete button so no one accidentally clicks
-        deleteEntityButton.setDisable(true);
-        saveEntityButton.setDisable(true);
+        deleteEmployeeButton.setDisable(true);
+        saveEmployeeButton.setDisable(true);
 
         //Hide editable
         setVisibilityEmployeeEditable(false);
@@ -464,8 +465,8 @@ public class MainController implements Initializable {
             setVisibilityEmployeeEditable(true);
 
             //Re-enable delete and save button
-            deleteEntityButton.setDisable(false);
-            saveEntityButton.setDisable(false);
+            deleteEmployeeButton.setDisable(false);
+            saveEmployeeButton.setDisable(false);
 
             //Assign selected data to fields
             employeeIDLbl.setText(Integer.toString(selectedEmployee.getEmployeeID()));
@@ -486,13 +487,12 @@ public class MainController implements Initializable {
         locationsPane.setVisible(false);
         toDoPane.setVisible(false);
 
-        //Show Specific Controls
-        generalControls.setVisible(true);
-        loadOutControls.setVisible(false);
+        //Set Title
+        titleLbl.setText("Inventory Module");
 
         //Disable delete button so no one accidentally clicks
-        deleteEntityButton.setDisable(true);
-        saveEntityButton.setDisable(true);
+        deleteAssetButton.setDisable(true);
+        saveAssetButton.setDisable(true);
 
         //Hide editable
         setVisibilityInventoryEditable(false);
@@ -549,8 +549,8 @@ public class MainController implements Initializable {
             setVisibilityInventoryEditable(true);
 
             //Re-enable delete and save button
-            deleteEntityButton.setDisable(false);
-            saveEntityButton.setDisable(false);
+            deleteAssetButton.setDisable(false);
+            saveAssetButton.setDisable(false);
 
             inventoryIDLbl.setText(Integer.toString(selectedAsset.getID()));
             inventoryAssetNameTxtBox.setText(selectedAsset.getAssetName());
@@ -593,9 +593,8 @@ public class MainController implements Initializable {
         locationsPane.setVisible(false);
         toDoPane.setVisible(false);
 
-        //Show Specific Controls
-        generalControls.setVisible(false);
-        loadOutControls.setVisible(true);
+        //Set Title
+        titleLbl.setText("Loadout Module");
 
         //Hide unneeded controls
         equipmentTblView.setVisible(false);
@@ -632,17 +631,15 @@ public class MainController implements Initializable {
         locationsPane.setVisible(true);
         toDoPane.setVisible(false);
 
-        //Show Specific Controls
-        generalControls.setVisible(true);
-        loadOutControls.setVisible(false);
+        //Set Title
+        titleLbl.setText("Locations Module");
 
         //Disable delete button so no one accidentally clicks
-        deleteEntityButton.setDisable(true);
-        saveEntityButton.setDisable(true);
+        deleteLocationButton.setDisable(true);
+        saveLocationButton.setDisable(true);
 
         //Hide editable
         setVisibilityLocationEditable(false);
-        loadOutControls.setVisible(false);
 
         //Populate Inventory Table View
         try{
@@ -669,8 +666,8 @@ public class MainController implements Initializable {
             setVisibilityLocationEditable(true);
 
             //Re-enable delete and save button
-            deleteEntityButton.setDisable(false);
-            saveEntityButton.setDisable(false);
+            deleteLocationButton.setDisable(false);
+            saveLocationButton.setDisable(false);
 
             locationIDLbl.setText(Integer.toString(selectedLocation.getLocationID()));
             locationNameTxt.setText(selectedLocation.getLocationName());
@@ -687,9 +684,8 @@ public class MainController implements Initializable {
         locationsPane.setVisible(false);
         toDoPane.setVisible(false);
 
-        //Show Specific Controls
-        generalControls.setVisible(false);
-        loadOutControls.setVisible(false);
+        //Set Title
+        titleLbl.setText("Reports Module");
     }
 
     @FXML
@@ -701,9 +697,8 @@ public class MainController implements Initializable {
         locationsPane.setVisible(false);
         toDoPane.setVisible(true);
 
-        //Show Specific Controls
-        generalControls.setVisible(false);
-        loadOutControls.setVisible(false);
+        //Set Title
+        titleLbl.setText("ToDo Module");
     }
 
     private void throwAlert(String header, String contents) {
