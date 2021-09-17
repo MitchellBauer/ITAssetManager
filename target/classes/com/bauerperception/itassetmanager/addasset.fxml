@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.AddAssetController">
    <children>
-      <Label fx:id="wizardTitle" text="Add Asset" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label fx:id="wizardTitle" alignment="CENTER" text="Add Asset" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
             <Insets left="10.0" />
          </padding>
@@ -59,8 +59,8 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="7.0">
          <children>
-            <Button fx:id="addAssetButton" mnemonicParsing="false" onAction="#saveAddAsset" text="Save" textFill="WHITE" />
-            <Button fx:id="cancelAddAssetButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#saveAddAsset" text="Save" textFill="WHITE" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
          </children>
       </HBox>
    </children>

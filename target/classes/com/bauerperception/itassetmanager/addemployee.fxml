@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: #253256;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bauerperception.itassetmanager.controller.AddEmployeeController">
    <children>
-      <Label fx:id="wizardTitle" layoutX="10.0" layoutY="10.0" text="Add Employee" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label fx:id="wizardTitle" alignment="CENTER" layoutX="10.0" layoutY="10.0" text="Add Employee" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
             <Insets left="10.0" />
          </padding>
@@ -49,8 +49,8 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="7.0">
          <children>
-            <Button fx:id="addSaveButton" mnemonicParsing="false" onAction="#saveAddEmployee" text="Save" textFill="WHITE" />
-            <Button fx:id="cancelAddEmployeeButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#saveAddEmployee" text="Save" textFill="WHITE" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
          </children>
       </HBox>
    </children>
