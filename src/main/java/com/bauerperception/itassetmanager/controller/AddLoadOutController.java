@@ -29,6 +29,7 @@ public class AddLoadOutController implements Initializable {
     LoadOutEntity workInProgressLoadOut;
     String loadOutName;
 
+    //<editor-fold desc="Description">
     @FXML
     private Label wizardTitle;
 
@@ -73,6 +74,7 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     private TableColumn<EquipmentEntity, String> purchaseUrlCol;
+    //</editor-fold>
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -132,10 +134,15 @@ public class AddLoadOutController implements Initializable {
     @FXML
     void deleteEquipment(ActionEvent event) {
         //TODO Be able to delete equipment from current equipment list
+        //TODO Confirmation
+        equipmentList.remove(equipmentTblView.getSelectionModel().getSelectedItem());
+        equipmentTblView.setItems(equipmentList);
     }
 
     @FXML
-    void editEquipment(ActionEvent event) {
+    void editEquipment(ActionEvent event) throws IOException {
+        EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
+
         //TODO Be able to edit one of the equipment in the list
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
@@ -144,7 +151,7 @@ public class AddLoadOutController implements Initializable {
         stage.setScene(scene);
         stage.show();
         ModifyEquipmentController controller = loader.getController();
-        controller.editEquipmentFromLoadOutWizard(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+        controller.editEquipmentFromLoadOutWizard(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName, selectedEquipment);
     }
 
     @FXML

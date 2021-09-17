@@ -94,7 +94,8 @@ public class EquipmentDAOImpl {
             highestID = result.getInt("highestID");
         }
         DBConn.closeConn();
-        return highestID++;
+        highestID++;
+        return highestID;
     }
 
     public static ObservableList<EquipmentEntity> getAllEquipment() throws Exception {

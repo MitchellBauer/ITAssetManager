@@ -27,7 +27,10 @@ public class ModifyEquipmentController implements Initializable {
     private ObservableList<EquipmentEntity> equipmentList;
     String loadOutName;
     boolean addingEquipmentToLoadOutWizard;
+    private boolean editingEquipmentFromLoadOutWizard;
+    private EquipmentEntity editingEquipmentEntity;
 
+    //<editor-fold desc="Description">
     @FXML
     private Label wizardTitle;
 
@@ -60,6 +63,7 @@ public class ModifyEquipmentController implements Initializable {
 
     @FXML
     private Button cancelButton;
+    //</editor-fold>
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,6 +71,7 @@ public class ModifyEquipmentController implements Initializable {
         existingEquipmentLbl.setVisible(false);
 
         addingEquipmentToLoadOutWizard = false;
+        editingEquipmentFromLoadOutWizard = false;
 
         try {
             existingEquipmentChoice.setItems(EquipmentDAOImpl.getAllEquipment());
@@ -82,7 +87,8 @@ public class ModifyEquipmentController implements Initializable {
 
     @FXML
     void cancelAdd(ActionEvent event) throws IOException {
-        if (addingEquipmentToLoadOutWizard){
+        //TODO Validation
+        if (addingEquipmentToLoadOutWizard || editingEquipmentFromLoadOutWizard){
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
             Scene scene = new Scene(loader.load());
@@ -107,6 +113,16 @@ public class ModifyEquipmentController implements Initializable {
 
             //save new equipment to work in progress equipment list
             int equipmentID = EquipmentDAOImpl.newEquipmentID();
+            if (!equipmentList.isEmpty()) {
+                int highestID = equipmentID;
+                for (EquipmentEntity i : equipmentList) {
+                    if (i.getEquipmentID() > highestID) {
+                        highestID = i.getEquipmentID();
+                    }
+                }
+                equipmentID++;
+            }
+
             String name = equipmentNameTxt.getText();
             String modelNum = equipmentModelNumTxt.getText();
             String equipmentType = typeChoice.getValue();
@@ -114,6 +130,33 @@ public class ModifyEquipmentController implements Initializable {
             float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
             equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, newEquipmentSlotNum, quantity, purchasePrice, purchaseUrl));
+            controller.loadData(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+        }
+
+        if(editingEquipmentFromLoadOutWizard){
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+            AddLoadOutController controller = loader.getController();
+
+            //save new equipment to work in progress equipment list
+            int equipmentID = editingEquipmentEntity.getEquipmentID();
+            String name = equipmentNameTxt.getText();
+            String modelNum = equipmentModelNumTxt.getText();
+            String equipmentType = typeChoice.getValue();
+            int quantity = Integer.parseInt(qtyNeededTxt.getText());
+            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            String purchaseUrl = urlTxt.getText();
+
+            for (EquipmentEntity i : equipmentList){
+                if (i.getEquipmentID() == equipmentID){
+                    equipmentList.remove(i);
+                    equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, newEquipmentSlotNum, quantity, purchasePrice, purchaseUrl));
+                }
+            }
             controller.loadData(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
         }
     }
@@ -130,5 +173,26 @@ public class ModifyEquipmentController implements Initializable {
         this.loadOutName = loadOutName;
 
         addingEquipmentToLoadOutWizard = true;
+    }
+
+    public void editEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName, EquipmentEntity selectedEquipment) {
+        this.loadOutID = loadOutID;
+        this.newEquipmentSlotNum = newEquipmentSlotNum;
+        this.equipmentList = equipmentList;
+        this.loadOutName = loadOutName;
+        this.editingEquipmentEntity = selectedEquipment;
+
+        editingEquipmentFromLoadOutWizard = true;
+
+        editEquipment(selectedEquipment);
+    }
+
+    private void editEquipment(EquipmentEntity selectedEquipment) {
+        equipmentNameTxt.setText(selectedEquipment.getName());
+        equipmentModelNumTxt.setText(selectedEquipment.getModelNum());
+        typeChoice.setValue(selectedEquipment.getEquipmentType());
+        qtyNeededTxt.setText(Integer.toString(selectedEquipment.getQuantityNeeded()));
+        purchasePriceTxt.setText(Float.toString(selectedEquipment.getPurchasePrice()));
+        urlTxt.setText(selectedEquipment.getWhereToPurchaseURL());
     }
 }

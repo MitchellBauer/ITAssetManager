@@ -51,7 +51,7 @@
                   </Label>
                   <Button fx:id="addEquipmentButton" mnemonicParsing="false" onAction="#addEquipment" text="Add" HBox.hgrow="NEVER" />
                   <Button fx:id="deleteEquipmentButton" mnemonicParsing="false" onAction="#deleteEquipment" text="Delete" HBox.hgrow="NEVER" />
-                  <Button fx:id="editEquipmentButton" layoutX="167.0" layoutY="10.0" mnemonicParsing="false" onAction="#editEquipment" text="Add" />
+                  <Button fx:id="editEquipmentButton" layoutX="167.0" layoutY="10.0" mnemonicParsing="false" onAction="#editEquipment" text="Edit" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" top="10.0" />
