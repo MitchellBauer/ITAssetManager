@@ -26,6 +26,18 @@ public class EquipmentEntity {
         this.equipmentType = equipmentType;
     }
 
+    public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, float purchasePrice, String purchaseUrl) {
+        this.equipmentID = equipmentID;
+        this.assignedLoadOutID = loadOutID;
+        this.loadOutSlotNum = slotNum;
+        this.name = name;
+        this.modelNum = modelNum;
+        this.purchasePrice = purchasePrice;
+        this.whereToPurchaseURL = purchaseUrl;
+        this.quantityNeeded = quantity;
+        this.equipmentType = equipmentType;
+    }
+
     public int getEquipmentID() {
         return equipmentID;
     }

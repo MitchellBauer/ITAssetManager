@@ -57,4 +57,18 @@ public class LoadOutDAOImpl {
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
     }
+
+    public static int getNewLoadOutID() throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "SELECT MAX(id) AS highestID FROM loadouts";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+        int highestID = 0;
+
+        while(result.next()){
+            highestID = result.getInt("highestID");
+        }
+        DBConn.closeConn();
+        return highestID++;
+    }
 }
