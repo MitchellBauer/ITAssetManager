@@ -1,8 +1,11 @@
 .button{
     -fx-background-color: #253256;
-    -fx-background-radius :  30 30 30 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-font-size: 16;
     -fx-font-weight: bold;
+}
+
+#addButton, #cancelButton{
     -fx-min-width: 100;
 }
 
@@ -18,9 +21,19 @@ TODO Might need to change the styling of the buttons
 }
 
 #wizardTitle{
-    -fx-background-color: #ADF1D2;
+    -fx-background-color: #192139;
+    -fx-text-fill: white;
     -fx-font-size: 16;
-    -fx-background-radius :  30 0 0 30;
+    -fx-background-radius :  0 0 0 0;
     -fx-label-padding: 5;
     -fx-font-weight: bold;
+}
+
+#addEquipmentButton, #deleteEquipmentButton, #editEquipmentButton{
+    -fx-background-color: #5299d3;
+    -fx-background-radius :  0 0 0 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , black, 10,0,2,2 );
 }

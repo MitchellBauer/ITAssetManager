@@ -5,10 +5,7 @@ import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class EquipmentDAOImpl {
     private static Statement stmt;
@@ -84,5 +81,19 @@ public class EquipmentDAOImpl {
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
+    }
+
+    public static int newEquipmentID() throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "SELECT MAX(id) AS highestID FROM equipment";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+        int highestID = 0;
+
+        while(result.next()){
+            highestID = result.getInt("highestID");
+        }
+        DBConn.closeConn();
+        return highestID++;
     }
 }

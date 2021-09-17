@@ -10,6 +10,10 @@
     -fx-background-color: #314272;
 }
 
+/*
+https://edencoding.com/style-tableview-javafx/
+ */
+
 /* fix markup for selected cells/cells in a selected row */
 .table-row-cell:filled > .table-cell:selected,
 .table-row-cell:filled:selected > .table-cell {

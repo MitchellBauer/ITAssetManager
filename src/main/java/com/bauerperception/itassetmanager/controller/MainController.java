@@ -729,15 +729,6 @@ public class MainController implements Initializable {
             stage.show();
         }
 
-        if (loadoutPane.isVisible()){
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-        }
-
         if (locationsPane.isVisible()){
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addlocation.fxml"));
@@ -810,7 +801,13 @@ public class MainController implements Initializable {
         //TODO Delete employee
     }
 
-    public void addLoadOut(ActionEvent actionEvent) {
+    public void addLoadOut(ActionEvent actionEvent) throws IOException {
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void editEquipment(ActionEvent actionEvent) {

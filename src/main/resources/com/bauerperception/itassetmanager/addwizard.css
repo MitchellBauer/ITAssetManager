@@ -29,7 +29,7 @@ TODO Might need to change the styling of the buttons
     -fx-font-weight: bold;
 }
 
-#addEquipmentButton, #deleteEquipmentButton{
+#addEquipmentButton, #deleteEquipmentButton, #editEquipmentButton{
     -fx-background-color: #5299d3;
     -fx-background-radius :  0 0 0 0;
     -fx-text-fill: #FFFFFF;
