@@ -96,4 +96,49 @@ public class EquipmentDAOImpl {
         DBConn.closeConn();
         return highestID++;
     }
+
+    public static ObservableList<EquipmentEntity> getAllEquipment() throws Exception {
+        ObservableList<EquipmentEntity> allEquipment = FXCollections.observableArrayList();
+        DBConn.makeConn();
+        String sqlStatement = "SELECT * FROM equipment";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+
+        while(result.next()){
+            int equipmentID = result.getInt("id");
+            String name = result.getString("name");
+            String modelNum = result.getString("model_num");
+            String equipmentType = result.getString("equipment_type");
+            int loadOutID = result.getInt("load_out_id");
+            int loadOutSlotNum = result.getInt("load_out_slot_num");
+            int quantity = result.getInt("quantity");
+            float purchasePrice = result.getFloat("purchase_price");
+            float lastPurchasePrice = result.getFloat("last_purchase_price");
+            String purchaseUrl = result.getString("purchase_url");
+
+            EquipmentEntity equipmentResult = new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID,
+                    loadOutSlotNum, quantity, purchasePrice, lastPurchasePrice, purchaseUrl);
+            allEquipment.add(equipmentResult);
+        }
+        DBConn.closeConn();
+        return allEquipment;
+    }
+
+    public static ObservableList<String> getTypes() throws Exception {
+        ObservableList<String> allTypes = FXCollections.observableArrayList();
+        DBConn.makeConn();
+        String sqlStatement = "SELECT * FROM assettypes";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+
+        while(result.next()){
+            //TODO May need to use this asset ID and then this will need class
+            int assetID = result.getInt("idassettypes");
+            String assetName = result.getString("type_name");
+
+            allTypes.add(assetName);
+        }
+        DBConn.closeConn();
+        return allTypes;
+    }
 }

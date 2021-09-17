@@ -72,13 +72,20 @@ public class AddLoadOutController implements Initializable {
     private TableColumn<EquipmentEntity, Float> purchasePriceCol;
 
     @FXML
-    private TableColumn<EquipmentEntity, Hyperlink> purchaseUrlCol;
+    private TableColumn<EquipmentEntity, String> purchaseUrlCol;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        equipmentTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+            editEquipmentButton.setDisable(false);
+            deleteEquipmentButton.setDisable(false);
+        });
+
         loadOutID = 0;
         newEquipmentSlotNum = 0;
         equipmentList = FXCollections.observableArrayList();
+        editEquipmentButton.setVisible(false);
+        deleteEquipmentButton.setVisible(false);
     }
 
     @FXML
@@ -124,12 +131,20 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     void deleteEquipment(ActionEvent event) {
-
+        //TODO Be able to delete equipment from current equipment list
     }
 
     @FXML
     void editEquipment(ActionEvent event) {
-
+        //TODO Be able to edit one of the equipment in the list
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+        ModifyEquipmentController controller = loader.getController();
+        controller.editEquipmentFromLoadOutWizard(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
     }
 
     @FXML
@@ -163,6 +178,10 @@ public class AddLoadOutController implements Initializable {
         this.loadOutName = loadOutName;
 
         loadOutNameTxt.setText(loadOutName);
+        editEquipmentButton.setVisible(true);
+        editEquipmentButton.setDisable(true);
+        deleteEquipmentButton.setVisible(true);
+        deleteEquipmentButton.setDisable(true);
 
         //TODO Fill in table view
         equipmentTblView.setItems(equipmentList);
@@ -173,25 +192,26 @@ public class AddLoadOutController implements Initializable {
         purchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));
         purchaseUrlCol.setCellValueFactory(new PropertyValueFactory<>("whereToPurchaseURL"));
-        purchaseUrlCol.setCellFactory(l -> {
-            return new TableCell<EquipmentEntity, Hyperlink>() {
-                @Override
-                protected void updateItem(Hyperlink item, boolean empty) {
-                    if (empty) {
-
-                    } else {
-                        item.setOnAction(e -> {
-                            Runtime rt = Runtime.getRuntime();
-                            try {
-                                rt.exec("rundll32 url.dll,FileProtocolHandler " + this.getText());
-                            } catch (IOException l) {
-                                l.printStackTrace();
-                            }
-                        });
-                    }
-                }
-            };
-        });
+        //TODO Hyperlink url is still not working
+//        purchaseUrlCol.setCellFactory(l -> {
+//            return new TableCell<EquipmentEntity, Hyperlink>() {
+//                @Override
+//                protected void updateItem(Hyperlink item, boolean empty) {
+//                    if (empty) {
+//
+//                    } else {
+//                        item.setOnAction(e -> {
+//                            Runtime rt = Runtime.getRuntime();
+//                            try {
+//                                rt.exec("rundll32 url.dll,FileProtocolHandler " + this.getText());
+//                            } catch (IOException l) {
+//                                l.printStackTrace();
+//                            }
+//                        });
+//                    }
+//                }
+//            };
+//        });
 
     }
 }

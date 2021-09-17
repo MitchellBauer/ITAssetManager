@@ -1,6 +1,7 @@
 package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
+import com.bauerperception.itassetmanager.model.AssetEntity;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -66,7 +67,17 @@ public class ModifyEquipmentController implements Initializable {
         existingEquipmentLbl.setVisible(false);
 
         addingEquipmentToLoadOutWizard = false;
-        //TODO Fill in choice boxs
+
+        try {
+            existingEquipmentChoice.setItems(EquipmentDAOImpl.getAllEquipment());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            typeChoice.setItems(EquipmentDAOImpl.getTypes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -107,7 +118,7 @@ public class ModifyEquipmentController implements Initializable {
         }
     }
 
-    public void addEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
+    public void addEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName) throws Exception {
         //Enable existing equipment for faster editing. In this scenario, we know we aren't creating new equipment.
         existingEquipmentChoice.setVisible(true);
         existingEquipmentLbl.setVisible(true);
@@ -119,7 +130,5 @@ public class ModifyEquipmentController implements Initializable {
         this.loadOutName = loadOutName;
 
         addingEquipmentToLoadOutWizard = true;
-
-        //TODO Fill in existing choice box
     }
 }

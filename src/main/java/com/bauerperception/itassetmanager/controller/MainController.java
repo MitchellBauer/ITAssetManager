@@ -387,6 +387,7 @@ public class MainController implements Initializable {
 
     @FXML
     void maximize(ActionEvent event) {
+        //TODO Maximize with the redesign is needs to be redone
         Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         // is stage minimizable into task bar. (true | false)
         if (stage.isMaximized()){

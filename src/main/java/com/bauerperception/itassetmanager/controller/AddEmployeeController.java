@@ -71,6 +71,7 @@ public class AddEmployeeController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //TODO Need to script the add employee wizard
     }
 
     @FXML

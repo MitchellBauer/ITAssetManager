@@ -5,7 +5,7 @@
     -fx-font-weight: bold;
 }
 
-#addButton, #cancelButton{
+#addButton, #cancelButton, #nextButton, #backButton{
     -fx-min-width: 100;
 }
 
@@ -29,7 +29,7 @@ TODO Might need to change the styling of the buttons
     -fx-font-weight: bold;
 }
 
-#addEquipmentButton, #deleteEquipmentButton{
+#addEquipmentButton, #deleteEquipmentButton, #editEquipmentButton{
     -fx-background-color: #5299d3;
     -fx-background-radius :  0 0 0 0;
     -fx-text-fill: #FFFFFF;
