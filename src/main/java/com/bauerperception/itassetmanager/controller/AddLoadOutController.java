@@ -1,9 +1,9 @@
 package com.bauerperception.itassetmanager.controller;
 
+import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
-import com.bauerperception.itassetmanager.util.HyperLinkCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +24,6 @@ public class AddLoadOutController implements Initializable {
 
     Stage stage;
     int loadOutID;
-    int newEquipmentSlotNum;
     ObservableList<EquipmentEntity> equipmentList;
     LoadOutEntity workInProgressLoadOut;
     String loadOutName;
@@ -37,7 +36,7 @@ public class AddLoadOutController implements Initializable {
     private TextField loadOutNameTxt;
 
     @FXML
-    private Button addButton;
+    private Button saveButton;
 
     @FXML
     private Button cancelButton;
@@ -84,10 +83,10 @@ public class AddLoadOutController implements Initializable {
         });
 
         loadOutID = 0;
-        newEquipmentSlotNum = 0;
         equipmentList = FXCollections.observableArrayList();
         editEquipmentButton.setVisible(false);
         deleteEquipmentButton.setVisible(false);
+        saveButton.setDisable(true);
     }
 
     @FXML
@@ -98,9 +97,6 @@ public class AddLoadOutController implements Initializable {
 
         loadOutName = loadOutNameTxt.getText();
 
-        //In all instances its better to add a slot number increase here
-        newEquipmentSlotNum++;
-
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
         Scene scene = new Scene(loader.load());
@@ -108,11 +104,11 @@ public class AddLoadOutController implements Initializable {
         stage.setScene(scene);
         stage.show();
         ModifyEquipmentController controller = loader.getController();
-        controller.addEquipmentFromLoadOutWizard(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+        controller.addEquipmentFromLoadOutWizard(event, loadOutID, equipmentList, loadOutName);
     }
 
     @FXML
-    void cancelAdd(ActionEvent event) throws IOException {
+    void cancel(ActionEvent event) throws IOException {
         Alert cancelConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
         cancelConfirmation.setTitle("");
         cancelConfirmation.setHeaderText("Cancel Confirmation");
@@ -151,36 +147,31 @@ public class AddLoadOutController implements Initializable {
         stage.setScene(scene);
         stage.show();
         ModifyEquipmentController controller = loader.getController();
-        controller.editEquipmentFromLoadOutWizard(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName, selectedEquipment);
+        controller.editEquipmentFromLoadOutWizard(event, loadOutID, equipmentList, loadOutName, selectedEquipment);
     }
 
     @FXML
-    void saveAdd(ActionEvent event) {
-//        String assetName = inventoryAssetNameTxtBox.getText();
-//        String assetModelNum = inventoryAssetModelNum.getText();
-//        String assetDescription = inventoryAssetDesc.getText();
-//        //TODO Need to add validation
-//        Float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
-//        String assetType = inventoryAssetType.getValue();
-//        int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
-//        int locationID = inventoryAssetLocation.getValue().getLocationID();
-//        LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
-//        AssetDAOImpl.addAsset(new AssetEntity(assetName, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
-//
-//        //TODO Can extract this method I think
-//        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-//        Scene scene = new Scene(loader.load());
-//        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-//        stage.setScene(scene);
-//        stage.show();
-//        MainController controller = loader.getController();
-//        controller.openInventory(event);
+    void save(ActionEvent event) throws Exception {
+        //Save equipment list to database, making sure to add reference to the loadOutID
+        //Save loadout to database
+
+        EquipmentDAOImpl.saveListOfEquipment(equipmentList);
+        //TODO Name validation
+        LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutNameTxt.getText()));
+
+        //TODO Can extract this method I think
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+        MainController controller = loader.getController();
+        controller.openLoadOuts(event);
     }
 
-    public void loadData(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
+    public void loadData(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
         this.loadOutID = loadOutID;
-        this.newEquipmentSlotNum = newEquipmentSlotNum;
         this.equipmentList = equipmentList;
         this.loadOutName = loadOutName;
 
@@ -189,6 +180,7 @@ public class AddLoadOutController implements Initializable {
         editEquipmentButton.setDisable(true);
         deleteEquipmentButton.setVisible(true);
         deleteEquipmentButton.setDisable(true);
+        saveButton.setDisable(false);
 
         //TODO Fill in table view
         equipmentTblView.setItems(equipmentList);

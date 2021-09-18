@@ -147,7 +147,7 @@ Left side navigation menu
 Module specific styling
  */
 
-#toDoControls .button, #loadOutControls .button, #locationControls .button, #employeeControls .button, #inventoryControls .button{
+#toDoControls .button, #loadOutControls .button, #locationControls .button, #employeeControls .button, #inventoryControls .button, #equipmentControls .button{
     -fx-background-color: #5299d3;
     -fx-background-radius :  0 0 0 0;
     -fx-text-fill: #FFFFFF;

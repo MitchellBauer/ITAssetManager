@@ -20,6 +20,10 @@ public class LoadOutEntity implements Entity{
         this.loadOutName = name;
     }
 
+    public LoadOutEntity(String text) {
+        this.loadOutName = text;
+    }
+
     public String getLoadOutName() {
         return loadOutName;
     }

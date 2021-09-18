@@ -6,6 +6,7 @@ import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,6 +48,7 @@ public class MainController implements Initializable {
     JavaFX Access Variables
      */
 
+    //<editor-fold desc="Description">
     @FXML
     private HBox topRightMenu;
 
@@ -151,7 +153,10 @@ public class MainController implements Initializable {
     private Button addLoadOutButton;
 
     @FXML
-    private Button editEquipment;
+    private Button editEquipmentButton;
+
+    @FXML
+    private Button addEquipmentButton;
 
     @FXML
     private Button deleteLoadOutButton;
@@ -172,7 +177,7 @@ public class MainController implements Initializable {
     private TableColumn<LoadOutEntity, String> loadOutNameCol;
 
     @FXML
-    private TableView<LoadOutEntity> equipmentTblView;
+    private TableView<EquipmentEntity> equipmentTblView;
 
     @FXML
     private TableColumn<LoadOutEntity, Integer> loadOutEquipSlotCol;
@@ -313,6 +318,7 @@ public class MainController implements Initializable {
 
     @FXML
     private TableColumn<AssetEntity, String> inventoryTblAssignedTo;
+    //</editor-fold>
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -337,7 +343,18 @@ public class MainController implements Initializable {
 
         loadOutTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
             if (newSelection != null){
-                loadLoadOutEquipmentData();
+                try {
+                    loadLoadOutEquipmentData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        equipmentTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+            if (newSelection != null){
+                editEquipmentButton.setDisable(false);
+                deleteEquipmentButton.setDisable(false);
             }
         });
 
@@ -599,8 +616,11 @@ public class MainController implements Initializable {
 
         //Hide unneeded controls
         equipmentTblView.setVisible(false);
-        editEquipment.setVisible(false);
+        editEquipmentButton.setVisible(false);
+        editEquipmentButton.setDisable(true);
         deleteEquipmentButton.setVisible(false);
+        deleteEquipmentButton.setDisable(true);
+        addEquipmentButton.setVisible(false);
 
         //Populate LoadOut table
         //Populate Inventory Table View
@@ -615,12 +635,67 @@ public class MainController implements Initializable {
         loadOutNameCol.setCellValueFactory(new PropertyValueFactory<>("loadOutName"));
     }
 
-    private void loadLoadOutEquipmentData() {
-        //TODO Load equipment data
+    private void loadLoadOutEquipmentData() throws Exception {
+        LoadOutEntity selectedLoadOut = loadOutTblView.getSelectionModel().getSelectedItem();
+
         //Show needed controls
         equipmentTblView.setVisible(true);
-        editEquipment.setVisible(true);
+        editEquipmentButton.setVisible(true);
         deleteEquipmentButton.setVisible(true);
+        addEquipmentButton.setVisible(true);
+
+        equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(selectedLoadOut.getLoadOutID()));
+        loadOutEquipSlotCol.setCellValueFactory(new PropertyValueFactory<>("loadOutSlotNum"));
+        loadOutEquipNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        loadOutEquipModelNumCol.setCellValueFactory(new PropertyValueFactory<>("modelNum"));
+        loadOutEquipTypeCol.setCellValueFactory(new PropertyValueFactory<>("equipmentType"));
+        loadOutEquipPriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
+        loadOutEquipPurchaseURLCol.setCellValueFactory(new PropertyValueFactory<>("whereToPurchaseURL"));
+        loadOutEquipQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));
+    }
+
+    public void addLoadOut(ActionEvent actionEvent) throws IOException {
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void addEquipment(ActionEvent actionEvent) throws Exception{
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+        ModifyEquipmentController controller = loader.getController();
+        controller.addEquipmentFromMain(loadOutTblView.getSelectionModel().getSelectedItem());
+    }
+
+    public void editEquipment(ActionEvent actionEvent) throws IOException {
+        EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
+
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+        ModifyEquipmentController controller = loader.getController();
+        controller.editEquipmentFromMain(selectedEquipment);
+    }
+
+    public void deleteLoadOut(ActionEvent actionEvent) {
+        //TODO Validation that no equipment is attached or do something with the equipment
+    }
+
+    public void deleteEquipmentFromLoadout(ActionEvent actionEvent) throws Exception {
+        //TODO Validation, no warning
+        EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
+        EquipmentDAOImpl.deleteEquipment(selectedEquipment);
+        equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(loadOutTblView.getSelectionModel().getSelectedItem().getLoadOutID()));
     }
 
     @FXML
@@ -800,23 +875,5 @@ public class MainController implements Initializable {
         }
 
         //TODO Delete employee
-    }
-
-    public void addLoadOut(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void editEquipment(ActionEvent actionEvent) {
-    }
-
-    public void deleteLoadOut(ActionEvent actionEvent) {
-    }
-
-    public void deleteEquipmentFromLoadout(ActionEvent actionEvent) {
     }
 }

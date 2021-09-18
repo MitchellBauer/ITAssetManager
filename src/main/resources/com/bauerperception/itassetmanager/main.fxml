@@ -25,7 +25,7 @@
       <Label fx:id="titleLbl" alignment="CENTER" text="Default Title" textFill="WHITE" AnchorPane.bottomAnchor="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="toDoPane">
+            <BorderPane fx:id="toDoPane" visible="false">
                <center>
                   <TableView prefWidth="825.0" BorderPane.alignment="CENTER">
                     <columns>
@@ -232,11 +232,12 @@
                   </TableView>
                </left>
             </BorderPane>
-            <BorderPane fx:id="loadoutPane" visible="false">
+            <BorderPane fx:id="loadoutPane">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TableView fx:id="equipmentTblView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Separator minHeight="500.0" orientation="VERTICAL" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="30.0" />
+                        <TableView fx:id="equipmentTblView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn fx:id="loadOutEquipSlotCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="Slot" />
                             <TableColumn fx:id="loadOutEquipNameCol" prefWidth="75.0" text="Name" />
@@ -268,12 +269,21 @@
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="editEquipment" alignment="CENTER" mnemonicParsing="false" onAction="#editEquipment" text="Edit&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
+                           </children>
+                        </HBox>
+                        <HBox fx:id="equipmentControls" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button fx:id="addEquipmentButton" alignment="CENTER" layoutX="10.0" layoutY="20.0" mnemonicParsing="false" onAction="#addEquipment" text="Add&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="deleteEquipmentButton" alignment="CENTER" layoutX="217.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteEquipmentFromLoadout" text="Delete&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="editEquipmentButton" alignment="CENTER" mnemonicParsing="false" onAction="#editEquipment" text="Edit&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="deleteEquipmentButton" alignment="CENTER" mnemonicParsing="false" onAction="#deleteEquipmentFromLoadout" text="Delete&#10;Equipment" textAlignment="CENTER" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets top="10.0" />
                                  </HBox.margin>

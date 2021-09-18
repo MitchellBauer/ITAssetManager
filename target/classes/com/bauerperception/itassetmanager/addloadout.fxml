@@ -36,8 +36,8 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#saveAdd" text="Save" textFill="WHITE" />
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" textFill="WHITE" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="RED" />
          </children>
       </HBox>
       <VBox AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">

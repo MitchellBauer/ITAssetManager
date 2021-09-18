@@ -1,7 +1,6 @@
 package com.bauerperception.itassetmanager.DAO;
 
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
-import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,7 +9,7 @@ import java.sql.*;
 public class EquipmentDAOImpl {
     private static Statement stmt;
 
-    public static ObservableList<EquipmentEntity> equipmentByLoadOutID(LoadOutEntity loadOutEntity) throws Exception{
+    public static ObservableList<EquipmentEntity> equipmentByLoadOutID(int loadOutEntity) throws Exception{
         ObservableList<EquipmentEntity> allEquipment = FXCollections.observableArrayList();
         DBConn.makeConn();
         String sqlStatement = "SELECT * FROM equipment WHERE load_out_id = " + loadOutEntity.getLoadOutID();
@@ -64,13 +63,14 @@ public class EquipmentDAOImpl {
                 "purchase_price, last_purchase_price, purchase_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, equipmentEntity.getName());
-        ps.setString(2, equipmentEntity.getEquipmentType());
-        ps.setInt(3, equipmentEntity.getAssignedLoadOutID());
-        ps.setInt(4, equipmentEntity.getLoadOutSlotNum());
-        ps.setInt(5, equipmentEntity.getQuantityNeeded());
-        ps.setFloat(6, equipmentEntity.getPurchasePrice());
+        ps.setString(2, equipmentEntity.getModelNum());
+        ps.setString(3, equipmentEntity.getEquipmentType());
+        ps.setInt(4, equipmentEntity.getAssignedLoadOutID());
+        ps.setInt(5, equipmentEntity.getLoadOutSlotNum());
+        ps.setInt(6, equipmentEntity.getQuantityNeeded());
         ps.setFloat(7, equipmentEntity.getPurchasePrice());
-        ps.setString(8, equipmentEntity.getWhereToPurchaseURL());
+        ps.setFloat(8, equipmentEntity.getPurchasePrice());
+        ps.setString(9, equipmentEntity.getWhereToPurchaseURL());
         ps.executeUpdate();
         DBConn.closeConn();
     }
@@ -141,5 +141,11 @@ public class EquipmentDAOImpl {
         }
         DBConn.closeConn();
         return allTypes;
+    }
+
+    public static void saveListOfEquipment(ObservableList<EquipmentEntity> equipmentList) throws Exception {
+        for (EquipmentEntity i : equipmentList){
+            addEquipment(i);
+        }
     }
 }

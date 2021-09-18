@@ -1,8 +1,10 @@
 package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
-import com.bauerperception.itassetmanager.model.AssetEntity;
+import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
+import com.bauerperception.itassetmanager.model.LoadOutEntity;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,18 +19,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class ModifyEquipmentController implements Initializable {
 
     Stage stage;
     int loadOutID;
-    int newEquipmentSlotNum;
     private ObservableList<EquipmentEntity> equipmentList;
     String loadOutName;
     boolean addingEquipmentToLoadOutWizard;
     private boolean editingEquipmentFromLoadOutWizard;
     private EquipmentEntity editingEquipmentEntity;
+    private boolean editingEquipmentFromMain;
+    private boolean addEquipmentFromMain;
 
     //<editor-fold desc="Description">
     @FXML
@@ -72,6 +78,8 @@ public class ModifyEquipmentController implements Initializable {
 
         addingEquipmentToLoadOutWizard = false;
         editingEquipmentFromLoadOutWizard = false;
+        editingEquipmentFromMain = false;
+        addEquipmentFromMain = false;
 
         try {
             existingEquipmentChoice.setItems(EquipmentDAOImpl.getAllEquipment());
@@ -96,7 +104,7 @@ public class ModifyEquipmentController implements Initializable {
             stage.setScene(scene);
             stage.show();
             AddLoadOutController controller = loader.getController();
-            controller.loadData(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+            controller.loadData(event, loadOutID, equipmentList, loadOutName);
         }
     }
 
@@ -129,8 +137,8 @@ public class ModifyEquipmentController implements Initializable {
             int quantity = Integer.parseInt(qtyNeededTxt.getText());
             float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
-            equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, newEquipmentSlotNum, quantity, purchasePrice, purchaseUrl));
-            controller.loadData(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+            equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
+            controller.loadData(event, loadOutID, equipmentList, loadOutName);
         }
 
         if(editingEquipmentFromLoadOutWizard){
@@ -154,30 +162,112 @@ public class ModifyEquipmentController implements Initializable {
             for (EquipmentEntity i : equipmentList){
                 if (i.getEquipmentID() == equipmentID){
                     equipmentList.remove(i);
-                    equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, newEquipmentSlotNum, quantity, purchasePrice, purchaseUrl));
+                    equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
                 }
             }
-            controller.loadData(event, loadOutID, newEquipmentSlotNum, equipmentList, loadOutName);
+            controller.loadData(event, loadOutID, equipmentList, loadOutName);
+        }
+
+        if (editingEquipmentFromMain){
+            String name = equipmentNameTxt.getText();
+            String modelNum = equipmentModelNumTxt.getText();
+            String equipmentType = typeChoice.getValue();
+            int quantity = Integer.parseInt(qtyNeededTxt.getText());
+            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            String purchaseUrl = urlTxt.getText();
+            EquipmentDAOImpl.updateEquipment(new EquipmentEntity(editingEquipmentEntity.getEquipmentID(), name, modelNum,
+                    equipmentType, editingEquipmentEntity.getAssignedLoadOutID(), editingEquipmentEntity.getLoadOutSlotNum(),
+                    quantity, purchasePrice, purchaseUrl));
+
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+            MainController controller = loader.getController();
+            controller.openLoadOuts(event);
+        }
+
+        if (addEquipmentFromMain){
+            String name = equipmentNameTxt.getText();
+            String modelNum = equipmentModelNumTxt.getText();
+            String equipmentType = typeChoice.getValue();
+            int quantity = Integer.parseInt(qtyNeededTxt.getText());
+            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            String purchaseUrl = urlTxt.getText();
+
+            EquipmentDAOImpl.updateEquipment(new EquipmentEntity(name, modelNum,
+                    equipmentType, loadOutID, getEquipmentSlotNumByLoadOutID(loadOutID),
+                    quantity, purchasePrice, purchaseUrl));
+
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+            MainController controller = loader.getController();
+            controller.openLoadOuts(event);
         }
     }
 
-    public void addEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName) throws Exception {
+    /*
+    In theory this is a very simple way to find any empty slot number or available slot number in the equipment list that is being assigned to the loadout.
+    Example, if the first item in the list has a slot number of 2, then 1 will be available.
+     */
+    private int getEquipmentSlotNum() {
+        int equipmentSlotNumber = 1;
+        //List has to be sorted
+        equipmentList.sort(new Comparator<EquipmentEntity>() {
+            public int compare(EquipmentEntity a, EquipmentEntity b) {
+                return a.getLoadOutSlotNum() - b.getLoadOutSlotNum();
+            }
+        });
+
+        for (EquipmentEntity i : equipmentList){
+            if (equipmentSlotNumber == i.getLoadOutSlotNum()){
+                equipmentSlotNumber++;
+            }
+        }
+        return equipmentSlotNumber;
+    }
+
+    private int getEquipmentSlotNumByLoadOutID(int loadOutID) throws Exception {
+        int equipmentSlotNumber = 1;
+        ObservableList<EquipmentEntity> tempEquipmentList = FXCollections.observableArrayList();
+        tempEquipmentList = EquipmentDAOImpl.equipmentByLoadOutID(loadOutID);
+
+        //List has to be sorted
+        tempEquipmentList.sort(new Comparator<EquipmentEntity>() {
+            public int compare(EquipmentEntity a, EquipmentEntity b) {
+                return a.getLoadOutSlotNum() - b.getLoadOutSlotNum();
+            }
+        });
+
+        for (EquipmentEntity i : tempEquipmentList){
+            if (equipmentSlotNumber == i.getLoadOutSlotNum()){
+                equipmentSlotNumber++;
+            }
+        }
+        return equipmentSlotNumber;
+    }
+
+    public void addEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName) throws Exception {
         //Enable existing equipment for faster editing. In this scenario, we know we aren't creating new equipment.
         existingEquipmentChoice.setVisible(true);
         existingEquipmentLbl.setVisible(true);
 
         //Set these values to public
         this.loadOutID = loadOutID;
-        this.newEquipmentSlotNum = newEquipmentSlotNum;
         this.equipmentList = equipmentList;
         this.loadOutName = loadOutName;
 
         addingEquipmentToLoadOutWizard = true;
     }
 
-    public void editEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, int newEquipmentSlotNum, ObservableList<EquipmentEntity> equipmentList, String loadOutName, EquipmentEntity selectedEquipment) {
+    public void editEquipmentFromLoadOutWizard(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName, EquipmentEntity selectedEquipment) {
         this.loadOutID = loadOutID;
-        this.newEquipmentSlotNum = newEquipmentSlotNum;
         this.equipmentList = equipmentList;
         this.loadOutName = loadOutName;
         this.editingEquipmentEntity = selectedEquipment;
@@ -187,12 +277,23 @@ public class ModifyEquipmentController implements Initializable {
         editEquipment(selectedEquipment);
     }
 
-    private void editEquipment(EquipmentEntity selectedEquipment) {
+    void editEquipment(EquipmentEntity selectedEquipment) {
         equipmentNameTxt.setText(selectedEquipment.getName());
         equipmentModelNumTxt.setText(selectedEquipment.getModelNum());
         typeChoice.setValue(selectedEquipment.getEquipmentType());
         qtyNeededTxt.setText(Integer.toString(selectedEquipment.getQuantityNeeded()));
         purchasePriceTxt.setText(Float.toString(selectedEquipment.getPurchasePrice()));
         urlTxt.setText(selectedEquipment.getWhereToPurchaseURL());
+    }
+
+    public void editEquipmentFromMain(EquipmentEntity selectedEquipment) {
+        editingEquipmentFromMain = true;
+        editEquipment(selectedEquipment);
+        editingEquipmentEntity = selectedEquipment;
+    }
+
+    public void addEquipmentFromMain(LoadOutEntity selectedItem) {
+        addEquipmentFromMain = true;
+        this.loadOutID = selectedItem.getLoadOutID();
     }
 }

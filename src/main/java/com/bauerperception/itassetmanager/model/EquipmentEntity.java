@@ -15,19 +15,30 @@ public class EquipmentEntity {
 
     public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int loadOutSlotNum, int quantity, float purchasePrice, float lastPurchasePrice, String purchaseUrl) {
         this.equipmentID = equipmentID;
-        this.assignedLoadOutID = assignedLoadOutID;
+        this.assignedLoadOutID = loadOutID;
         this.loadOutSlotNum = loadOutSlotNum;
         this.name = name;
         this.modelNum = modelNum;
         this.purchasePrice = purchasePrice;
-        this.lastPurchasedPrice = lastPurchasedPrice;
-        this.whereToPurchaseURL = whereToPurchaseURL;
-        this.quantityNeeded = quantityNeeded;
+        this.lastPurchasedPrice = purchasePrice;
+        this.whereToPurchaseURL = purchaseUrl;
+        this.quantityNeeded = quantity;
         this.equipmentType = equipmentType;
     }
 
     public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, float purchasePrice, String purchaseUrl) {
         this.equipmentID = equipmentID;
+        this.assignedLoadOutID = loadOutID;
+        this.loadOutSlotNum = slotNum;
+        this.name = name;
+        this.modelNum = modelNum;
+        this.purchasePrice = purchasePrice;
+        this.whereToPurchaseURL = purchaseUrl;
+        this.quantityNeeded = quantity;
+        this.equipmentType = equipmentType;
+    }
+
+    public EquipmentEntity(String name, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, float purchasePrice, String purchaseUrl) {
         this.assignedLoadOutID = loadOutID;
         this.loadOutSlotNum = slotNum;
         this.name = name;
@@ -116,5 +127,17 @@ public class EquipmentEntity {
 
     public void setEquipmentType(String equipmentType) {
         this.equipmentType = equipmentType;
+    }
+
+    @Override
+    public String toString() {
+        return "EquipmentEntity{" +
+                "name='" + name + '\'' +
+                ", modelNum='" + modelNum + '\'' +
+                ", purchasePrice=" + purchasePrice +
+                ", whereToPurchaseURL='" + whereToPurchaseURL + '\'' +
+                ", quantityNeeded=" + quantityNeeded +
+                ", equipmentType='" + equipmentType + '\'' +
+                '}';
     }
 }
