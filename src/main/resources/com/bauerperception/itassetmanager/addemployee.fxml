@@ -158,11 +158,23 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="7.0">
          <children>
-            <Button fx:id="backButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#backButton" text="Back" textFill="WHITE" />
-            <Button fx:id="nextButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#nextButton" text="Next" textFill="WHITE" />
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#saveAddEmployee" text="Save" textFill="WHITE" />
+            <Button fx:id="backButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#backButton" text="Back" textFill="WHITE" visible="false" />
+            <Button fx:id="nextButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#nextButton" text="Next" textFill="WHITE" visible="false" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#saveAddEmployee" text="Save" textFill="WHITE" visible="false" />
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" textFill="RED" />
          </children>
       </HBox>
+      <Label fx:id="errorNoLocationsLbl" alignment="CENTER" layoutX="286.0" layoutY="112.0" style="-fx-font-weight: bold;" text="There is no locations in the database. &#10;An employee must be assigned to a location.&#10;Before existing. Please click the button below or cancel." textAlignment="CENTER" textFill="WHITE" visible="false" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="goToLocationEditorBtn" layoutX="274.0" layoutY="168.0" mnemonicParsing="false" onAction="#goToLocationEditor" text="Goto Location Editor" textFill="WHITE" visible="false" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="170.0" />
+      <Label fx:id="errorNoLoadOutsLbl" alignment="CENTER" layoutX="110.0" layoutY="110.0" style="-fx-font-weight: bold;" text="There is no loadouts in the database. &#10;An employee must have a loadout available b&#10;efore existing. Please click the button below or cancel." textAlignment="CENTER" textFill="WHITE" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="goToLoadOutEditorBtn" layoutX="210.0" layoutY="180.0" mnemonicParsing="false" onAction="#goToLoadOutEditor" text="Goto Loadout Editor" textFill="WHITE" visible="false" />
    </children>
 </AnchorPane>

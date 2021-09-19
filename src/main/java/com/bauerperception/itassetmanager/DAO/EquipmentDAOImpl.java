@@ -9,10 +9,10 @@ import java.sql.*;
 public class EquipmentDAOImpl {
     private static Statement stmt;
 
-    public static ObservableList<EquipmentEntity> equipmentByLoadOutID(int loadOutEntity) throws Exception{
+    public static ObservableList<EquipmentEntity> equipmentByLoadOutID(int loadOutID) throws Exception{
         ObservableList<EquipmentEntity> allEquipment = FXCollections.observableArrayList();
         DBConn.makeConn();
-        String sqlStatement = "SELECT * FROM equipment WHERE load_out_id = " + loadOutEntity.getLoadOutID();
+        String sqlStatement = "SELECT * FROM equipment WHERE load_out_id = " + loadOutID;
         stmt = DBConn.conn.createStatement();
         ResultSet result = stmt.executeQuery(sqlStatement);
 
@@ -21,14 +21,14 @@ public class EquipmentDAOImpl {
             String name = result.getString("name");
             String modelNum = result.getString("model_num");
             String equipmentType = result.getString("equipment_type");
-            int loadOutID = result.getInt("load_out_id");
+            int resultLoadOutID = result.getInt("load_out_id");
             int loadOutSlotNum = result.getInt("load_out_slot_num");
             int quantity = result.getInt("quantity");
             float purchasePrice = result.getFloat("purchase_price");
             float lastPurchasePrice = result.getFloat("last_purchase_price");
             String purchaseUrl = result.getString("purchase_url");
 
-            EquipmentEntity equipmentResult = new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID,
+            EquipmentEntity equipmentResult = new EquipmentEntity(equipmentID, name, modelNum, equipmentType, resultLoadOutID,
                     loadOutSlotNum, quantity, purchasePrice, lastPurchasePrice, purchaseUrl);
             allEquipment.add(equipmentResult);
         }

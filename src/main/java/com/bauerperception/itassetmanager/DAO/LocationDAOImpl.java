@@ -21,8 +21,9 @@ public class LocationDAOImpl {
         while(result.next()){
             int locationID = result.getInt("id");
             String locationName = result.getString("name");
+            int loadOutID = result.getInt("loadout_id");
 
-            LocationEntity LocationResult = new LocationEntity(locationID, locationName);
+            LocationEntity LocationResult = new LocationEntity(locationID, locationName, loadOutID);
             allLocations.add(LocationResult);
         }
         DBConn.closeConn();
@@ -33,9 +34,10 @@ public class LocationDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "INSERT INTO locations (name) VALUES (?)";
+        String sqlStatement = "INSERT INTO locations (name, loadout_id) VALUES (?, ?)";
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, newLocation.getLocationName());
+        ps.setInt(2, newLocation.getLoadOutID());
         ps.executeUpdate();
         DBConn.closeConn();
     }
@@ -52,10 +54,11 @@ public class LocationDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "UPDATE locations SET name = ? WHERE id = ?";
+        String sqlStatement = "UPDATE locations SET name = ?, loadout_id = ? WHERE id = ?";
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, selectedLocation.getLocationName());
-        ps.setInt(2, selectedLocation.getLocationID());
+        ps.setInt(2, selectedLocation.getLoadOutID());
+        ps.setInt(3, selectedLocation.getLocationID());
         ps.executeUpdate();
         DBConn.closeConn();
     }

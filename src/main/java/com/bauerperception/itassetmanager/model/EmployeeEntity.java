@@ -1,32 +1,39 @@
 package com.bauerperception.itassetmanager.model;
 
-import javafx.beans.property.SimpleStringProperty;
-
-import java.util.ArrayList;
-
 public class EmployeeEntity implements Entity{
     private int employeeID;
     private String firstName;
     private String middleName;
     private String lastName;
     private String emailAddress;
-    private int assignedWorkLocation;
+    private int primaryWorkLocation;
+    private int secondaryWorkLocation;
 
-    public EmployeeEntity(int employeeID, String firstName, String middleName, String lastName, String emailAddress, int assignedWorkLocation) {
+    public EmployeeEntity(String firstName, String middleName, String lastName, String emailAddress, int primaryLocationID, int secondaryLocationID) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.emailAddress = emailAddress;
+        this.primaryWorkLocation = primaryLocationID;
+        this.secondaryWorkLocation = secondaryLocationID;
+    }
+
+    public EmployeeEntity(int employeeID, String firstName, String middleName, String lastName, String emailAddress, int assignedWorkLocation, int secondaryWorkLocation) {
         this.employeeID = employeeID;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.assignedWorkLocation = assignedWorkLocation;
+        this.primaryWorkLocation = assignedWorkLocation;
+        this.secondaryWorkLocation = secondaryWorkLocation;
     }
 
-    public EmployeeEntity(String firstName, String middleName, String lastName, String emailAddress, int assignedWorkLocationID) {
+    public EmployeeEntity(String firstName, String middleName, String lastName, String emailAddress, int primaryWorkLocation) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.assignedWorkLocation = assignedWorkLocationID;
+        this.primaryWorkLocation = primaryWorkLocation;
     }
 
     public int getEmployeeID() {
@@ -69,12 +76,20 @@ public class EmployeeEntity implements Entity{
         this.emailAddress = emailAddress;
     }
 
-    public int getAssignedWorkLocation() {
-        return assignedWorkLocation;
+    public int getPrimaryWorkLocation() {
+        return primaryWorkLocation;
     }
 
-    public void setAssignedWorkLocation(int assignedWorkLocation) {
-        this.assignedWorkLocation = assignedWorkLocation;
+    public void setPrimaryWorkLocation(int primaryWorkLocation) {
+        this.primaryWorkLocation = primaryWorkLocation;
+    }
+
+    public int getSecondaryWorkLocation() {
+        return secondaryWorkLocation;
+    }
+
+    public void setSecondaryWorkLocation(int secondaryWorkLocation) {
+        this.secondaryWorkLocation = secondaryWorkLocation;
     }
 
     @Override

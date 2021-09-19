@@ -37,3 +37,12 @@ TODO Might need to change the styling of the buttons
     -fx-font-weight: bold;
     -fx-effect: dropshadow( gaussian , black, 10,0,2,2 );
 }
+
+#goToLocationEditorBtn{
+    -fx-background-color: #cf5c36;
+    -fx-background-radius :  0 0 0 0;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , black, 10,0,2,2 );
+}

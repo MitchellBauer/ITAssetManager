@@ -85,9 +85,10 @@ CREATE TABLE `employees` (
   `last_name` varchar(255) NOT NULL,
   `email_address` varchar(255) NOT NULL,
   `work_location` int NOT NULL,
+  `second_work_location` int DEFAULT NULL,
   PRIMARY KEY (`idemployees`),
   UNIQUE KEY `email_address_UNIQUE` (`email_address`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +97,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'Mitchell','Jonathan','Bauer','mbauer@trimacpanel.com',1);
+INSERT INTO `employees` VALUES (1,'Mitchell','Jonathan','Bauer','mbauer@trimacpanel.com',1,NULL);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,9 +118,9 @@ CREATE TABLE `equipment` (
   `quantity` int NOT NULL,
   `purchase_price` float DEFAULT NULL,
   `last_purchase_price` float DEFAULT NULL,
-  `purchase_url` varchar(255) DEFAULT NULL,
+  `purchase_url` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,6 +129,7 @@ CREATE TABLE `equipment` (
 
 LOCK TABLES `equipment` WRITE;
 /*!40000 ALTER TABLE `equipment` DISABLE KEYS */;
+INSERT INTO `equipment` VALUES (1,'HP Monitor','HP VH240a','Monitor',0,0,3,239,239,'https://www.amazon.com/HP-23-8-inch-Adjustment-Speakers-VH240a/dp/B072M34RQC/ref=sr_1_1_sspa?crid=3NHTV4AGEDTLX&dchild=1&keywords=24+inch+monitor&qid=1631915536&sprefix=24%2Caps%2C231&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzR1JMOU1EQzFLVDlBJmVuY3J5cHRlZElkPUEwNTk5OTg0NEhWQzVIWFlQRVVaJmVuY3J5cHRlZEFkSWQ9QTA2MjEyMDcyV0lPU0RaT1JESDRYJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==');
 /*!40000 ALTER TABLE `equipment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +144,7 @@ CREATE TABLE `loadouts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,6 +153,7 @@ CREATE TABLE `loadouts` (
 
 LOCK TABLES `loadouts` WRITE;
 /*!40000 ALTER TABLE `loadouts` DISABLE KEYS */;
+INSERT INTO `loadouts` VALUES (0,'Home Office W/ Laptop');
 /*!40000 ALTER TABLE `loadouts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-17 11:51:29
+-- Dump completed on 2021-09-19 11:54:20

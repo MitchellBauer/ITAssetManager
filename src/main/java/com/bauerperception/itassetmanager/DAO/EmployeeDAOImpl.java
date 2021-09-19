@@ -23,8 +23,10 @@ public class EmployeeDAOImpl {
             String lastName = result.getString("last_name");
             String emailAddress = result.getString("email_address");
             int assignedWorkLocation = result.getInt("work_location");
+            int secondaryWorkLocation = result.getInt("secondary_work_location");
 
-            EmployeeEntity employeeResult = new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation);
+            EmployeeEntity employeeResult = new EmployeeEntity(employeeID, firstName, middleName, lastName,
+                    emailAddress, assignedWorkLocation, secondaryWorkLocation);
             allEmployees.add(employeeResult);
         }
         DBConn.closeConn();
@@ -36,9 +38,9 @@ public class EmployeeDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "UPDATE employees SET first_name = ?, middle_name = ?, last_name = ?, " +
-                "email_address = ?, work_location = ? WHERE idasset = ?;";
+                "email_address = ?, work_location = ?, second_work_location WHERE idasset = ?;";
         ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
-        ps.setInt(6, employeeEntity.getEmployeeID());
+        ps.setInt(7, employeeEntity.getEmployeeID());
         ps.executeUpdate();
         DBConn.closeConn();
     }
@@ -47,8 +49,8 @@ public class EmployeeDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "INSERT INTO employees (first_name, middle_name, last_name, email_address, work_location) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO employees (first_name, middle_name, last_name, email_address, work_location, " +
+                "second_work_location) VALUES (?, ?, ?, ?, ?, ?)";
         ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
         ps.executeUpdate();
         DBConn.closeConn();
@@ -61,7 +63,8 @@ public class EmployeeDAOImpl {
         ps.setString(2, employeeEntity.getMiddleName());
         ps.setString(3, employeeEntity.getLastName());
         ps.setString(4, employeeEntity.getEmailAddress());
-        ps.setInt(5, employeeEntity.getAssignedWorkLocation());
+        ps.setInt(5, employeeEntity.getPrimaryWorkLocation());
+        ps.setInt(6, employeeEntity.getSecondaryWorkLocation());
         return ps;
     }
 

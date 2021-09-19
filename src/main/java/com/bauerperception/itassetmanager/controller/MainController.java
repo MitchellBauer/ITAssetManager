@@ -2,11 +2,8 @@ package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.model.*;
 import com.bauerperception.itassetmanager.DAO.*;
-import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,18 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import javax.xml.stream.Location;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -492,7 +485,7 @@ public class MainController implements Initializable {
             employeeMiddleNameTxt.setText(selectedEmployee.getMiddleName());
             employeeLastNameTxt.setText(selectedEmployee.getLastName());
             employeeEmailTxt.setText(selectedEmployee.getEmailAddress());
-            employeeWorkLocTxt.setValue(getEntityByID(locationList, selectedEmployee.getAssignedWorkLocation()));
+            employeeWorkLocTxt.setValue(getEntityByID(locationList, selectedEmployee.getPrimaryWorkLocation()));
         }
     }
 

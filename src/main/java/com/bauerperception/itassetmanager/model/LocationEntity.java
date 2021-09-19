@@ -5,11 +5,20 @@ import java.util.ArrayList;
 public class LocationEntity implements Entity{
     private int locationID;
     private String locationName;
-    private ArrayList<LoadOutEntity> assignedLoadOuts;
+    private int loadOutID;
 
-    public LocationEntity(int locationID, String locationName) {
+    public LocationEntity(int locationID, String locationName, int assignedLoadOut) {
         this.locationID = locationID;
         this.locationName = locationName;
+        this.loadOutID = assignedLoadOut;
+    }
+
+    public int getLoadOutID() {
+        return loadOutID;
+    }
+
+    public void setLoadOutID(int loadOutID) {
+        this.loadOutID = loadOutID;
     }
 
     public LocationEntity(String workLocationName) {
