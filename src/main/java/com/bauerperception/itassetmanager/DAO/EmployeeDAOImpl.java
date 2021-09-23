@@ -23,7 +23,7 @@ public class EmployeeDAOImpl {
             String lastName = result.getString("last_name");
             String emailAddress = result.getString("email_address");
             int assignedWorkLocation = result.getInt("work_location");
-            int secondaryWorkLocation = result.getInt("secondary_work_location");
+            int secondaryWorkLocation = result.getInt("second_work_location");
 
             EmployeeEntity employeeResult = new EmployeeEntity(employeeID, firstName, middleName, lastName,
                     emailAddress, assignedWorkLocation, secondaryWorkLocation);

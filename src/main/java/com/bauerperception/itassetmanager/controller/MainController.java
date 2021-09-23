@@ -2,9 +2,12 @@ package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.model.*;
 import com.bauerperception.itassetmanager.DAO.*;
+import com.bauerperception.itassetmanager.util.FXUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -27,8 +31,8 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     /*
-    Public variables
-     */
+        Public variables
+         */
     ObservableList<String> assetEntityTypeList;
     ObservableList<EmployeeEntity> employeeList;
     ObservableList<LocationEntity> locationList;
@@ -67,11 +71,11 @@ public class MainController implements Initializable {
     Task/Todoo Pane
      */
 
-    @FXML
-    private BorderPane toDoPane;
-
-    @FXML
-    private Button goToTaskButton;
+//    @FXML
+//    private BorderPane toDoPane;
+//
+//    @FXML
+//    private Button goToTaskButton;
 
     /*
     Employee Pane
@@ -123,7 +127,13 @@ public class MainController implements Initializable {
     private Label employeeWorkLocLbl;
 
     @FXML
-    private ChoiceBox<LocationEntity> employeeWorkLocTxt;
+    private ChoiceBox<LocationEntity> employeeWorkLocChoice;
+
+    @FXML
+    private Label employeeSecondaryWorkLocLbl;
+
+    @FXML
+    private ChoiceBox<LocationEntity> employeeSecondaryWorkLocChoice;
 
     @FXML
     private TableView<EmployeeEntity> employeeTblView;
@@ -134,6 +144,11 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<EmployeeEntity, String> employeeNameCol;
 
+    @FXML
+    private TextField employeeSearchTextBar;
+
+    @FXML
+    private Button employeeSearchButton;
 
     /*
     LoadOut Pane and Controls
@@ -193,6 +208,12 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<LoadOutEntity, Integer> loadOutEquipQuantityCol;
 
+    @FXML
+    private TextField loadOutSearchTextBar;
+
+    @FXML
+    private Button loadOutSearchButton;
+
     /*
     Location Pane
      */
@@ -222,6 +243,12 @@ public class MainController implements Initializable {
     private TextField locationNameTxt;
 
     @FXML
+    private Label loadOutAssignedLbl;
+
+    @FXML
+    private ChoiceBox<LoadOutEntity> assignedLoadOutChoice;
+
+    @FXML
     private TableView<LocationEntity> locationTblView;
 
     @FXML
@@ -229,6 +256,12 @@ public class MainController implements Initializable {
 
     @FXML
     private TableColumn<LocationEntity, String> locationNameCol;
+
+    @FXML
+    private TextField locationSearchTextBar;
+
+    @FXML
+    private Button locationSearchButton;
 
     /*
      Inventory Pane
@@ -277,7 +310,7 @@ public class MainController implements Initializable {
     private Label inventoryIDLbl;
 
     @FXML
-    private TextField inventoryAssetNameTxtBox;
+    private TextField inventoryAssetMfrTxtBox;
 
     @FXML
     private ChoiceBox<String> inventoryAssetType;
@@ -307,10 +340,19 @@ public class MainController implements Initializable {
     private TableColumn<AssetEntity, Integer> inventoryTblID;
 
     @FXML
-    private TableColumn<AssetEntity, String> inventoryTblAssetName;
+    private TableColumn<AssetEntity, String> inventoryTblAssetMfr;
 
     @FXML
     private TableColumn<AssetEntity, String> inventoryTblAssignedTo;
+
+    @FXML
+    public TableColumn<AssetEntity, String> inventoryTblAssetType;
+
+    @FXML
+    private TextField inventorySearchTextBar;
+
+    @FXML
+    private Button inventorySearchButton;
     //</editor-fold>
 
     @Override
@@ -330,7 +372,11 @@ public class MainController implements Initializable {
 
         locationTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
             if (newSelection != null){
-                loadLocationData();
+                try {
+                    loadLocationData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -354,29 +400,25 @@ public class MainController implements Initializable {
         /*
         Load defaults
          */
-        //Inventory Type Defaults
         try {
             assetEntityTypeList = AssetDAOImpl.getAssetTypes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //Inventory Employee Assignment Defaults
-        try {
+            assetList = AssetDAOImpl.getAllAssets();
             employeeList = EmployeeDAOImpl.getAllEmployees();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //Inventory Location Assignment Defaults
-        try {
             locationList = LocationDAOImpl.getAllLocations();
+            loadOutList = LoadOutDAOImpl.getAllLoadOuts();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //Call initial open
-        openToDo(new ActionEvent());
+        //openToDo(new ActionEvent());
+        try {
+            openInventory(new ActionEvent());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @FXML
@@ -422,7 +464,7 @@ public class MainController implements Initializable {
         inventoryPane.setVisible(false);
         loadoutPane.setVisible(false);
         locationsPane.setVisible(false);
-        toDoPane.setVisible(false);
+        //toDoPane.setVisible(false);
 
         //Set Title
         titleLbl.setText("Employee Module");
@@ -453,6 +495,42 @@ public class MainController implements Initializable {
                 return new SimpleStringProperty(employee.getValue().getFirstName() + " " + shortenedMiddleName + " " + employee.getValue().getLastName());
             }
         });
+
+        //Interactive filter search bar for Employee
+        FilteredList<EmployeeEntity> employeeFilteredData = new FilteredList<>(employeeList, p -> true);
+        employeeSearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            employeeFilteredData.setPredicate(employee -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                try {
+                    if (employee.getFirstName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (employee.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //Compare ID
+                if (FXUtil.isNumeric(newValue)){
+                    if (employee.getEmployeeID() == Integer.parseInt(newValue)){
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        });
+
+        SortedList<EmployeeEntity> sortedEmployeeData = new SortedList<>(employeeFilteredData);
+        sortedEmployeeData.comparatorProperty().bind(employeeTblView.comparatorProperty());
+        employeeTblView.setItems(sortedEmployeeData);
     }
 
     void setVisibilityEmployeeEditable(boolean b) {
@@ -467,7 +545,9 @@ public class MainController implements Initializable {
         employeeEmailLbl.setVisible(b);
         employeeEmailTxt.setVisible(b);
         employeeWorkLocLbl.setVisible(b);
-        employeeWorkLocTxt.setVisible(b);
+        employeeWorkLocChoice.setVisible(b);
+        employeeSecondaryWorkLocLbl.setVisible(b);
+        employeeSecondaryWorkLocChoice.setVisible(b);
     }
 
     private void loadEmployeeData(){
@@ -485,7 +565,18 @@ public class MainController implements Initializable {
             employeeMiddleNameTxt.setText(selectedEmployee.getMiddleName());
             employeeLastNameTxt.setText(selectedEmployee.getLastName());
             employeeEmailTxt.setText(selectedEmployee.getEmailAddress());
-            employeeWorkLocTxt.setValue(getEntityByID(locationList, selectedEmployee.getPrimaryWorkLocation()));
+            employeeWorkLocChoice.setValue(FXUtil.getEntityByID(locationList, selectedEmployee.getPrimaryWorkLocation()));
+
+            //Load locations
+            try {
+                employeeWorkLocChoice.setItems(LocationDAOImpl.getAllLocations());
+                employeeSecondaryWorkLocChoice.setItems(LocationDAOImpl.getAllLocations());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            employeeWorkLocChoice.setValue(FXUtil.getEntityByID(employeeWorkLocChoice.getItems(), selectedEmployee.getPrimaryWorkLocation()));
+            employeeSecondaryWorkLocChoice.setValue(FXUtil.getEntityByID(employeeSecondaryWorkLocChoice.getItems(), selectedEmployee.getSecondaryWorkLocation()));
         }
     }
 
@@ -496,7 +587,7 @@ public class MainController implements Initializable {
         inventoryPane.setVisible(true);
         loadoutPane.setVisible(false);
         locationsPane.setVisible(false);
-        toDoPane.setVisible(false);
+        //toDoPane.setVisible(false);
 
         //Set Title
         titleLbl.setText("Inventory Module");
@@ -517,11 +608,17 @@ public class MainController implements Initializable {
         }
 
         inventoryTblID.setCellValueFactory(new PropertyValueFactory<>("assetID"));
-        inventoryTblAssetName.setCellValueFactory(new PropertyValueFactory<>("assetName"));
+        inventoryTblAssetMfr.setCellValueFactory(new PropertyValueFactory<>("assetManufacturer"));
+        inventoryTblAssetType.setCellValueFactory(new PropertyValueFactory<>("assetType"));
 
         //Takes the passed in AssetEntity and extracts the employee's ID that is assigned to it. Then returns the name of the employee in the column.
         inventoryTblAssignedTo.setCellValueFactory(asset -> {
-            EmployeeEntity assignedEmployee = getEntityByID(employeeList, asset.getValue().getAssignedToID());
+            EmployeeEntity assignedEmployee = null;
+            try {
+                assignedEmployee = FXUtil.getEntityByID(employeeList, asset.getValue().getAssignedToID());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if(assignedEmployee.getMiddleName().isEmpty()) {
                 return new SimpleStringProperty(assignedEmployee.getFirstName() + " " + assignedEmployee.getLastName());
             } else {
@@ -529,12 +626,61 @@ public class MainController implements Initializable {
                 return new SimpleStringProperty(assignedEmployee.getFirstName() + " " + shortenedMiddleName + " " + assignedEmployee.getLastName());
             }
         });
+
+        //Interactive filter search bar for Inventory
+        //TODO https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/
+        FilteredList<AssetEntity> inventoryFilteredData = new FilteredList<>(assetList, p -> true);
+        inventorySearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            inventoryFilteredData.setPredicate(asset -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                EmployeeEntity assignedEmployee = null;
+                try {
+                    assignedEmployee = FXUtil.getEntityByID(employeeList,asset.getAssignedToID());
+                    if (assignedEmployee.getFirstName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (assignedEmployee.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //Compare ID
+                if (FXUtil.isNumeric(newValue)){
+                    if (asset.getAssetID() == Integer.parseInt(newValue)){
+                        return true;
+                    }
+                }
+
+                //Compare Asset Type
+                if (asset.getAssetType().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+
+                //Compare manufacturer
+                if (asset.getAssetManufacturer().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+
+                return false;
+            });
+        });
+
+        SortedList<AssetEntity> sortedInventoryData = new SortedList<>(inventoryFilteredData);
+        sortedInventoryData.comparatorProperty().bind(inventoryTblView.comparatorProperty());
+        inventoryTblView.setItems(sortedInventoryData);
     }
 
     void setVisibilityInventoryEditable(boolean b) {
         //TODO condense this https://stackoverflow.com/questions/29061483/grouping-objects-in-javafx
         inventoryIDLbl.setVisible(b);
-        inventoryAssetNameTxtBox.setVisible(b);
+        inventoryAssetMfrTxtBox.setVisible(b);
         inventoryAssetModelNum.setVisible(b);
         inventoryAssetDesc.setVisible(b);
         inventoryAssetPurchasedPrice.setVisible(b);
@@ -564,7 +710,7 @@ public class MainController implements Initializable {
             saveAssetButton.setDisable(false);
 
             inventoryIDLbl.setText(Integer.toString(selectedAsset.getID()));
-            inventoryAssetNameTxtBox.setText(selectedAsset.getAssetName());
+            inventoryAssetMfrTxtBox.setText(selectedAsset.getAssetManufacturer());
             inventoryAssetModelNum.setText(selectedAsset.getAssetModel());
             inventoryAssetDesc.setText(selectedAsset.getAssetDescription());
             inventoryAssetPurchasedPrice.setText(Float.toString(selectedAsset.getPurchasedPrice()));
@@ -576,23 +722,12 @@ public class MainController implements Initializable {
 
             //Load all employees and set value
             inventoryAssetAssignedTo.setItems(employeeList);
-            inventoryAssetAssignedTo.setValue(getEntityByID(employeeList, selectedAsset.getAssignedToID()));
+            inventoryAssetAssignedTo.setValue(FXUtil.getEntityByID(inventoryAssetAssignedTo.getItems(), selectedAsset.getAssignedToID()));
 
             //Load all locations and set value
             inventoryAssetLocation.setItems(locationList);
-            inventoryAssetLocation.setValue(getEntityByID(locationList, selectedAsset.getLocationID()));
+            inventoryAssetLocation.setValue(FXUtil.getEntityByID(inventoryAssetLocation.getItems(), selectedAsset.getLocationID()));
         }
-    }
-
-    //TODO Might make more sense to send this over to a Util module
-    <T extends Entity> T getEntityByID(ObservableList<T> genericList, int entityID) {
-        for (T i : genericList) {
-            if (i.getID() == entityID){
-                return i;
-            }
-        }
-        //If this returns null the ID for an entity in the list
-        return null;
     }
 
     @FXML
@@ -602,7 +737,7 @@ public class MainController implements Initializable {
         inventoryPane.setVisible(false);
         loadoutPane.setVisible(true);
         locationsPane.setVisible(false);
-        toDoPane.setVisible(false);
+        //toDoPane.setVisible(false);
 
         //Set Title
         titleLbl.setText("Loadout Module");
@@ -645,6 +780,36 @@ public class MainController implements Initializable {
         loadOutEquipPriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         loadOutEquipPurchaseURLCol.setCellValueFactory(new PropertyValueFactory<>("whereToPurchaseURL"));
         loadOutEquipQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));
+
+        //Interactive filter search bar for LoadOut
+        FilteredList<LoadOutEntity> loadOutFilteredData = new FilteredList<>(loadOutList, p -> true);
+        loadOutSearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            loadOutFilteredData.setPredicate(loadout -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (loadout.getLoadOutName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+
+                //Compare ID
+                if (FXUtil.isNumeric(newValue)){
+                    if (loadout.getLoadOutID() == Integer.parseInt(newValue)){
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        });
+
+        SortedList<LoadOutEntity> sortedLoadOutData = new SortedList<>(loadOutFilteredData);
+        sortedLoadOutData.comparatorProperty().bind(loadOutTblView.comparatorProperty());
+        loadOutTblView.setItems(sortedLoadOutData);
     }
 
     public void addLoadOut(ActionEvent actionEvent) throws IOException {
@@ -667,16 +832,9 @@ public class MainController implements Initializable {
         controller.addEquipmentFromMain(loadOutTblView.getSelectionModel().getSelectedItem());
     }
 
-    public void editEquipment(ActionEvent actionEvent) throws IOException {
+    public void editEquipment(ActionEvent event) throws IOException {
         EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
-
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        ModifyEquipmentController controller = loader.getController();
+        ModifyEquipmentController controller = FXUtil.goToScene(event, "modifyequipment", "addwizard").getController();
         controller.editEquipmentFromMain(selectedEquipment);
     }
 
@@ -698,7 +856,7 @@ public class MainController implements Initializable {
         inventoryPane.setVisible(false);
         loadoutPane.setVisible(false);
         locationsPane.setVisible(true);
-        toDoPane.setVisible(false);
+        //toDoPane.setVisible(false);
 
         //Set Title
         titleLbl.setText("Locations Module");
@@ -720,6 +878,36 @@ public class MainController implements Initializable {
 
         locationIDCol.setCellValueFactory(new PropertyValueFactory<>("locationID"));
         locationNameCol.setCellValueFactory(new PropertyValueFactory<>("locationName"));
+
+        //Interactive filter search bar for Location
+        FilteredList<LocationEntity> locationFilteredData = new FilteredList<>(locationList, p -> true);
+        locationSearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            locationFilteredData.setPredicate(ilocation -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (ilocation.getLocationName().toLowerCase().contains(lowerCaseFilter)){
+                    return true;
+                }
+
+                //Compare ID
+                if (FXUtil.isNumeric(newValue)){
+                    if (ilocation.getLocationID() == Integer.parseInt(newValue)){
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        });
+
+        SortedList<LocationEntity> sortedLocationData = new SortedList<>(locationFilteredData);
+        sortedLocationData.comparatorProperty().bind(locationTblView.comparatorProperty());
+        locationTblView.setItems(sortedLocationData);
     }
 
     private void setVisibilityLocationEditable(boolean b) {
@@ -727,9 +915,11 @@ public class MainController implements Initializable {
         locationNameLbl.setVisible(b);
         locationIDTitle.setVisible(b);
         locationNameTxt.setVisible(b);
+        assignedLoadOutChoice.setVisible(b);
+        loadOutAssignedLbl.setVisible(b);
     }
 
-    private void loadLocationData() {
+    private void loadLocationData() throws Exception {
         LocationEntity selectedLocation = locationTblView.getSelectionModel().getSelectedItem();
         if (selectedLocation != null){
             setVisibilityLocationEditable(true);
@@ -740,6 +930,9 @@ public class MainController implements Initializable {
 
             locationIDLbl.setText(Integer.toString(selectedLocation.getLocationID()));
             locationNameTxt.setText(selectedLocation.getLocationName());
+
+            assignedLoadOutChoice.setItems(LoadOutDAOImpl.getAllLoadOuts());
+            assignedLoadOutChoice.setValue(FXUtil.getEntityByID(assignedLoadOutChoice.getItems(), selectedLocation.getLoadOutID()));
         }
     }
 
@@ -751,32 +944,24 @@ public class MainController implements Initializable {
         inventoryPane.setVisible(false);
         loadoutPane.setVisible(false);
         locationsPane.setVisible(false);
-        toDoPane.setVisible(false);
+        //toDoPane.setVisible(false);
 
         //Set Title
         titleLbl.setText("Reports Module");
     }
 
-    @FXML
-    void openToDo(ActionEvent event) {
-        //Show Panel
-        employeePane.setVisible(false);
-        inventoryPane.setVisible(false);
-        loadoutPane.setVisible(false);
-        locationsPane.setVisible(false);
-        toDoPane.setVisible(true);
-
-        //Set Title
-        titleLbl.setText("ToDo Module");
-    }
-
-    private void throwAlert(String header, String contents) {
-        Alert cancelConfirmation = new Alert(Alert.AlertType.ERROR);
-        cancelConfirmation.setTitle("");
-        cancelConfirmation.setHeaderText(header);
-        cancelConfirmation.setContentText(contents);
-        Optional<ButtonType> confirmationResult = cancelConfirmation.showAndWait();
-    }
+//    @FXML
+//    void openToDo(ActionEvent event) {
+//        //Show Panel
+//        employeePane.setVisible(false);
+//        inventoryPane.setVisible(false);
+//        loadoutPane.setVisible(false);
+//        locationsPane.setVisible(false);
+//        toDoPane.setVisible(true);
+//
+//        //Set Title
+//        titleLbl.setText("Task Module");
+//    }
 
     public void addEntity(ActionEvent actionEvent) throws IOException {
         if (inventoryPane.isVisible()){
@@ -811,7 +996,7 @@ public class MainController implements Initializable {
     public void saveEntity() throws Exception {
         if (inventoryPane.isVisible()) {
             int assetID = Integer.parseInt(inventoryIDLbl.getText());
-            String assetName = inventoryAssetNameTxtBox.getText();
+            String assetManufacturer = inventoryAssetMfrTxtBox.getText();
             String assetModelNum = inventoryAssetModelNum.getText();
             String assetDescription = inventoryAssetDesc.getText();
             //TODO Need to add validation
@@ -820,27 +1005,31 @@ public class MainController implements Initializable {
             int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
             int locationID = inventoryAssetLocation.getValue().getLocationID();
             LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
-            AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetName, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
+            AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
             inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
             assetList = AssetDAOImpl.getAllAssets();
         }
 
         if (employeePane.isVisible()){
+            //TODO Validation
             int employeeID = Integer.parseInt(employeeIDLbl.getText());
             String firstName = employeeFirstNameTxt.getText();
             String middleName = employeeMiddleNameTxt.getText();
             String lastName = employeeLastNameTxt.getText();
             String emailAddress = employeeEmailTxt.getText();
-            int assignedWorkLocation = employeeWorkLocTxt.getValue().getLocationID();
-            EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation));
+            int assignedWorkLocation = employeeWorkLocChoice.getValue().getLocationID();
+            int secondaryWorkLocation = employeeSecondaryWorkLocChoice.getValue().getLocationID();
+            EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation, secondaryWorkLocation));
             employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
             employeeList = EmployeeDAOImpl.getAllEmployees();
         }
 
         if (locationsPane.isVisible()){
+            //TODO Validation
             int locationID = Integer.parseInt(locationIDLbl.getText());
             String locationName = locationNameTxt.getText();
-            LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName));
+            int loadOutID = assignedLoadOutChoice.getValue().getLoadOutID();
+            LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName,loadOutID));
             locationTblView.setItems(LocationDAOImpl.getAllLocations());
             locationList = LocationDAOImpl.getAllLocations();
         }
@@ -868,5 +1057,22 @@ public class MainController implements Initializable {
         }
 
         //TODO Delete employee
+    }
+
+    public void employeeSearch(ActionEvent actionEvent) {
+    }
+
+    public void loadOutSearch(ActionEvent actionEvent) {
+    }
+
+    public void locationSearch(ActionEvent actionEvent) {
+    }
+
+    public void inventorySearch(ActionEvent actionEvent) {
+        if (inventorySearchTextBar.getText().isEmpty()) {
+            //Clear filter
+        } else {
+
+        }
     }
 }

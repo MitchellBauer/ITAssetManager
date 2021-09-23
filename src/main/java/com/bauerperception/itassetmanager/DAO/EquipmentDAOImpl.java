@@ -133,8 +133,7 @@ public class EquipmentDAOImpl {
         ResultSet result = stmt.executeQuery(sqlStatement);
 
         while(result.next()){
-            //TODO May need to use this asset ID and then this will need class
-            int assetID = result.getInt("idassettypes");
+            //int assetID = result.getInt("idassettypes");
             String assetName = result.getString("type_name");
 
             allTypes.add(assetName);

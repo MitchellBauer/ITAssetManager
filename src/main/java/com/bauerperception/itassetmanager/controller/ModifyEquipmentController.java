@@ -4,6 +4,7 @@ import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
+import com.bauerperception.itassetmanager.util.FXUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -95,16 +96,13 @@ public class ModifyEquipmentController implements Initializable {
 
     @FXML
     void cancelAdd(ActionEvent event) throws IOException {
-        //TODO Validation
         if (addingEquipmentToLoadOutWizard || editingEquipmentFromLoadOutWizard){
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            AddLoadOutController controller = loader.getController();
+            AddLoadOutController controller = FXUtil.goToScene(event,"addloadout", "addwizard").getController();
             controller.loadData(event, loadOutID, equipmentList, loadOutName);
+        } else {
+            if (FXUtil.cancelWizard()){
+                FXUtil.goToMainScene(event).openLoadOuts(event);
+            }
         }
     }
 

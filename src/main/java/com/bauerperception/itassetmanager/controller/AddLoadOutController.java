@@ -4,20 +4,18 @@ import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
+import com.bauerperception.itassetmanager.util.FXUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddLoadOutController implements Initializable {
@@ -91,83 +89,53 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     void addEquipment(ActionEvent event) throws Exception {
+        //TODO LoadOutID saving in here doesn't make any sense
         if (loadOutID == 0){
             loadOutID = LoadOutDAOImpl.getNewLoadOutID();
         }
 
         loadOutName = loadOutNameTxt.getText();
 
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        ModifyEquipmentController controller = loader.getController();
+        ModifyEquipmentController controller = FXUtil.goToScene(event,"modifyequipment", "addwizard").getController();
         controller.addEquipmentFromLoadOutWizard(event, loadOutID, equipmentList, loadOutName);
     }
 
     @FXML
     void cancel(ActionEvent event) throws IOException {
-        Alert cancelConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelConfirmation.setTitle("");
-        cancelConfirmation.setHeaderText("Cancel Confirmation");
-        cancelConfirmation.setContentText("Do you really want to cancel? You will lose any data entered");
-        Optional<ButtonType> confirmationResult = cancelConfirmation.showAndWait();
-
-        if (confirmationResult.get() == ButtonType.OK) {
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            MainController controller = loader.getController();
-            controller.openLoadOuts(event);
+        if (FXUtil.cancelWizard()) {
+            FXUtil.goToMainScene(event).openLoadOuts(event);
         }
     }
 
     @FXML
     void deleteEquipment(ActionEvent event) {
-        //TODO Be able to delete equipment from current equipment list
-        //TODO Confirmation
-        equipmentList.remove(equipmentTblView.getSelectionModel().getSelectedItem());
-        equipmentTblView.setItems(equipmentList);
+        if (FXUtil.confirmDeletion(event)){
+            equipmentList.remove(equipmentTblView.getSelectionModel().getSelectedItem());
+            equipmentTblView.setItems(equipmentList);
+        }
     }
 
     @FXML
     void editEquipment(ActionEvent event) throws IOException {
         EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
-
-        //TODO Be able to edit one of the equipment in the list
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        ModifyEquipmentController controller = loader.getController();
+        ModifyEquipmentController controller = FXUtil.goToScene(event,"modifyequipment", "addwizard").getController();
         controller.editEquipmentFromLoadOutWizard(event, loadOutID, equipmentList, loadOutName, selectedEquipment);
     }
 
     @FXML
     void save(ActionEvent event) throws Exception {
-        //Save equipment list to database, making sure to add reference to the loadOutID
-        //Save loadout to database
+        if (!equipmentList.isEmpty()){
+            EquipmentDAOImpl.saveListOfEquipment(equipmentList);
+        } else {
+            FXUtil.throwAlert("Entry Data Missing", "Please assign at least one piece of equipment to the loadout.");
+        }
 
-        EquipmentDAOImpl.saveListOfEquipment(equipmentList);
-        //TODO Name validation
-        LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutNameTxt.getText()));
-
-        //TODO Can extract this method I think
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        MainController controller = loader.getController();
-        controller.openLoadOuts(event);
+        if (!loadOutNameTxt.getText().isEmpty()){
+            LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutNameTxt.getText()));
+            FXUtil.goToMainScene(event).openLoadOuts(event);
+        } else {
+            FXUtil.throwAlert("Entry Data Missing", "Please enter a name for the loadout.");
+        }
     }
 
     public void loadData(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
@@ -182,7 +150,6 @@ public class AddLoadOutController implements Initializable {
         deleteEquipmentButton.setDisable(true);
         saveButton.setDisable(false);
 
-        //TODO Fill in table view
         equipmentTblView.setItems(equipmentList);
         slotNumCol.setCellValueFactory(new PropertyValueFactory<>("loadOutSlotNum"));
         equipmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("equipmentType"));

@@ -52,4 +52,9 @@ public class LoadOutEntity implements Entity{
     public int getID() {
         return loadOutID;
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + loadOutID + " Name: " + loadOutName;
+    }
 }

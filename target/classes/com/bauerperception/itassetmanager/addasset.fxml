@@ -36,19 +36,40 @@
         </rowConstraints>
          <children>
             <ChoiceBox fx:id="inventoryAssetAssignedTo" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label text="Purchased Price" textFill="WHITE" GridPane.rowIndex="7">
+            <Label text="Purchased Price" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Name" textFill="WHITE" />
-            <Label text="Type" textFill="WHITE" GridPane.rowIndex="1" />
-            <Label text="Model Num." textFill="WHITE" GridPane.rowIndex="2" />
-            <Label text="Description" textFill="WHITE" GridPane.rowIndex="3" />
-            <Label text="Assigned To" textFill="WHITE" GridPane.rowIndex="4" />
-            <Label text="Location" textFill="WHITE" GridPane.rowIndex="5" />
-            <Label text="Purchased Date" textFill="WHITE" GridPane.rowIndex="6" />
-            <TextField fx:id="inventoryAssetNameTxtBox" GridPane.columnIndex="1" />
+            <Label text="Manufacturer" textFill="WHITE" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Type" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Model Num." textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Description" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Assigned To" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <Label text="Purchased Date" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Label>
+            <TextField fx:id="inventoryAssetMfgTxtBox" GridPane.columnIndex="1" />
             <ChoiceBox fx:id="inventoryAssetType" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="inventoryAssetModelNum" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="inventoryAssetDesc" GridPane.columnIndex="1" GridPane.rowIndex="3" />

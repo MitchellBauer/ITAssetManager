@@ -71,4 +71,23 @@ public class LoadOutDAOImpl {
         DBConn.closeConn();
         return highestID++;
     }
+
+    public static LoadOutEntity getLoadOutByID(int loadOutID) throws Exception {
+        ObservableList<LoadOutEntity> allLoadOuts = FXCollections.observableArrayList();
+        DBConn.makeConn();
+        String sqlStatement = "SELECT * FROM loadouts WHERE id = " + loadOutID;
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+
+        while(result.next()){
+            int resultLoadOutID = result.getInt("id");
+            String name = result.getString("name");
+
+            LoadOutEntity loadOutResult = new LoadOutEntity(resultLoadOutID, name);
+            allLoadOuts.add(loadOutResult);
+        }
+        DBConn.closeConn();
+
+        return allLoadOuts.get(0);
+    }
 }

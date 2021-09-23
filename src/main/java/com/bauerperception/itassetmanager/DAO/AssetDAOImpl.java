@@ -20,7 +20,7 @@ public class AssetDAOImpl {
 
         while(result.next()){
             int assetID = result.getInt("idasset");
-            String assetName = result.getString("name");
+            String assetManufacturer = result.getString("manufacturer");
             String assetType = result.getString("type");
             String assetModel = result.getString("model_num");
             String assetDescription = result.getString("description");
@@ -31,7 +31,7 @@ public class AssetDAOImpl {
 
             LocalDate purchasedDate = TimeUtil.importMySQLToLocalDate(purchasedDateString);
 
-            AssetEntity assetResult = new AssetEntity(assetID, assetName, assetType, assetModel, assetDescription, assignedToID, location, purchasedDate, purchasedPrice);
+            AssetEntity assetResult = new AssetEntity(assetID, assetManufacturer, assetType, assetModel, assetDescription, assignedToID, location, purchasedDate, purchasedPrice);
             allAssets.add(assetResult);
         }
         DBConn.closeConn();
@@ -46,11 +46,10 @@ public class AssetDAOImpl {
         ResultSet result = stmt.executeQuery(sqlStatement);
 
         while(result.next()){
-            //TODO May need to use this asset ID and then this will need class
-            int assetID = result.getInt("idassettypes");
-            String assetName = result.getString("type_name");
+            //int assetID = result.getInt("idassettypes");
+            String typeName = result.getString("type_name");
 
-            allAssetTypes.add(assetName);
+            allAssetTypes.add(typeName);
         }
         DBConn.closeConn();
         return allAssetTypes;
@@ -60,7 +59,7 @@ public class AssetDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "INSERT INTO asset (name, type, model_num, description, assigned_to, location, purchased_date, purchased_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO asset (manufacturer, type, model_num, description, assigned_to, location, purchased_date, purchased_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         ps = getPreparedAssetStatement(assetEntity, conn, sqlStatement);
         ps.executeUpdate();
         DBConn.closeConn();
@@ -69,7 +68,7 @@ public class AssetDAOImpl {
     private static PreparedStatement getPreparedAssetStatement(AssetEntity assetEntity, Connection conn, String sqlStatement) throws SQLException {
         PreparedStatement ps;
         ps = conn.prepareStatement(sqlStatement);
-        ps.setString(1, assetEntity.getAssetName());
+        ps.setString(1, assetEntity.getAssetManufacturer());
         ps.setString(2, assetEntity.getAssetType());
         ps.setString(3, assetEntity.getAssetModel());
         ps.setString(4, assetEntity.getAssetDescription());
@@ -84,7 +83,7 @@ public class AssetDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "UPDATE asset SET name = ?, type = ?, model_num = ?, description = ?, assigned_to = ?, location = ?, purchased_date = ?, purchased_price = ? WHERE idasset = ?;";
+        String sqlStatement = "UPDATE asset SET manufacturer = ?, type = ?, model_num = ?, description = ?, assigned_to = ?, location = ?, purchased_date = ?, purchased_price = ? WHERE idasset = ?;";
         ps = getPreparedAssetStatement(assetEntity, conn, sqlStatement);
         ps.setInt(9, assetEntity.getAssetID());
         ps.executeUpdate();

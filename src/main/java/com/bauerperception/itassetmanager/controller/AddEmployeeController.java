@@ -1,27 +1,21 @@
 package com.bauerperception.itassetmanager.controller;
 
-import com.bauerperception.itassetmanager.DAO.AssetDAOImpl;
 import com.bauerperception.itassetmanager.DAO.EmployeeDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LocationDAOImpl;
-import com.bauerperception.itassetmanager.model.AssetEntity;
 import com.bauerperception.itassetmanager.model.EmployeeEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
+import com.bauerperception.itassetmanager.util.FXUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddEmployeeController implements Initializable {
@@ -190,7 +184,6 @@ public class AddEmployeeController implements Initializable {
          */
         if (doLocationsExist) {
             if (doLoadOutsExist) {
-                //TODO Need to script the add employee wizard
                 //All data exists, setup the wizard
                 wizardTitle.setText("Assign Location to Employee");
                 locationAssignmentPane.setVisible(true);
@@ -210,14 +203,8 @@ public class AddEmployeeController implements Initializable {
 
     @FXML
     void cancelAdd(ActionEvent event) throws Exception {
-        Alert cancelConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelConfirmation.setTitle("");
-        cancelConfirmation.setHeaderText("Cancel Confirmation");
-        cancelConfirmation.setContentText("Do you really want to cancel? You will lose any data entered");
-        Optional<ButtonType> confirmationResult = cancelConfirmation.showAndWait();
-
-        if (confirmationResult.get() == ButtonType.OK) {
-            goToMainScene(event);
+        if (FXUtil.cancelWizard()) {
+            FXUtil.goToMainScene(event).openEmployees(event);
         }
     }
 
@@ -230,95 +217,88 @@ public class AddEmployeeController implements Initializable {
         LoadOutEntity secondaryLoadOut;
 
         //Safe check for null values in these entities
-        if (primaryWorkLocationChoice.getValue() != null){
-            primaryLocation = primaryWorkLocationChoice.getValue();
-        } else {
-            throw new Exception("Primary location can't be null.");
-        }
+//        if (primaryWorkLocationChoice.getValue() != null){
+//            primaryLocation = primaryWorkLocationChoice.getValue();
+//        } else {
+//            throw new Exception("Primary location can't be null.");
+//        }
+//
+//        if (secondaryWorkLocationChoice.getValue() != null && secondaryLocationExists) {
+//            secondaryLocation = secondaryWorkLocationChoice.getValue();
+//        } else {
+//            throw new Exception("Secondary location can't be null.");
+//        }
+//
+//        if (primaryLoadOutChoice.getValue() != null){
+//            primaryLoadOut = primaryLoadOutChoice.getValue();
+//        } else {
+//            throw new Exception("Primary loadout can't be null.");
+//        }
+//
+//        if (secondaryLoadOutChoice.getValue() != null && secondaryLocationExists){
+//            secondaryLoadOut = secondaryLoadOutChoice.getValue();
+//        } else {
+//            throw new Exception("Secondary loadout can't be null.");
+//        }
 
-        if (secondaryWorkLocationChoice.getValue() != null && secondaryLocationExists) {
-            secondaryLocation = secondaryWorkLocationChoice.getValue();
-        } else {
-            throw new Exception("Secondary location can't be null.");
-        }
+        primaryLocation = primaryWorkLocationChoice.getValue();
+        secondaryLocation = secondaryWorkLocationChoice.getValue();
+        primaryLoadOut = primaryLoadOutChoice.getValue();
+        secondaryLoadOut = secondaryLoadOutChoice.getValue();
 
-        if (primaryLoadOutChoice.getValue() != null){
-            primaryLoadOut = primaryLoadOutChoice.getValue();
-        } else {
-            throw new Exception("Primary loadout can't be null.");
-        }
-
-        if (secondaryLoadOutChoice.getValue() != null && secondaryLocationExists){
-            secondaryLoadOut = secondaryLoadOutChoice.getValue();
-        } else {
-            throw new Exception("Secondary loadout can't be null.");
-        }
-
-        if (travelBagCheckBox.isSelected()){
+        if(travelBagCheckBox.isSelected()){
             //TODO assign travel bag equipment to employee
         }
 
         primaryLocation.setLoadOutID(primaryLoadOut.getLoadOutID());
-        secondaryLocation.setLoadOutID(secondaryLoadOut.getLoadOutID());
+        if(secondaryLoadOut != null){
+            secondaryLocation.setLoadOutID(secondaryLoadOut.getLoadOutID());
+        }
 
         String firstName = employeeFirstNameTxt.getText();
         String middleName = employeeMiddleNameTxt.getText();
         String lastName = employeeLastNameTxt.getText();
         String emailAddress = employeeEmailTxt.getText();
 
-        if (secondaryLocation != null){
-            EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, primaryLocation.getLocationID(), secondaryLocation.getLocationID()));
+        if (!employeeFirstNameTxt.getText().isEmpty()){
+            if (!employeeLastNameTxt.getText().isEmpty()){
+                if(primaryWorkLocationChoice.getValue() != null){
+                    if(secondaryLoadOut != null){
+                        EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, primaryLocation.getLocationID(), secondaryLocation.getLocationID()));
+                        FXUtil.goToMainScene(event).openEmployees(event);
+                    } else {
+                        EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, primaryLocation.getLocationID()));
+                        FXUtil.goToMainScene(event).openEmployees(event);
+                    }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "A employee requires a primary work location.");
+                }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "A employee requires a last name.");
+            }
         } else {
-            EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, primaryLocation.getLocationID()));
+            FXUtil.throwAlert("Entry Data Missing", "A employee requires a first name.");
         }
-
-        goToMainScene(event);
     }
-
-    private void goToMainScene(ActionEvent event) throws java.io.IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        MainController controller = loader.getController();
-        controller.openEmployees(event);
-    }
-
 
     @FXML
     void goToLocationEditor(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        MainController controller = loader.getController();
-        controller.openLocations();
+        FXUtil.goToMainScene(event).openLocations();
     }
 
     @FXML
     void goToLoadOutEditor(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        MainController controller = loader.getController();
-        controller.openLoadOuts(event);
+        FXUtil.goToMainScene(event).openLoadOuts(event);
     }
 
     @FXML
     void backButton(ActionEvent event) {
-        //TODO Some annoying validation has to go into this. One could go back and delete an item from a choicebox possibly.
         if (loadOutAssignmentPane.isVisible()){
             backButton.setVisible(false);
             loadOutAssignmentPane.setVisible(false);
             locationAssignmentPane.setVisible(true);
             nextButton.setDisable(true);
+            return;
         }
 
         if (employeeDataPane.isVisible()){
@@ -326,6 +306,7 @@ public class AddEmployeeController implements Initializable {
             loadOutAssignmentPane.setVisible(true);
             nextButton.setDisable(true);
             nextButton.setVisible(true);
+            return;
         }
     }
 
@@ -336,6 +317,15 @@ public class AddEmployeeController implements Initializable {
             backButton.setVisible(true);
             nextButton.setDisable(true);
             loadOutAssignmentPane.setVisible(true);
+            if(primaryWorkLocationChoice.getValue().getLoadOutID() > -1){
+                primaryLoadOutChoice.setValue(FXUtil.getEntityByID(primaryLoadOutChoice.getItems(), primaryWorkLocationChoice.getValue().getLoadOutID()));
+            }
+            if(secondaryWorkLocationChoice.getValue() != null){
+               if(secondaryWorkLocationChoice.getValue().getLoadOutID() > -1){
+                   secondaryLoadOutChoice.setValue(FXUtil.getEntityByID(secondaryLoadOutChoice.getItems(), secondaryWorkLocationChoice.getValue().getLoadOutID()));
+               }
+            }
+            return;
         }
 
         if (loadOutAssignmentPane.isVisible()){
@@ -343,6 +333,7 @@ public class AddEmployeeController implements Initializable {
             nextButton.setVisible(false);
             addButton.setVisible(true);
             employeeDataPane.setVisible(true);
+            return;
         }
     }
 }

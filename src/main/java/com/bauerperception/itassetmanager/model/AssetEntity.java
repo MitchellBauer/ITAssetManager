@@ -1,11 +1,10 @@
 package com.bauerperception.itassetmanager.model;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
 public class AssetEntity implements Entity{
     private int assetID;
-    private String assetName;
+    private String assetManufacturer;
 
     private String assetType;
     private String assetModel;
@@ -17,9 +16,9 @@ public class AssetEntity implements Entity{
     private LocalDate purchasedDate;
     private float purchasedPrice;
 
-    public AssetEntity(int assetID, String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
+    public AssetEntity(int assetID, String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
         this.assetID = assetID;
-        this.assetName = assetName;
+        this.assetManufacturer = assetManufacturer;
         this.assetType = assetType;
         this.assetModel = assetModel;
         this.assetDescription = assetDescription;
@@ -29,8 +28,8 @@ public class AssetEntity implements Entity{
         this.purchasedPrice = purchasedPrice;
     }
 
-    public AssetEntity(String assetName, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
-        this.assetName = assetName;
+    public AssetEntity(String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
+        this.assetManufacturer = assetManufacturer;
         this.assetType = assetType;
         this.assetModel = assetModel;
         this.assetDescription = assetDescription;
@@ -48,12 +47,12 @@ public class AssetEntity implements Entity{
         this.assetID = assetID;
     }
 
-    public String getAssetName() {
-        return assetName;
+    public String getAssetManufacturer() {
+        return assetManufacturer;
     }
 
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
+    public void setAssetManufacturer(String assetManufacturer) {
+        this.assetManufacturer = assetManufacturer;
     }
 
     public String getAssetType() {

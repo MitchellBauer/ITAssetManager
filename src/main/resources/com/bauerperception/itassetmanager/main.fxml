@@ -25,32 +25,6 @@
       <Label fx:id="titleLbl" alignment="CENTER" text="Default Title" textFill="WHITE" AnchorPane.bottomAnchor="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="toDoPane" visible="false">
-               <center>
-                  <TableView prefWidth="825.0" BorderPane.alignment="CENTER">
-                    <columns>
-                      <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="ID" />
-                      <TableColumn prefWidth="75.0" text="Priority" />
-                        <TableColumn minWidth="150.0" prefWidth="-1.0" text="Name" />
-                        <TableColumn minWidth="400.0" prefWidth="-1.0" text="Description" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </center>
-               <top>
-                  <AnchorPane BorderPane.alignment="CENTER">
-                     <children>
-                        <HBox fx:id="toDoControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
-                           <children>
-                              <Button fx:id="goToTaskButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#goToTask" text="Go To Task" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
-               </top>
-            </BorderPane>
             <BorderPane fx:id="inventoryPane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
@@ -103,11 +77,11 @@
                                     <Insets right="10.0" />
                                  </padding></Label>
                               <Label fx:id="inventoryIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
-                              <Label fx:id="inventoryLblName" text="Name" textFill="WHITE" GridPane.rowIndex="1">
+                              <Label fx:id="inventoryLblName" text="Manufacturer" textFill="WHITE" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding></Label>
-                              <TextField fx:id="inventoryAssetNameTxtBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="inventoryAssetMfrTxtBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="inventoryLblType" text="Type" textFill="WHITE" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets right="10.0" />
@@ -139,16 +113,22 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView fx:id="inventoryTblView" minWidth="275.0" BorderPane.alignment="CENTER">
-                    <columns>
-                        <TableColumn fx:id="inventoryTblID" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                      <TableColumn fx:id="inventoryTblAssetName" prefWidth="75.0" text="Name" />
-                      <TableColumn fx:id="inventoryTblAssignedTo" prefWidth="75.0" text="Assigned To" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="inventorySearchTextBar" onAction="#inventorySearch" promptText="Type here to search" />
+                        <TableView fx:id="inventoryTblView" minWidth="275.0">
+                          <columns>
+                              <TableColumn fx:id="inventoryTblID" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="ID" />
+                              <TableColumn fx:id="inventoryTblAssetType" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" resizable="false" text="Type" />
+                            <TableColumn fx:id="inventoryTblAssetMfr" editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Mfr." />
+                            <TableColumn fx:id="inventoryTblAssignedTo" editable="false" prefWidth="75.0" text="Assigned To" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
                </left></BorderPane>
             <BorderPane fx:id="employeePane" visible="false">
                <right>
@@ -166,6 +146,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label fx:id="employeeFirstNameLbl" text="First Name" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
@@ -188,17 +169,23 @@
                                     <Insets right="10.0" />
                                  </GridPane.margin></Label>
                               <TextField fx:id="employeeEmailTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label fx:id="employeeWorkLocLbl" text="Assigned Work Location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                              <Label fx:id="employeeWorkLocLbl" text="Primary Work Location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ChoiceBox fx:id="employeeWorkLocTxt" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ChoiceBox fx:id="employeeWorkLocChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <Label fx:id="employeeIDTitleLbl" text="ID" textFill="WHITE" GridPane.halignment="RIGHT">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></Label>
                               <Label fx:id="employeeIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label fx:id="employeeSecondaryWorkLocLbl" layoutX="10.0" layoutY="220.0" text="Secondary Work Location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ChoiceBox fx:id="employeeSecondaryWorkLocChoice" layoutX="141.0" layoutY="216.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                            </children>
                         </GridPane>
                      </children>
@@ -221,18 +208,23 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView fx:id="employeeTblView" minWidth="275.0" BorderPane.alignment="CENTER">
-                     <columns>
-                        <TableColumn fx:id="employeeIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn fx:id="employeeNameCol" prefWidth="75.0" text="Full Name" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="employeeSearchTextBar" onAction="#employeeSearch" promptText="Type here to search" />
+                        <TableView fx:id="employeeTblView" minWidth="275.0">
+                           <columns>
+                              <TableColumn fx:id="employeeIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                              <TableColumn fx:id="employeeNameCol" prefWidth="75.0" text="Full Name" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
                </left>
             </BorderPane>
-            <BorderPane fx:id="loadoutPane">
+            <BorderPane fx:id="loadoutPane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -297,15 +289,20 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView fx:id="loadOutTblView" minWidth="275.0" BorderPane.alignment="CENTER">
-                     <columns>
-                        <TableColumn fx:id="loadOutIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn fx:id="loadOutNameCol" prefWidth="75.0" text="Loadout Name" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="loadOutSearchTextBar" onAction="#loadOutSearch" promptText="Type here to search" />
+                        <TableView fx:id="loadOutTblView" minWidth="275.0">
+                           <columns>
+                              <TableColumn fx:id="loadOutIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                              <TableColumn fx:id="loadOutNameCol" prefWidth="75.0" text="Loadout Name" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
                </left>
             </BorderPane>
             <BorderPane fx:id="locationsPane" visible="false">
@@ -320,6 +317,7 @@
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label fx:id="locationIDTitle" text="ID" textFill="WHITE" GridPane.halignment="RIGHT">
@@ -328,12 +326,18 @@
                                  </GridPane.margin>
                               </Label>
                               <Label fx:id="locationIDLbl" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
-                              <Label fx:id="locationNameLbl" text="Location Name" textFill="WHITE" GridPane.rowIndex="1">
+                              <Label fx:id="locationNameLbl" text="Location Name" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </Label>
                               <TextField fx:id="locationNameTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="loadOutAssignedLbl" layoutX="10.0" layoutY="57.0" text="Assigned Loadout" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ChoiceBox fx:id="assignedLoadOutChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children>
@@ -356,32 +360,60 @@
                   </AnchorPane>
                </top>
                <left>
-                  <TableView fx:id="locationTblView" minWidth="275.0" BorderPane.alignment="CENTER">
-                     <columns>
-                        <TableColumn fx:id="locationIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn fx:id="locationNameCol" prefWidth="75.0" text="Location Name" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="locationSearchTextBar" onAction="#locationSearch" promptText="Type here to search" />
+                        <TableView fx:id="locationTblView" minWidth="275.0">
+                           <columns>
+                              <TableColumn fx:id="locationIDCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                              <TableColumn fx:id="locationNameCol" prefWidth="75.0" text="Location Name" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
                </left>
                <StackPane.margin>
                   <Insets />
                </StackPane.margin>
             </BorderPane>
+            <!--
+            //TODO Enable for todo module
+            <BorderPane fx:id="toDoPane" visible="false">
+               <center>
+                  <TableView prefWidth="825.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="ID" />
+                      <TableColumn editable="false" prefWidth="75.0" text="Priority" />
+                        <TableColumn editable="false" minWidth="150.0" prefWidth="-1.0" text="Name" />
+                        <TableColumn editable="false" minWidth="400.0" prefWidth="-1.0" text="Description" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </center>
+               <top>
+                  <AnchorPane BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox fx:id="toDoControls" alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Button fx:id="goToTaskButton" alignment="CENTER" minHeight="50.0" minWidth="70.0" mnemonicParsing="false" onAction="#goToTask" text="Go To Task" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </top>
+            </BorderPane>
+            -->
          </children>
       </StackPane>
       <AnchorPane fx:id="navigationMenu" layoutX="-2.0" layoutY="273.0" prefHeight="600.0" prefWidth="173.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="85.0">
                <children>
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openToDo" text="ToDo">
-                     <VBox.margin>
-                        <Insets bottom="2.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Separator maxWidth="110.0" prefWidth="200.0" />
                   <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openInventory" text="Inventory">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
@@ -410,6 +442,15 @@
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin></Button>
+                  <Separator maxWidth="110.0" prefWidth="200.0" visible="false" />
+                  <!--
+                  //TODO: When adding the ToDo Module
+                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openToDo" text="ToDo" visible="false">
+                     <VBox.margin>
+                        <Insets bottom="2.0" />
+                     </VBox.margin>
+                  </Button>
+                  -->
                </children>
             </VBox>
          </children>

@@ -1,70 +1,60 @@
 package com.bauerperception.itassetmanager.controller;
 
+import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LocationDAOImpl;
+import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
+import com.bauerperception.itassetmanager.util.FXUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AddLocationController {
+import static com.bauerperception.itassetmanager.util.FXUtil.goToMainScene;
 
-    Stage stage;
-
-    @FXML
-    private Label wizardTitle;
-
-    @FXML
-    private Label locationNameLbl;
+public class AddLocationController implements Initializable{
 
     @FXML
     private TextField locationNameTxt;
 
     @FXML
-    private Button addLocationButton;
+    private ChoiceBox<LoadOutEntity> assignLoadOutChoice;
 
-    @FXML
-    private Button cancelAddLocationButton;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            assignLoadOutChoice.setItems(LoadOutDAOImpl.getAllLoadOuts());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void cancelAdd(ActionEvent event) throws IOException {
-        Alert cancelConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelConfirmation.setTitle("");
-        cancelConfirmation.setHeaderText("Cancel Confirmation");
-        cancelConfirmation.setContentText("Do you really want to cancel? You will lose any data entered");
-        Optional<ButtonType> confirmationResult = cancelConfirmation.showAndWait();
-
-        if (confirmationResult.get() == ButtonType.OK) {
-            goToMainScene(event);
+        if (FXUtil.cancelWizard()) {
+            goToMainScene(event).openLocations();
         }
     }
 
     @FXML
     void saveAddLocation(ActionEvent event) throws Exception {
-        //TODO Need to add validation
         String workLocationName = locationNameTxt.getText();
-        LocationDAOImpl.addLocation(new LocationEntity(workLocationName));
 
-        goToMainScene(event);
-    }
-
-    private void goToMainScene(ActionEvent event) throws java.io.IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        MainController controller = loader.getController();
-        controller.openEmployees(event);
+        if (!workLocationName.isEmpty()){
+            if(assignLoadOutChoice.getValue() != null){
+                LocationDAOImpl.addLocation(new LocationEntity(workLocationName, assignLoadOutChoice.getValue().getLoadOutID()));
+            } else {
+                LocationDAOImpl.addLocation(new LocationEntity(workLocationName));
+            }
+            goToMainScene(event).openLocations();
+        } else {
+            FXUtil.throwAlert("Missing Data", "A location has to have a name before being saved.");
+        }
     }
 }

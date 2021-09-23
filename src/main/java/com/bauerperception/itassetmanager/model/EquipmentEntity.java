@@ -10,7 +10,6 @@ public class EquipmentEntity {
     private float lastPurchasedPrice;
     private String whereToPurchaseURL;
     private int quantityNeeded;
-    //TODO Probably need to convert type to an actual OO?
     private String equipmentType;
 
     public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int loadOutSlotNum, int quantity, float purchasePrice, float lastPurchasePrice, String purchaseUrl) {

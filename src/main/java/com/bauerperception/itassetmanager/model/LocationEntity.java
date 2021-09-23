@@ -13,6 +13,11 @@ public class LocationEntity implements Entity{
         this.loadOutID = assignedLoadOut;
     }
 
+    public LocationEntity(String workLocationName, int loadOutID) {
+        this.locationName = workLocationName;
+        this.loadOutID = loadOutID;
+    }
+
     public int getLoadOutID() {
         return loadOutID;
     }
