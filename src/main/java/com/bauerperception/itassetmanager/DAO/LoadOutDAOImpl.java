@@ -69,7 +69,8 @@ public class LoadOutDAOImpl {
             highestID = result.getInt("highestID");
         }
         DBConn.closeConn();
-        return highestID++;
+        //highestID++; //Has to increment before return otherwise it doesn't return. Or do ++ before
+        return ++highestID;
     }
 
     public static LoadOutEntity getLoadOutByID(int loadOutID) throws Exception {
@@ -88,6 +89,21 @@ public class LoadOutDAOImpl {
         }
         DBConn.closeConn();
 
-        return allLoadOuts.get(0);
+        if (allLoadOuts.size() > 0){
+            return allLoadOuts.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static void addLoadOutWithCustomID(LoadOutEntity loadOutEntity, int customID) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+        String sqlStatement = "INSERT INTO loadouts (id, name) VALUES (?, ?)";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setInt(1, customID);
+        ps.setString(2, loadOutEntity.getLoadOutName());
+        ps.executeUpdate();
+        DBConn.closeConn();
     }
 }

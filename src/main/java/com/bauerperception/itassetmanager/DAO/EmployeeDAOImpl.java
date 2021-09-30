@@ -38,7 +38,7 @@ public class EmployeeDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "UPDATE employees SET first_name = ?, middle_name = ?, last_name = ?, " +
-                "email_address = ?, work_location = ?, second_work_location WHERE idasset = ?;";
+                "email_address = ?, work_location = ?, second_work_location = ? WHERE idemployees = ?;";
         ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
         ps.setInt(7, employeeEntity.getEmployeeID());
         ps.executeUpdate();
@@ -74,5 +74,50 @@ public class EmployeeDAOImpl {
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
+    }
+
+    public static void addEmployeeWithCustomID(EmployeeEntity employeeEntity, int customID) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+        String sqlStatement = "INSERT INTO itassetdb.employees (idemployees, first_name, middle_name, last_name, email_address, work_location, " +
+                "second_work_location) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setInt(1, customID);
+        ps.setString(2, employeeEntity.getFirstName());
+        ps.setString(3, employeeEntity.getMiddleName());
+        ps.setString(4, employeeEntity.getLastName());
+        ps.setString(5, employeeEntity.getEmailAddress());
+        ps.setInt(6, employeeEntity.getPrimaryWorkLocation());
+        ps.setInt(7, employeeEntity.getSecondaryWorkLocation());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
+
+    public static EmployeeEntity getEmployeeByID(int selectedEmployeeID) throws Exception {
+        ObservableList<EmployeeEntity> allEmployees = FXCollections.observableArrayList();
+        DBConn.makeConn();
+        String sqlStatement = "SELECT * FROM employees WHERE idemployees = " + selectedEmployeeID;
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+
+        while(result.next()){
+            int employeeID = result.getInt("idemployees");
+            String firstName = result.getString("first_name");
+            String middleName = result.getString("middle_name");
+            String lastName = result.getString("last_name");
+            String emailAddress = result.getString("email_address");
+            int assignedWorkLocation = result.getInt("work_location");
+            int secondaryWorkLocation = result.getInt("second_work_location");
+
+            EmployeeEntity employeeResult = new EmployeeEntity(employeeID, firstName, middleName, lastName,
+                    emailAddress, assignedWorkLocation, secondaryWorkLocation);
+            allEmployees.add(employeeResult);
+        }
+        DBConn.closeConn();
+        if (allEmployees.size() > 0){
+            return allEmployees.get(0);
+        } else {
+            return null;
+        }
     }
 }

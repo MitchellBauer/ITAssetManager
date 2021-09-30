@@ -55,7 +55,7 @@ public class AddLoadOutController implements Initializable {
     private TableColumn<EquipmentEntity, Integer> slotNumCol;
 
     @FXML
-    private TableColumn<EquipmentEntity, String> nameCol;
+    private TableColumn<EquipmentEntity, String> mfrCol;
 
     @FXML
     private TableColumn<EquipmentEntity, String> modelNumCol;
@@ -67,7 +67,7 @@ public class AddLoadOutController implements Initializable {
     private TableColumn<EquipmentEntity, Integer> qtyCol;
 
     @FXML
-    private TableColumn<EquipmentEntity, Float> purchasePriceCol;
+    private TableColumn<EquipmentEntity, Double> purchasePriceCol;
 
     @FXML
     private TableColumn<EquipmentEntity, String> purchaseUrlCol;
@@ -125,6 +125,11 @@ public class AddLoadOutController implements Initializable {
     @FXML
     void save(ActionEvent event) throws Exception {
         if (!equipmentList.isEmpty()){
+            //Had a problem where the equipment in this list is not being assigned proper loadoutID
+            //TODO Check if this fixes the loadout saving
+            for (EquipmentEntity i : equipmentList){
+                i.setAssignedLoadOutID(loadOutID);
+            }
             EquipmentDAOImpl.saveListOfEquipment(equipmentList);
         } else {
             FXUtil.throwAlert("Entry Data Missing", "Please assign at least one piece of equipment to the loadout.");
@@ -153,7 +158,7 @@ public class AddLoadOutController implements Initializable {
         equipmentTblView.setItems(equipmentList);
         slotNumCol.setCellValueFactory(new PropertyValueFactory<>("loadOutSlotNum"));
         equipmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("equipmentType"));
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        mfrCol.setCellValueFactory(new PropertyValueFactory<>("mfr"));
         modelNumCol.setCellValueFactory(new PropertyValueFactory<>("modelNum"));
         purchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));

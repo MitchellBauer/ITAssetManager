@@ -4,19 +4,22 @@ public class EquipmentEntity {
     private int equipmentID;
     private int assignedLoadOutID;
     private int loadOutSlotNum;
-    private String name;
+    private String mfr;
     private String modelNum;
-    private float purchasePrice;
-    private float lastPurchasedPrice;
+    private double purchasePrice;
+    private double lastPurchasedPrice;
     private String whereToPurchaseURL;
     private int quantityNeeded;
     private String equipmentType;
+    //These two fields are only used in reports. Not the best implementation but it does work.
+    private int purchaseForEmployeeID;
+    private int purchaseForLocation;
 
-    public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int loadOutSlotNum, int quantity, float purchasePrice, float lastPurchasePrice, String purchaseUrl) {
+    public EquipmentEntity(int equipmentID, String mfr, String modelNum, String equipmentType, int loadOutID, int loadOutSlotNum, int quantity, double purchasePrice, double lastPurchasePrice, String purchaseUrl) {
         this.equipmentID = equipmentID;
         this.assignedLoadOutID = loadOutID;
         this.loadOutSlotNum = loadOutSlotNum;
-        this.name = name;
+        this.mfr = mfr;
         this.modelNum = modelNum;
         this.purchasePrice = purchasePrice;
         this.lastPurchasedPrice = purchasePrice;
@@ -25,11 +28,11 @@ public class EquipmentEntity {
         this.equipmentType = equipmentType;
     }
 
-    public EquipmentEntity(int equipmentID, String name, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, float purchasePrice, String purchaseUrl) {
+    public EquipmentEntity(int equipmentID, String mfr, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, double purchasePrice, String purchaseUrl) {
         this.equipmentID = equipmentID;
         this.assignedLoadOutID = loadOutID;
         this.loadOutSlotNum = slotNum;
-        this.name = name;
+        this.mfr = mfr;
         this.modelNum = modelNum;
         this.purchasePrice = purchasePrice;
         this.whereToPurchaseURL = purchaseUrl;
@@ -37,15 +40,31 @@ public class EquipmentEntity {
         this.equipmentType = equipmentType;
     }
 
-    public EquipmentEntity(String name, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, float purchasePrice, String purchaseUrl) {
+    public EquipmentEntity(String mfr, String modelNum, String equipmentType, int loadOutID, int slotNum, int quantity, double purchasePrice, String purchaseUrl) {
         this.assignedLoadOutID = loadOutID;
         this.loadOutSlotNum = slotNum;
-        this.name = name;
+        this.mfr = mfr;
         this.modelNum = modelNum;
         this.purchasePrice = purchasePrice;
         this.whereToPurchaseURL = purchaseUrl;
         this.quantityNeeded = quantity;
         this.equipmentType = equipmentType;
+    }
+
+    public int getPurchaseForLocation() {
+        return purchaseForLocation;
+    }
+
+    public void setPurchaseForLocation(int purchaseForLocation) {
+        this.purchaseForLocation = purchaseForLocation;
+    }
+
+    public int getPurchaseForEmployeeID() {
+        return purchaseForEmployeeID;
+    }
+
+    public void setPurchaseForEmployeeID(int purchaseForEmployeeID) {
+        this.purchaseForEmployeeID = purchaseForEmployeeID;
     }
 
     public int getEquipmentID() {
@@ -72,12 +91,12 @@ public class EquipmentEntity {
         this.loadOutSlotNum = loadOutSlotNum;
     }
 
-    public String getName() {
-        return name;
+    public String getMfr() {
+        return mfr;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMfr(String mfr) {
+        this.mfr = mfr;
     }
 
     public String getModelNum() {
@@ -88,19 +107,19 @@ public class EquipmentEntity {
         this.modelNum = modelNum;
     }
 
-    public float getPurchasePrice() {
+    public double getPurchasePrice() {
         return purchasePrice;
     }
 
-    public void setPurchasePrice(float purchasePrice) {
+    public void setPurchasePrice(double purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
 
-    public float getLastPurchasedPrice() {
+    public double getLastPurchasedPrice() {
         return lastPurchasedPrice;
     }
 
-    public void setLastPurchasedPrice(float lastPurchasedPrice) {
+    public void setLastPurchasedPrice(double lastPurchasedPrice) {
         this.lastPurchasedPrice = lastPurchasedPrice;
     }
 
@@ -130,13 +149,6 @@ public class EquipmentEntity {
 
     @Override
     public String toString() {
-        return "EquipmentEntity{" +
-                "name='" + name + '\'' +
-                ", modelNum='" + modelNum + '\'' +
-                ", purchasePrice=" + purchasePrice +
-                ", whereToPurchaseURL='" + whereToPurchaseURL + '\'' +
-                ", quantityNeeded=" + quantityNeeded +
-                ", equipmentType='" + equipmentType + '\'' +
-                '}';
+        return equipmentType + " " + mfr + " model=" + modelNum + " $" + purchasePrice;
     }
 }

@@ -79,31 +79,31 @@ public class AddAssetController implements Initializable {
 
     @FXML
     void saveAddAsset(ActionEvent event) throws Exception {
-        if(!inventoryAssetMfgTxtBox.getText().isEmpty()){
-            if(!inventoryAssetType.getValue().isEmpty()){
-                if(!inventoryAssetModelNum.getText().isEmpty()){
+        if(!inventoryAssetType.getValue().isEmpty()){
+            String assetManufacturer = inventoryAssetMfgTxtBox.getText();
+            String assetType = inventoryAssetType.getValue();
 
-                } else {
-                    FXUtil.throwAlert("Entry Data Missing", "An asset requires a model number.");
-                }
-            } else {
-                FXUtil.throwAlert("Entry Data Missing", "An asset requires a type.");
+            //TODO need a better way to handle a "0" ID. Right now this might help?
+            int employeeID = -1;
+            if (inventoryAssetAssignedTo.getValue() != null){
+                employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
             }
+
+            int locationID = -1;
+            if (inventoryAssetLocation.getValue() != null){
+                locationID = inventoryAssetLocation.getValue().getLocationID();
+            }
+
+            String assetModelNum = inventoryAssetModelNum.getText();
+            String assetDescription = inventoryAssetDesc.getText();
+            double assetPurchasedPrice = Double.parseDouble(inventoryAssetPurchasedPrice.getText());
+            LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
+            AssetDAOImpl.addAsset(new AssetEntity(assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
+
+            FXUtil.goToMainScene(event).openInventory(event);
         } else {
-            FXUtil.throwAlert("Entry Data Missing", "An asset requires a manufacturer.");
+            FXUtil.throwAlert("Entry Data Missing", "An asset requires a type.");
         }
-
-        String assetManufacturer = inventoryAssetMfgTxtBox.getText();
-        String assetType = inventoryAssetType.getValue();
-        int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
-        int locationID = inventoryAssetLocation.getValue().getLocationID();
-        String assetModelNum = inventoryAssetModelNum.getText();
-        String assetDescription = inventoryAssetDesc.getText();
-        float assetPurchasedPrice = Float.parseFloat(inventoryAssetPurchasedPrice.getText());
-        LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
-        AssetDAOImpl.addAsset(new AssetEntity(assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
-
-        FXUtil.goToMainScene(event).openInventory(event);
     }
 
 

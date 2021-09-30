@@ -1,7 +1,6 @@
 package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
-import com.bauerperception.itassetmanager.DAO.LoadOutDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import com.bauerperception.itassetmanager.util.FXUtil;
@@ -20,8 +19,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
@@ -42,7 +39,7 @@ public class ModifyEquipmentController implements Initializable {
     private Label wizardTitle;
 
     @FXML
-    private TextField equipmentNameTxt;
+    private TextField equipmentMfrTxt;
 
     @FXML
     private ChoiceBox<EquipmentEntity> existingEquipmentChoice;
@@ -82,11 +79,14 @@ public class ModifyEquipmentController implements Initializable {
         editingEquipmentFromMain = false;
         addEquipmentFromMain = false;
 
+        //TODO existing choicebox doesn't autopopulate fields on choicebox change
+
         try {
             existingEquipmentChoice.setItems(EquipmentDAOImpl.getAllEquipment());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         try {
             typeChoice.setItems(EquipmentDAOImpl.getTypes());
         } catch (Exception e) {
@@ -129,11 +129,11 @@ public class ModifyEquipmentController implements Initializable {
                 equipmentID++;
             }
 
-            String name = equipmentNameTxt.getText();
+            String name = equipmentMfrTxt.getText();
             String modelNum = equipmentModelNumTxt.getText();
             String equipmentType = typeChoice.getValue();
             int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
             equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
             controller.loadData(event, loadOutID, equipmentList, loadOutName);
@@ -150,11 +150,11 @@ public class ModifyEquipmentController implements Initializable {
 
             //save new equipment to work in progress equipment list
             int equipmentID = editingEquipmentEntity.getEquipmentID();
-            String name = equipmentNameTxt.getText();
+            String name = equipmentMfrTxt.getText();
             String modelNum = equipmentModelNumTxt.getText();
             String equipmentType = typeChoice.getValue();
             int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
 
             for (EquipmentEntity i : equipmentList){
@@ -167,11 +167,11 @@ public class ModifyEquipmentController implements Initializable {
         }
 
         if (editingEquipmentFromMain){
-            String name = equipmentNameTxt.getText();
+            String name = equipmentMfrTxt.getText();
             String modelNum = equipmentModelNumTxt.getText();
             String equipmentType = typeChoice.getValue();
             int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
             EquipmentDAOImpl.updateEquipment(new EquipmentEntity(editingEquipmentEntity.getEquipmentID(), name, modelNum,
                     equipmentType, editingEquipmentEntity.getAssignedLoadOutID(), editingEquipmentEntity.getLoadOutSlotNum(),
@@ -188,11 +188,11 @@ public class ModifyEquipmentController implements Initializable {
         }
 
         if (addEquipmentFromMain){
-            String name = equipmentNameTxt.getText();
+            String name = equipmentMfrTxt.getText();
             String modelNum = equipmentModelNumTxt.getText();
             String equipmentType = typeChoice.getValue();
             int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            float purchasePrice = Float.parseFloat(purchasePriceTxt.getText());
+            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
             String purchaseUrl = urlTxt.getText();
 
             EquipmentDAOImpl.updateEquipment(new EquipmentEntity(name, modelNum,
@@ -276,11 +276,11 @@ public class ModifyEquipmentController implements Initializable {
     }
 
     void editEquipment(EquipmentEntity selectedEquipment) {
-        equipmentNameTxt.setText(selectedEquipment.getName());
+        equipmentMfrTxt.setText(selectedEquipment.getMfr());
         equipmentModelNumTxt.setText(selectedEquipment.getModelNum());
         typeChoice.setValue(selectedEquipment.getEquipmentType());
         qtyNeededTxt.setText(Integer.toString(selectedEquipment.getQuantityNeeded()));
-        purchasePriceTxt.setText(Float.toString(selectedEquipment.getPurchasePrice()));
+        purchasePriceTxt.setText(Double.toString(selectedEquipment.getPurchasePrice()));
         urlTxt.setText(selectedEquipment.getWhereToPurchaseURL());
     }
 

@@ -60,8 +60,8 @@
             <TableView fx:id="equipmentTblView" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn fx:id="slotNumCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="Slot" />
-                <TableColumn fx:id="nameCol" prefWidth="75.0" text="Name" />
-                  <TableColumn fx:id="modelNumCol" maxWidth="80.0" minWidth="80.0" text="Model Num" />
+                <TableColumn fx:id="mfrCol" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" text="Manufacturer" />
+                  <TableColumn fx:id="modelNumCol" maxWidth="127.0" minWidth="127.0" prefWidth="127.0" text="Model Num" />
                   <TableColumn fx:id="equipmentTypeCol" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Type" />
                   <TableColumn fx:id="qtyCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="Qty" />
                   <TableColumn fx:id="purchasePriceCol" maxWidth="80.0" minWidth="80.0" text="Cost" />

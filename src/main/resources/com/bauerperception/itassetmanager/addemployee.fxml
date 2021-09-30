@@ -75,11 +75,14 @@
           <RowConstraints minHeight="45.0" prefHeight="45.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <!--
+            //TODO Travel Bag
             <CheckBox fx:id="travelBagCheckBox" mnemonicParsing="false" text="Require travel bag? Contains extra &#10;charger and travel accessories." textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font size="14.0" />
                </font>
             </CheckBox>
+            -->
             <Label fx:id="secondaryLoadOutLbl" text="Default text for secondary location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <font>
                   <Font size="14.0" />

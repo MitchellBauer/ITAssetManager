@@ -92,7 +92,7 @@ public class FXUtil {
             return false;
         }
         try {
-            float d = Float.parseFloat(inputString);
+            double d = Double.parseDouble(inputString);
         } catch (NumberFormatException nfe) {
             return false;
         }

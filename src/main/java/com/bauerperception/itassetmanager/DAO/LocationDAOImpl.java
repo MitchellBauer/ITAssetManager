@@ -62,4 +62,40 @@ public class LocationDAOImpl {
         ps.executeUpdate();
         DBConn.closeConn();
     }
+
+    public static LocationEntity getLocationByID(int customID) throws Exception {
+        ObservableList<LocationEntity> allLocations = FXCollections.observableArrayList();
+        DBConn.makeConn();
+        String sqlStatement = "SELECT * FROM locations WHERE id = " + customID;
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+
+        while(result.next()){
+            int locationID = result.getInt("id");
+            String locationName = result.getString("name");
+            int loadOutID = result.getInt("loadout_id");
+
+            LocationEntity LocationResult = new LocationEntity(locationID, locationName, loadOutID);
+            allLocations.add(LocationResult);
+        }
+        DBConn.closeConn();
+        if (allLocations.size() > 0){
+            return allLocations.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static void addLocationWithCustomID(LocationEntity newLocation, int customID) throws Exception {
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+
+        String sqlStatement = "INSERT INTO locations (id, name, loadout_id) VALUES (?, ?, ?)";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setInt(1, customID);
+        ps.setString(2, newLocation.getLocationName());
+        ps.setInt(3, newLocation.getLoadOutID());
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
 }

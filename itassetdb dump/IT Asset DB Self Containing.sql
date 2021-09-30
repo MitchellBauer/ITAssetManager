@@ -116,8 +116,8 @@ CREATE TABLE `equipment` (
   `load_out_id` int NOT NULL,
   `load_out_slot_num` int DEFAULT NULL,
   `quantity` int NOT NULL,
-  `purchase_price` float DEFAULT NULL,
-  `last_purchase_price` float DEFAULT NULL,
+  `purchase_price` double DEFAULT NULL,
+  `last_purchase_price` double DEFAULT NULL,
   `purchase_url` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

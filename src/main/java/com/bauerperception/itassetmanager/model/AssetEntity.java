@@ -5,18 +5,16 @@ import java.time.LocalDate;
 public class AssetEntity implements Entity{
     private int assetID;
     private String assetManufacturer;
-
     private String assetType;
     private String assetModel;
-    
     private String assetDescription;
     private int assignedToID;
-
     private int locationID;
     private LocalDate purchasedDate;
-    private float purchasedPrice;
+    private double purchasedPrice;
+    //TODO Serial no.?
 
-    public AssetEntity(int assetID, String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
+    public AssetEntity(int assetID, String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, double purchasedPrice) {
         this.assetID = assetID;
         this.assetManufacturer = assetManufacturer;
         this.assetType = assetType;
@@ -28,7 +26,7 @@ public class AssetEntity implements Entity{
         this.purchasedPrice = purchasedPrice;
     }
 
-    public AssetEntity(String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, float purchasedPrice) {
+    public AssetEntity(String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, double purchasedPrice) {
         this.assetManufacturer = assetManufacturer;
         this.assetType = assetType;
         this.assetModel = assetModel;
@@ -103,11 +101,11 @@ public class AssetEntity implements Entity{
         this.purchasedDate = purchasedDate;
     }
 
-    public float getPurchasedPrice() {
+    public double getPurchasedPrice() {
         return purchasedPrice;
     }
 
-    public void setPurchasedPrice(float purchasedPrice) {
+    public void setPurchasedPrice(double purchasedPrice) {
         this.purchasedPrice = purchasedPrice;
     }
 
