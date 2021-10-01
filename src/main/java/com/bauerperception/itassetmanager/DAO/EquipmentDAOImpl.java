@@ -198,4 +198,12 @@ public class EquipmentDAOImpl {
         ps.executeUpdate();
         DBConn.closeConn();
     }
+
+    public static void deleteOrphanedEquipment(int loadOutID) throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "DELETE FROM equipment WHERE load_out_id  = '" + loadOutID + "'";
+        stmt = DBConn.conn.createStatement();
+        stmt.executeUpdate(sqlStatement);
+        DBConn.closeConn();
+    }
 }

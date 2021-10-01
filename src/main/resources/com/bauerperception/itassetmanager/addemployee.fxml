@@ -76,7 +76,7 @@
         </rowConstraints>
          <children>
             <!--
-            //TODO Travel Bag
+            //Future Travel Bag
             <CheckBox fx:id="travelBagCheckBox" mnemonicParsing="false" text="Require travel bag? Contains extra &#10;charger and travel accessories." textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font size="14.0" />

@@ -41,8 +41,8 @@ public class AddEmployeeController implements Initializable {
     @FXML
     private GridPane loadOutAssignmentPane;
 
-    @FXML
-    private CheckBox travelBagCheckBox;
+//    @FXML
+//    private CheckBox travelBagCheckBox;
 
     @FXML
     private Label secondaryLoadOutLbl;
@@ -126,7 +126,7 @@ public class AddEmployeeController implements Initializable {
             e.printStackTrace();
         }
 
-        if (primaryWorkLocationChoice.getItems().size() > 0){
+        if (primaryWorkLocationChoice.getItems().size() > 0) {
             doLocationsExist = true;
         } else {
             doLocationsExist = false;
@@ -147,7 +147,7 @@ public class AddEmployeeController implements Initializable {
             e.printStackTrace();
         }
 
-        if (primaryLoadOutChoice.getItems().size() > 0){
+        if (primaryLoadOutChoice.getItems().size() > 0) {
             doLoadOutsExist = true;
         } else {
             doLoadOutsExist = false;
@@ -170,7 +170,7 @@ public class AddEmployeeController implements Initializable {
         });
 
         secondaryLoadOutChoice.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (primaryLoadOutChoice.getValue() != null){
+            if (primaryLoadOutChoice.getValue() != null) {
                 nextButton.setDisable(false);
             }
         });
@@ -210,48 +210,22 @@ public class AddEmployeeController implements Initializable {
 
     @FXML
     void saveAddEmployee(ActionEvent event) throws Exception {
-        //TODO Need to add validation
         LocationEntity primaryLocation;
         LocationEntity secondaryLocation;
         LoadOutEntity primaryLoadOut;
         LoadOutEntity secondaryLoadOut;
-
-        //Safe check for null values in these entities
-//        if (primaryWorkLocationChoice.getValue() != null){
-//            primaryLocation = primaryWorkLocationChoice.getValue();
-//        } else {
-//            throw new Exception("Primary location can't be null.");
-//        }
-//
-//        if (secondaryWorkLocationChoice.getValue() != null && secondaryLocationExists) {
-//            secondaryLocation = secondaryWorkLocationChoice.getValue();
-//        } else {
-//            throw new Exception("Secondary location can't be null.");
-//        }
-//
-//        if (primaryLoadOutChoice.getValue() != null){
-//            primaryLoadOut = primaryLoadOutChoice.getValue();
-//        } else {
-//            throw new Exception("Primary loadout can't be null.");
-//        }
-//
-//        if (secondaryLoadOutChoice.getValue() != null && secondaryLocationExists){
-//            secondaryLoadOut = secondaryLoadOutChoice.getValue();
-//        } else {
-//            throw new Exception("Secondary loadout can't be null.");
-//        }
 
         primaryLocation = primaryWorkLocationChoice.getValue();
         secondaryLocation = secondaryWorkLocationChoice.getValue();
         primaryLoadOut = primaryLoadOutChoice.getValue();
         secondaryLoadOut = secondaryLoadOutChoice.getValue();
 
-        if(travelBagCheckBox.isSelected()){
-            //TODO assign travel bag equipment to employee
-        }
+        //if(travelBagCheckBox.isSelected()){
+        //Future assign travel bag equipment to employee
+        //}
 
         primaryLocation.setLoadOutID(primaryLoadOut.getLoadOutID());
-        if(secondaryLoadOut != null){
+        if (secondaryLoadOut != null) {
             secondaryLocation.setLoadOutID(secondaryLoadOut.getLoadOutID());
         }
 
@@ -260,10 +234,10 @@ public class AddEmployeeController implements Initializable {
         String lastName = employeeLastNameTxt.getText();
         String emailAddress = employeeEmailTxt.getText();
 
-        if (!employeeFirstNameTxt.getText().isEmpty()){
-            if (!employeeLastNameTxt.getText().isEmpty()){
-                if(primaryWorkLocationChoice.getValue() != null){
-                    if(secondaryLoadOut != null){
+        if (!employeeFirstNameTxt.getText().isEmpty()) {
+            if (!employeeLastNameTxt.getText().isEmpty()) {
+                if (primaryWorkLocationChoice.getValue() != null) {
+                    if (secondaryLoadOut != null) {
                         EmployeeDAOImpl.addEmployee(new EmployeeEntity(firstName, middleName, lastName, emailAddress, primaryLocation.getLocationID(), secondaryLocation.getLocationID()));
                         FXUtil.goToMainScene(event).openEmployees(event);
                     } else {
@@ -293,7 +267,7 @@ public class AddEmployeeController implements Initializable {
 
     @FXML
     void backButton(ActionEvent event) {
-        if (loadOutAssignmentPane.isVisible()){
+        if (loadOutAssignmentPane.isVisible()) {
             backButton.setVisible(false);
             loadOutAssignmentPane.setVisible(false);
             locationAssignmentPane.setVisible(true);
@@ -301,7 +275,7 @@ public class AddEmployeeController implements Initializable {
             return;
         }
 
-        if (employeeDataPane.isVisible()){
+        if (employeeDataPane.isVisible()) {
             employeeDataPane.setVisible(false);
             loadOutAssignmentPane.setVisible(true);
             nextButton.setDisable(true);
@@ -312,23 +286,23 @@ public class AddEmployeeController implements Initializable {
 
     @FXML
     void nextButton(ActionEvent event) {
-        if (locationAssignmentPane.isVisible()){
+        if (locationAssignmentPane.isVisible()) {
             locationAssignmentPane.setVisible(false);
             backButton.setVisible(true);
             nextButton.setDisable(true);
             loadOutAssignmentPane.setVisible(true);
-            if(primaryWorkLocationChoice.getValue().getLoadOutID() > -1){
+            if (primaryWorkLocationChoice.getValue().getLoadOutID() > 0) {
                 primaryLoadOutChoice.setValue(FXUtil.getEntityByID(primaryLoadOutChoice.getItems(), primaryWorkLocationChoice.getValue().getLoadOutID()));
             }
-            if(secondaryWorkLocationChoice.getValue() != null){
-               if(secondaryWorkLocationChoice.getValue().getLoadOutID() > -1){
-                   secondaryLoadOutChoice.setValue(FXUtil.getEntityByID(secondaryLoadOutChoice.getItems(), secondaryWorkLocationChoice.getValue().getLoadOutID()));
-               }
+            if (secondaryWorkLocationChoice.getValue() != null) {
+                if (secondaryWorkLocationChoice.getValue().getLoadOutID() > 0) {
+                    secondaryLoadOutChoice.setValue(FXUtil.getEntityByID(secondaryLoadOutChoice.getItems(), secondaryWorkLocationChoice.getValue().getLoadOutID()));
+                }
             }
             return;
         }
 
-        if (loadOutAssignmentPane.isVisible()){
+        if (loadOutAssignmentPane.isVisible()) {
             loadOutAssignmentPane.setVisible(false);
             nextButton.setVisible(false);
             addButton.setVisible(true);

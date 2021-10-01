@@ -89,7 +89,6 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     void addEquipment(ActionEvent event) throws Exception {
-        //TODO LoadOutID saving in here doesn't make any sense
         if (loadOutID == 0){
             loadOutID = LoadOutDAOImpl.getNewLoadOutID();
         }
@@ -125,8 +124,6 @@ public class AddLoadOutController implements Initializable {
     @FXML
     void save(ActionEvent event) throws Exception {
         if (!equipmentList.isEmpty()){
-            //Had a problem where the equipment in this list is not being assigned proper loadoutID
-            //TODO Check if this fixes the loadout saving
             for (EquipmentEntity i : equipmentList){
                 i.setAssignedLoadOutID(loadOutID);
             }
@@ -136,7 +133,7 @@ public class AddLoadOutController implements Initializable {
         }
 
         if (!loadOutNameTxt.getText().isEmpty()){
-            LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutNameTxt.getText()));
+            LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutID, loadOutNameTxt.getText()));
             FXUtil.goToMainScene(event).openLoadOuts(event);
         } else {
             FXUtil.throwAlert("Entry Data Missing", "Please enter a name for the loadout.");
@@ -145,6 +142,7 @@ public class AddLoadOutController implements Initializable {
 
     public void loadData(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
         this.loadOutID = loadOutID;
+        System.out.println("My loadOut ID is: " + this.loadOutID);
         this.equipmentList = equipmentList;
         this.loadOutName = loadOutName;
 
@@ -163,26 +161,5 @@ public class AddLoadOutController implements Initializable {
         purchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));
         purchaseUrlCol.setCellValueFactory(new PropertyValueFactory<>("whereToPurchaseURL"));
-        //TODO Hyperlink url is still not working
-//        purchaseUrlCol.setCellFactory(l -> {
-//            return new TableCell<EquipmentEntity, Hyperlink>() {
-//                @Override
-//                protected void updateItem(Hyperlink item, boolean empty) {
-//                    if (empty) {
-//
-//                    } else {
-//                        item.setOnAction(e -> {
-//                            Runtime rt = Runtime.getRuntime();
-//                            try {
-//                                rt.exec("rundll32 url.dll,FileProtocolHandler " + this.getText());
-//                            } catch (IOException l) {
-//                                l.printStackTrace();
-//                            }
-//                        });
-//                    }
-//                }
-//            };
-//        });
-
     }
 }

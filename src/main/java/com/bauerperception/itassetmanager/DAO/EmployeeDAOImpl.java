@@ -120,4 +120,24 @@ public class EmployeeDAOImpl {
             return null;
         }
     }
+
+    public static void deleteLocation(int locationID) throws Exception {
+        //Need to run this twice to make sure both work location columns have been set to 0
+
+        PreparedStatement ps;
+        Connection conn = DBConn.getConn();
+        String sqlStatement = "UPDATE employees SET work_location = ? WHERE work_location = ?;";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setInt(1, 0);
+        ps.setInt(2, locationID);
+        ps.executeUpdate();
+
+        conn = DBConn.getConn();
+        sqlStatement = "UPDATE employees SET second_work_location = ? WHERE second_work_location = ?;";
+        ps = conn.prepareStatement(sqlStatement);
+        ps.setInt(1, 0);
+        ps.setInt(2, locationID);
+        ps.executeUpdate();
+        DBConn.closeConn();
+    }
 }

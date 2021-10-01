@@ -39,7 +39,7 @@ public class AssetDAOImpl {
     }
 
     public static ObservableList<String> getAssetTypes() throws Exception{
-        //TODO Can be renamed as types and probably should be pulled into it's own DAO
+        //Future Can be renamed as types and probably should be pulled into it's own DAO
         ObservableList<String> allAssetTypes = FXCollections.observableArrayList();
         DBConn.makeConn();
         String sqlStatement = "SELECT * FROM assettypes";

@@ -1,3 +1,7 @@
+.table-column{
+    -fx-alignment: CENTER;
+}
+
 .choice-box{
     -fx-background-radius: 0 0 0 0;
 }

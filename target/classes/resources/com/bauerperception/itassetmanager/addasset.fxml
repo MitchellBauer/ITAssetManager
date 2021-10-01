@@ -74,7 +74,7 @@
             <TextField fx:id="inventoryAssetModelNum" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="inventoryAssetDesc" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ChoiceBox fx:id="inventoryAssetLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <DatePicker fx:id="inventoryAssetPurchasedDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <DatePicker fx:id="inventoryAssetPurchasedDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="inventoryAssetPurchasedPrice" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>

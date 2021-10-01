@@ -36,8 +36,8 @@ public class AssetDAOImplTest {
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
 
-        //TODO Take a snap shot at the beginning of test. Then delete anything extra if needed.
-        //TODO auto clean auto-increment in database
+        //Future Take a snap shot at the beginning of test. Then delete anything extra if needed.
+        //Future auto clean auto-increment in database
     }
 
     @Test

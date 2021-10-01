@@ -12,7 +12,7 @@ public class AssetEntity implements Entity{
     private int locationID;
     private LocalDate purchasedDate;
     private double purchasedPrice;
-    //TODO Serial no.?
+    //Future Serial no.?
 
     public AssetEntity(int assetID, String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, double purchasedPrice) {
         this.assetID = assetID;

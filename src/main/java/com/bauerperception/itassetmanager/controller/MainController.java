@@ -3,6 +3,7 @@ package com.bauerperception.itassetmanager.controller;
 import com.bauerperception.itassetmanager.model.*;
 import com.bauerperception.itassetmanager.DAO.*;
 import com.bauerperception.itassetmanager.util.FXUtil;
+import com.bauerperception.itassetmanager.util.TimeUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -20,14 +21,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainController implements Initializable {
 
@@ -420,9 +428,6 @@ public class MainController implements Initializable {
     private TableColumn<AssetEntity, Double> reportTwoPurchasePriceCol;
 
     @FXML
-    private TableColumn<AssetEntity, String> reportTwoPurchaseUrlCol;
-
-    @FXML
     private TableView<MissingData> reportThreeTblView;
 
     @FXML
@@ -447,7 +452,7 @@ public class MainController implements Initializable {
     private TableColumn<AssetEntity, String> reportFourModelNumCol;
 
     @FXML
-    private TableColumn<AssetEntity, Integer> reportFourQtyCol;
+    private TableColumn<AssetEntity, LocalDate> reportFourPurchasedDateCol;
 
     @FXML
     private TableColumn<AssetEntity, Double> reportFourPurchasePriceCol;
@@ -462,7 +467,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO: https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
+        //Link https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
         inventoryTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
             if (newSelection != null){
                 loadAssetData();
@@ -535,26 +540,26 @@ public class MainController implements Initializable {
 
     }
 
-    @FXML
-    void goToTask(ActionEvent event) {
+//    @FXML
+//    void goToTask(ActionEvent event) {
+//
+//    }
 
-    }
-
-    @FXML
-    void maximize(ActionEvent event) {
-        //TODO Maximize with the redesign is needs to be redone
-        Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        // is stage minimizable into task bar. (true | false)
-        if (stage.isMaximized()){
-            stage.setMaximized(false);
-        } else {
-            stage.setMaximized(true);
-        }
-    }
+//    @FXML
+//    void maximize(ActionEvent event) {
+//        //Link Maximize with the redesign is needs to be redone
+//        Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+//        // is stage minimizable into task bar. (true | false)
+//        if (stage.isMaximized()){
+//            stage.setMaximized(false);
+//        } else {
+//            stage.setMaximized(true);
+//        }
+//    }
 
     @FXML
     void minimize(ActionEvent event) {
-        //TODO: https://stackoverflow.com/questions/16591438/how-to-minimize-maximize-and-restore-down-through-buttons-in-java
+        //Link https://stackoverflow.com/questions/16591438/how-to-minimize-maximize-and-restore-down-through-buttons-in-java
         Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         // is stage minimizable into task bar. (true | false)
         stage.setIconified(true);
@@ -589,7 +594,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
-        //TODO https://stackoverflow.com/questions/19209155/populating-a-javafx-tableview-when-not-all-the-properties-are-in-the-same-class
+        //Link https://stackoverflow.com/questions/19209155/populating-a-javafx-tableview-when-not-all-the-properties-are-in-the-same-class
         employeeIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         employeeNameCol.setCellValueFactory(employee -> {
             if(employee.getValue().getMiddleName().isEmpty()) {
@@ -720,7 +725,7 @@ public class MainController implements Initializable {
         inventoryTblAssignedTo.setCellValueFactory(asset -> {
             EmployeeEntity assignedEmployee = null;
             try {
-                if (asset.getValue().getAssignedToID() > -1){
+                if (asset.getValue().getAssignedToID() > 0){
                     assignedEmployee = FXUtil.getEntityByID(employeeList, asset.getValue().getAssignedToID());
                 } else {
                     return new SimpleStringProperty("Unassigned");
@@ -737,7 +742,7 @@ public class MainController implements Initializable {
         });
 
         //Interactive filter search bar for Inventory
-        //TODO https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/
+        //Link https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/
         FilteredList<AssetEntity> inventoryFilteredData = new FilteredList<>(assetList, p -> true);
         inventorySearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
             inventoryFilteredData.setPredicate(asset -> {
@@ -750,7 +755,7 @@ public class MainController implements Initializable {
                 String lowerCaseFilter = newValue.toLowerCase();
                 EmployeeEntity assignedEmployee = null;
                 try {
-                    if (asset.getAssignedToID() > -1){
+                    if (asset.getAssignedToID() > 0){
                         assignedEmployee = FXUtil.getEntityByID(employeeList, asset.getAssignedToID());
                     } else {
                         return false;
@@ -791,7 +796,7 @@ public class MainController implements Initializable {
     }
 
     void setVisibilityInventoryEditable(boolean b) {
-        //TODO condense this https://stackoverflow.com/questions/29061483/grouping-objects-in-javafx
+        //Link condense this https://stackoverflow.com/questions/29061483/grouping-objects-in-javafx
         inventoryIDLbl.setVisible(b);
         inventoryAssetMfrTxtBox.setVisible(b);
         inventoryAssetModelNum.setVisible(b);
@@ -926,8 +931,8 @@ public class MainController implements Initializable {
         loadOutTblView.setItems(sortedLoadOutData);
     }
 
-    public void addLoadOut(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+    public void addLoadOut(ActionEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
@@ -935,8 +940,8 @@ public class MainController implements Initializable {
         stage.show();
     }
 
-    public void addEquipment(ActionEvent actionEvent) throws Exception{
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+    public void addEquipment(ActionEvent event) throws Exception{
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
@@ -952,15 +957,26 @@ public class MainController implements Initializable {
         controller.editEquipmentFromMain(selectedEquipment);
     }
 
-    public void deleteLoadOut(ActionEvent actionEvent) {
-        //TODO Validation that no equipment is attached or do something with the equipment
+    public void deleteLoadOut(ActionEvent event) throws Exception {
+        LoadOutEntity selectedLoadOut = loadOutTblView.getSelectionModel().getSelectedItem();
+        if (selectedLoadOut != null) {
+            if (FXUtil.confirmDeletion(event)) {
+                LoadOutDAOImpl.deleteLoadOut(selectedLoadOut);
+                loadOutList = LoadOutDAOImpl.getAllLoadOuts();
+                loadOutTblView.setItems(loadOutList);
+            }
+        }
+        openLoadOuts(event);
     }
 
-    public void deleteEquipmentFromLoadout(ActionEvent actionEvent) throws Exception {
-        //TODO Validation, no warning
+    public void deleteEquipmentFromLoadout(ActionEvent event) throws Exception {
         EquipmentEntity selectedEquipment = equipmentTblView.getSelectionModel().getSelectedItem();
-        EquipmentDAOImpl.deleteEquipment(selectedEquipment);
-        equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(loadOutTblView.getSelectionModel().getSelectedItem().getLoadOutID()));
+        if (selectedEquipment != null){
+            if (FXUtil.confirmDeletion(event)){
+                EquipmentDAOImpl.deleteEquipment(selectedEquipment);
+                equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(loadOutTblView.getSelectionModel().getSelectedItem().getLoadOutID()));
+            }
+        }
     }
 
     @FXML
@@ -1067,6 +1083,7 @@ public class MainController implements Initializable {
         reportTwoTblView.setVisible(false);
         reportThreeTblView.setVisible(false);
         reportFourTblView.setVisible(false);
+        reportExportButton.setDisable(true);
 
         //Fill choice box
         ObservableList<String> listOfReports = FXCollections.observableArrayList();
@@ -1079,18 +1096,25 @@ public class MainController implements Initializable {
 
     public void runReports(ActionEvent event) throws Exception {
         //Since the switching is on the run button, we have to set all reports to not visible
+        reportExportButton.setDisable(false);
         reportOneTblView.setVisible(false);
         reportTwoTblView.setVisible(false);
         reportThreeTblView.setVisible(false);
         reportFourTblView.setVisible(false);
-        if (reportsChoiceBox.getValue().compareTo("Need to Purchase") == 0){
-            reportOneNeedToPurchase();
-        } else if (reportsChoiceBox.getValue().compareTo("Unassigned Assets") == 0){
-            reportTwoUnassignedAssets();
-        } else if(reportsChoiceBox.getValue().compareTo("Missing Data on Assets") == 0){
-            reportThreeMissingDataOnAssets();
-        } else if(reportsChoiceBox.getValue().compareTo("All Assets") == 0){
-            reportFourAllAssets();
+
+        if (reportsChoiceBox.getValue() != null){
+            if (reportsChoiceBox.getValue().compareTo("Need to Purchase") == 0){
+                reportOneNeedToPurchase();
+            } else if (reportsChoiceBox.getValue().compareTo("Unassigned Assets") == 0){
+                reportTwoUnassignedAssets();
+            } else if(reportsChoiceBox.getValue().compareTo("Missing Data on Assets") == 0){
+                reportThreeMissingDataOnAssets();
+            } else if(reportsChoiceBox.getValue().compareTo("All Assets") == 0){
+                reportFourAllAssets();
+            }
+        } else {
+            reportExportButton.setDisable(true);
+            FXUtil.throwAlert("Choice Box Empty", "Please choose an item on before running.");
         }
     }
 
@@ -1105,10 +1129,10 @@ public class MainController implements Initializable {
             //See what loadout is assigned to them
             LocationEntity primaryWorkLocation = FXUtil.getEntityByID(locationList, e.getPrimaryWorkLocation());
             LocationEntity secondaryWorkLocation = FXUtil.getEntityByID(locationList, e.getSecondaryWorkLocation());
-            //TODO Travel bag
+            //FUTURE Travel bag
 
             //Sum up the list of equipment for each loadout
-            if (primaryWorkLocation != null && primaryWorkLocation.getLoadOutID() > -1) {
+            if (primaryWorkLocation != null && primaryWorkLocation.getLoadOutID() > 0) {
                 primaryWorkEquipmentList = EquipmentDAOImpl.equipmentByLoadOutID(primaryWorkLocation.getLoadOutID());
                 //Need to set the purchase ID for all this equipment. Otherwise it looks horrible in the report.
                 for (EquipmentEntity z : primaryWorkEquipmentList){
@@ -1117,7 +1141,7 @@ public class MainController implements Initializable {
                 }
                 needToPurchase.addAll(primaryWorkEquipmentList);
             }
-            if (secondaryWorkLocation != null && secondaryWorkLocation.getLoadOutID() > -1) {
+            if (secondaryWorkLocation != null && secondaryWorkLocation.getLoadOutID() > 0) {
                 secondaryWorkEquipmentList = EquipmentDAOImpl.equipmentByLoadOutID(secondaryWorkLocation.getLoadOutID());
                 //Need to set the purchase ID for all this equipment. Otherwise it looks horrible in the report.
                 for (EquipmentEntity z : secondaryWorkEquipmentList){
@@ -1131,7 +1155,7 @@ public class MainController implements Initializable {
             assetsAssignedToEmployee = AssetDAOImpl.getAssetsByEmployeeID(e.getEmployeeID());
 
             //compare the sum of the equipment to the assets (comparison quantity and type)
-            /*TODO: make this a possible setting, how strict this comparison is.
+            /*FUTURE: make this a possible setting, how strict this comparison is.
              In my case, we have existing assets that can work or be a substitute to the prescribed loadout.
              This saves the company money. A big corporation may not care and would rather have all the same equipment.*/
             for (AssetEntity a : assetsAssignedToEmployee){
@@ -1151,7 +1175,6 @@ public class MainController implements Initializable {
             }
         }
 
-        //TODO Formatting is off, open up a scroll to the side
         reportOneTblView.setVisible(true);
         reportOneTblView.setItems(needToPurchase);
 
@@ -1160,7 +1183,7 @@ public class MainController implements Initializable {
             EmployeeEntity assignedEmployee = null;
 
             try {
-                if (equipment.getValue().getPurchaseForEmployeeID() > -1){
+                if (equipment.getValue().getPurchaseForEmployeeID() > 0){
                     assignedEmployee = FXUtil.getEntityByID(employeeList, equipment.getValue().getPurchaseForEmployeeID());
                 } else {
                     return new SimpleStringProperty("Unassigned");
@@ -1208,11 +1231,9 @@ public class MainController implements Initializable {
         reportTwoModelNumCol.setCellValueFactory(new PropertyValueFactory<>("assetModel"));
         reportTwoTypeCol.setCellValueFactory(new PropertyValueFactory<>("assetType"));
         reportTwoPurchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasedPrice"));
-        //TODO delete purchase url
     }
 
     private void reportThreeMissingDataOnAssets() {
-        //TODO ID column should be changed to Asset ID
         reportThreeTblView.setVisible(true);
         ObservableList<MissingData> missingDataList = FXCollections.observableArrayList();
         //Iterate over every asset
@@ -1238,7 +1259,11 @@ public class MainController implements Initializable {
                 missingDataList.add(new MissingData(i.getAssetID(), "Purchased Price is Zero"));
             }
 
-            //TODO Serial NO.
+            if (i.getPurchasedDate().isEqual(TimeUtil.importMySQLToLocalDate("1990-01-01"))){
+                missingDataList.add(new MissingData(i.getAssetID(), "Default Purchased Date"));
+            }
+
+            //Future Serial NO.
         }
 
         reportThreeTblView.setItems(missingDataList);
@@ -1249,11 +1274,10 @@ public class MainController implements Initializable {
     private void reportFourAllAssets() {
         reportFourTblView.setVisible(true);
         reportFourTblView.setItems(assetList);
-        //TODO Remove Quantity column
         reportFourEmployeeCol.setCellValueFactory(asset -> {
             EmployeeEntity assignedEmployee = null;
             try {
-                if (asset.getValue().getAssignedToID() > -1){
+                if (asset.getValue().getAssignedToID() > 0){
                     assignedEmployee = FXUtil.getEntityByID(employeeList, asset.getValue().getAssignedToID());
                 } else {
                     return new SimpleStringProperty("Unassigned");
@@ -1272,7 +1296,7 @@ public class MainController implements Initializable {
         reportFourLocationCol.setCellValueFactory(asset -> {
             LocationEntity assignedLocation = null;
 
-            if (asset.getValue().getLocationID() > -1){
+            if (asset.getValue().getLocationID() > 0){
                 assignedLocation = FXUtil.getEntityByID(locationList, asset.getValue().getLocationID());
                 return new SimpleStringProperty(assignedLocation.getLocationName());
             } else {
@@ -1283,16 +1307,68 @@ public class MainController implements Initializable {
         reportFourModelNumCol.setCellValueFactory(new PropertyValueFactory<>("assetModel"));
         reportFourTypeCol.setCellValueFactory(new PropertyValueFactory<>("assetType"));
         reportFourPurchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasedPrice"));
-        //TODO Add purchased date
+        reportFourPurchasedDateCol.setCellValueFactory(new PropertyValueFactory<>("purchasedDate"));
     }
 
     public void runReportExport(ActionEvent event) {
-        //TODO export reports table to CSV
-        //TODO ability to generate reports with multiple columns, multiple rows, date-time stamp, and title
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.CSV)", "*.CSV");
+        fileChooser.setTitle("Save Report");
+        fileChooser.setInitialFileName(reportsChoiceBox.getValue() + "Report");
+        fileChooser.getExtensionFilters().add(extFilter);
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
 
+        if (file != null) {
+            try {
+                PrintWriter writer;
+                writer = new PrintWriter(file);
+                Date date = new Date();
+                switch (reportsChoiceBox.getValue()){
+                    case "Need to Purchase":
+                        writer.println("Report: Need to Purchase," + new Timestamp(date.getTime()));
+                        writer = writeTableToCSV(writer, reportOneTblView);
+                        break;
+                    case "Unassigned Assets":
+                        writer.println("Report: Unassigned Assets," + new Timestamp(date.getTime()));
+                        writer = writeTableToCSV(writer, reportTwoTblView);
+                        break;
+                    case "Missing Data on Assets":
+                        writer.println("Report: Missing Data on Assets," + new Timestamp(date.getTime()));
+                        writer = writeTableToCSV(writer, reportThreeTblView);
+                        break;
+                    case "All Assets":
+                        writer.println("Report: All Assets," + new Timestamp(date.getTime()));
+                        writer = writeTableToCSV(writer, reportFourTblView);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + reportsChoiceBox.getValue());
+                }
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
+    private PrintWriter writeTableToCSV(PrintWriter writer, TableView reportTable) {
+        ObservableList<TableColumn> columns = reportTable.getColumns();
+
+        //Populate column headers into excel spreadsheet
+        for (TableColumn column : columns){
+            writer.print(column.getText() + ",");
+        }
+        writer.println(); //Go to next line to start actual data.
+        for (Object row : reportTable.getItems()){
+            for (TableColumn column : columns){
+                writer.print(column.getCellObservableValue(row).getValue() + ",");
+            }
+            writer.println();
+        }
+
+        return writer;
+    }
 
     /*
     @FXML
@@ -1324,67 +1400,105 @@ public class MainController implements Initializable {
 
     public void saveEntity() throws Exception {
         if (inventoryPane.isVisible()) {
-            int assetID = Integer.parseInt(inventoryIDLbl.getText());
-            String assetManufacturer = inventoryAssetMfrTxtBox.getText();
-            String assetModelNum = inventoryAssetModelNum.getText();
-            String assetDescription = inventoryAssetDesc.getText();
-            //TODO Need to add validation
-            double assetPurchasedPrice = Double.parseDouble(inventoryAssetPurchasedPrice.getText());
-            String assetType = inventoryAssetType.getValue();
-            int employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
-            int locationID = inventoryAssetLocation.getValue().getLocationID();
-            LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
-            AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
-            inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
-            assetList = AssetDAOImpl.getAllAssets();
-        }
+            if (!inventoryAssetType.getValue().isEmpty()){
+                if (FXUtil.isNumeric(inventoryAssetPurchasedPrice.getText())){
+                    int assetID = Integer.parseInt(inventoryIDLbl.getText());
+                    String assetManufacturer = inventoryAssetMfrTxtBox.getText();
+                    String assetModelNum = inventoryAssetModelNum.getText();
+                    String assetDescription = inventoryAssetDesc.getText();
+                    double assetPurchasedPrice = Double.parseDouble(inventoryAssetPurchasedPrice.getText());
+                    String assetType = inventoryAssetType.getValue();
 
-        if (employeePane.isVisible()){
-            //TODO Validation
-            int employeeID = Integer.parseInt(employeeIDLbl.getText());
-            String firstName = employeeFirstNameTxt.getText();
-            String middleName = employeeMiddleNameTxt.getText();
-            String lastName = employeeLastNameTxt.getText();
-            String emailAddress = employeeEmailTxt.getText();
-            int assignedWorkLocation = employeeWorkLocChoice.getValue().getLocationID();
-            int secondaryWorkLocation = employeeSecondaryWorkLocChoice.getValue().getLocationID();
-            EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation, secondaryWorkLocation));
-            employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
-            employeeList = EmployeeDAOImpl.getAllEmployees();
-        }
+                    int employeeID = 0;
+                    if (inventoryAssetAssignedTo.getValue() != null){
+                        employeeID = inventoryAssetAssignedTo.getValue().getEmployeeID();
+                    }
 
-        if (locationsPane.isVisible()){
-            //TODO Validation
-            int locationID = Integer.parseInt(locationIDLbl.getText());
-            String locationName = locationNameTxt.getText();
-            int loadOutID = assignedLoadOutChoice.getValue().getLoadOutID();
-            LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName,loadOutID));
-            locationTblView.setItems(LocationDAOImpl.getAllLocations());
-            locationList = LocationDAOImpl.getAllLocations();
-        }
-    }
+                    int locationID = 0;
+                    if (inventoryAssetLocation.getValue() != null){
+                        locationID = inventoryAssetLocation.getValue().getLocationID();
+                    }
 
-    public void deleteEntity(ActionEvent actionEvent) throws Exception {
-        if (inventoryPane.isVisible()){
-            //TODO Convert actual deletion to "inactive" for accounting like deletion
-            AssetEntity selectedAsset = inventoryTblView.getSelectionModel().getSelectedItem();
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-
-            if (selectedAsset != null) {
-                Alert deleteConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-                deleteConfirmation.setTitle("");
-                deleteConfirmation.setHeaderText("Delete Confirmation");
-                deleteConfirmation.setContentText("Do you really want to delete this asset?");
-                Optional<ButtonType> confirmationResult = deleteConfirmation.showAndWait();
-
-                if (confirmationResult.get() == ButtonType.OK) {
-                    AssetDAOImpl.deleteAsset(selectedAsset);
-                    inventoryTblView.setItems(AssetDAOImpl.getAllAssets());
+                    LocalDate assetPurchasedDate = inventoryAssetPurchasedDate.getValue();
+                    AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
                     assetList = AssetDAOImpl.getAllAssets();
+                    inventoryTblView.setItems(assetList);
+                } else {
+                    FXUtil.throwAlert("Incorrect Data Entry", "The purchased price has to be numeric.");
                 }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "An asset requires a type.");
             }
         }
 
-        //TODO Delete employee
+        if (employeePane.isVisible()){
+            if (!employeeFirstNameTxt.getText().isEmpty()){
+                if (!employeeMiddleNameTxt.getText().isEmpty()){
+                    if (!employeeLastNameTxt.getText().isEmpty()){
+                        int employeeID = Integer.parseInt(employeeIDLbl.getText());
+                        String firstName = employeeFirstNameTxt.getText();
+                        String middleName = employeeMiddleNameTxt.getText();
+                        String lastName = employeeLastNameTxt.getText();
+                        String emailAddress = employeeEmailTxt.getText();
+                        int assignedWorkLocation = employeeWorkLocChoice.getValue().getLocationID();
+                        int secondaryWorkLocation = employeeSecondaryWorkLocChoice.getValue().getLocationID();
+                        EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation, secondaryWorkLocation));
+                        employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
+                        employeeList = EmployeeDAOImpl.getAllEmployees();
+                    } else {
+                        FXUtil.throwAlert("Entry Data Missing", "An employee requires a last name.");
+                    }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "An employee requires a middle name.");
+                }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "An employee requires a first name.");
+            }
+        }
+
+        if (locationsPane.isVisible()){
+            if (!locationNameTxt.getText().isEmpty()){
+                int locationID = Integer.parseInt(locationIDLbl.getText());
+                String locationName = locationNameTxt.getText();
+                int loadOutID = assignedLoadOutChoice.getValue().getLoadOutID();
+                LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName,loadOutID));
+                locationTblView.setItems(LocationDAOImpl.getAllLocations());
+                locationList = LocationDAOImpl.getAllLocations();
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "A location requires a name.");
+            }
+        }
+    }
+
+    public void deleteEntity(ActionEvent event) throws Exception {
+        //Future Convert actual deletion to "inactive" for accounting like deletion
+        if (inventoryPane.isVisible()){
+            AssetEntity selectedAsset = inventoryTblView.getSelectionModel().getSelectedItem();
+            if (selectedAsset != null) {
+                if (FXUtil.confirmDeletion(event)) {
+                    AssetDAOImpl.deleteAsset(selectedAsset);
+                    assetList = AssetDAOImpl.getAllAssets();
+                    inventoryTblView.setItems(assetList);
+                }
+            }
+        } else if (employeePane.isVisible()){
+            EmployeeEntity selectedEmployee = employeeTblView.getSelectionModel().getSelectedItem();
+            if (selectedEmployee != null){
+                if (FXUtil.confirmDeletion(event)){
+                    EmployeeDAOImpl.deleteEmployee(selectedEmployee);
+                    employeeList = EmployeeDAOImpl.getAllEmployees();
+                    employeeTblView.setItems(employeeList);
+                }
+            }
+        } else if (locationsPane.isVisible()){
+            LocationEntity selectedLocation = locationTblView.getSelectionModel().getSelectedItem();
+            if (selectedLocation != null){
+                if (FXUtil.confirmDeletion(event)){
+                    LocationDAOImpl.deleteLocation(selectedLocation);
+                    locationList = LocationDAOImpl.getAllLocations();
+                    locationTblView.setItems(locationList);
+                }
+            }
+        }
     }
 }

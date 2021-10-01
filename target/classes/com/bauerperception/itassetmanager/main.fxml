@@ -25,7 +25,7 @@
       <Label fx:id="titleLbl" alignment="CENTER" text="Default Title" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="inventoryPane" visible="false">
+            <BorderPane fx:id="inventoryPane">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -65,7 +65,7 @@
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding></Label>
-                              <DatePicker fx:id="inventoryAssetPurchasedDate" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <DatePicker fx:id="inventoryAssetPurchasedDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                               <Label fx:id="inventoryLblPurchasedPrice" text="Purchased Price" textFill="WHITE" GridPane.rowIndex="8">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
@@ -232,12 +232,12 @@
                         <TableView fx:id="equipmentTblView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn fx:id="loadOutEquipSlotCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="Slot" />
-                            <TableColumn fx:id="loadOutEquipMfrCol" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Manufacturer" />
+                            <TableColumn fx:id="loadOutEquipMfrCol" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Manufacturer" />
                               <TableColumn fx:id="loadOutEquipModelNumCol" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="Model" />
                               <TableColumn fx:id="loadOutEquipTypeCol" maxWidth="60.0" minWidth="60.0" prefWidth="-1.0" text="Type" />
                               <TableColumn fx:id="loadOutEquipPriceCol" maxWidth="60.0" minWidth="60.0" prefWidth="-1.0" text="Price" />
-                              <TableColumn fx:id="loadOutEquipPurchaseURLCol" maxWidth="60.0" minWidth="60.0" prefWidth="-1.0" text="URL" />
                               <TableColumn fx:id="loadOutEquipQuantityCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" text="Qty" />
+                              <TableColumn fx:id="loadOutEquipPurchaseURLCol" maxWidth="60.0" minWidth="60.0" prefWidth="-1.0" text="URL" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -379,7 +379,7 @@
                   <Insets />
                </StackPane.margin>
             </BorderPane>
-            <BorderPane fx:id="reportsPane" layoutX="10.0" layoutY="10.0">
+            <BorderPane fx:id="reportsPane" layoutX="10.0" layoutY="10.0" visible="false">
                <top>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <BorderPane.margin>
@@ -397,19 +397,19 @@
                   </AnchorPane>
                </top>
                <center>
-                  <StackPane fx:id="reportsStackPane" BorderPane.alignment="CENTER">
+                  <StackPane fx:id="reportsStackPane" layoutX="10.0" layoutY="10.0" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets bottom="10.0" right="10.0" />
                      </BorderPane.margin>
                      <children>
-                        <TableView fx:id="reportOneTblView">
+                        <TableView fx:id="reportOneTblView" layoutX="10.0" layoutY="10.0" visible="false">
                            <columns>
-                              <TableColumn fx:id="reportOneEmployeeCol" prefWidth="75.0" text="For Employee" />
-                              <TableColumn fx:id="reportOneLocationCol" prefWidth="75.0" text="Location" />
-                              <TableColumn fx:id="reportOneTypeCol" prefWidth="75.0" text="Type" />
+                              <TableColumn fx:id="reportOneEmployeeCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="For Employee" />
+                              <TableColumn fx:id="reportOneLocationCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Location" />
+                              <TableColumn fx:id="reportOneTypeCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Type" />
                               <TableColumn fx:id="reportOneQtyCol" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" text="Qty" />
-                              <TableColumn fx:id="reportOneMfgCol" prefWidth="75.0" text="Mfr." />
-                              <TableColumn fx:id="reportOneModelNumCol" prefWidth="75.0" text="Model Num." />
+                              <TableColumn fx:id="reportOneMfgCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Mfr." />
+                              <TableColumn fx:id="reportOneModelNumCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Model Num." />
                               <TableColumn fx:id="reportOnePurchasePriceCol" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Price" />
                               <TableColumn fx:id="reportOnePurchaseUrlCol" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" text="Purchase URL" />
                            </columns>
@@ -419,12 +419,11 @@
                         </TableView>
                         <TableView fx:id="reportTwoTblView" layoutX="10.0" layoutY="10.0" visible="false">
                            <columns>
-                              <TableColumn fx:id="reportTwoIDCol" prefWidth="75.0" text="ID" />
-                              <TableColumn fx:id="reportTwoTypeCol" prefWidth="75.0" text="Type" />
-                              <TableColumn fx:id="reportTwoMfgCol" prefWidth="75.0" text="Mfr." />
-                              <TableColumn fx:id="reportTwoModelNumCol" prefWidth="75.0" text="Model Num." />
-                              <TableColumn fx:id="reportTwoPurchasePriceCol" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Price" />
-                              <TableColumn fx:id="reportTwoPurchaseUrlCol" prefWidth="75.0" text="Purchase URL" />
+                              <TableColumn fx:id="reportTwoIDCol" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
+                              <TableColumn fx:id="reportTwoTypeCol" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Type" />
+                              <TableColumn fx:id="reportTwoMfgCol" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Mfr." />
+                              <TableColumn fx:id="reportTwoModelNumCol" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Model Num." />
+                              <TableColumn fx:id="reportTwoPurchasePriceCol" maxWidth="175.0" minWidth="175.0" prefWidth="175.0" text="Price" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -432,8 +431,8 @@
                         </TableView>
                         <TableView fx:id="reportThreeTblView" layoutX="10.0" layoutY="10.0" visible="false">
                            <columns>
-                              <TableColumn fx:id="reportThreeIDCol" prefWidth="224.79991149902344" text="ID" />
-                              <TableColumn fx:id="reportThreeTypeCol" prefWidth="588.800048828125" text="Missing Info." />
+                              <TableColumn fx:id="reportThreeIDCol" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" text="Asset ID" />
+                              <TableColumn fx:id="reportThreeTypeCol" maxWidth="590.0" minWidth="590.0" prefWidth="590.0" text="Missing Info." />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -442,13 +441,13 @@
                         <TableView fx:id="reportFourTblView" layoutX="10.0" layoutY="10.0" visible="false">
                            <columns>
                               <TableColumn fx:id="reportFourIDCol" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" text="ID" />
-                              <TableColumn fx:id="reportFourMfgCol" prefWidth="75.0" text="Mfr." />
-                              <TableColumn fx:id="reportFourTypeCol" prefWidth="75.0" text="Type" />
-                              <TableColumn fx:id="reportFourModelNumCol" prefWidth="75.0" text="Model Num." />
-                              <TableColumn fx:id="reportFourQtyCol" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" text="Qty" />
+                              <TableColumn fx:id="reportFourMfgCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Mfr." />
+                              <TableColumn fx:id="reportFourTypeCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Type" />
+                              <TableColumn fx:id="reportFourModelNumCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Model Num." />
                               <TableColumn fx:id="reportFourPurchasePriceCol" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Price" />
-                              <TableColumn fx:id="reportFourEmployeeCol" prefWidth="75.0" text="For Employee" />
-                              <TableColumn fx:id="reportFourLocationCol" prefWidth="75.0" text="Location" />
+                              <TableColumn fx:id="reportFourPurchasedDateCol" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Purchased Date" />
+                              <TableColumn fx:id="reportFourEmployeeCol" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="For Employee" />
+                              <TableColumn fx:id="reportFourLocationCol" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Location" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -459,7 +458,7 @@
                </center>
             </BorderPane>
             <!--
-            //TODO Enable for todo module
+            //FUTURE Enable for task module
             <BorderPane fx:id="toDoPane" visible="false">
                <center>
                   <TableView prefWidth="825.0" BorderPane.alignment="CENTER">
@@ -523,8 +522,8 @@
                      </VBox.margin></Button>
                   <Separator maxWidth="110.0" prefWidth="200.0" visible="false" />
                   <!--
-                  //TODO: When adding the ToDo Module
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openToDo" text="ToDo" visible="false">
+                  //FUTURE When adding the task Module
+                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openToDo" text="Task" visible="false">
                      <VBox.margin>
                         <Insets bottom="2.0" />
                      </VBox.margin>

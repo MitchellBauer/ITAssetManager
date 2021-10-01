@@ -55,9 +55,9 @@ public class LoadOutDAOImplTest {
 
     @Test
     public void addLoadOut() throws Exception {
-        LoadOutEntity loadOutEntity = new LoadOutEntity( "add1");
+        LoadOutEntity loadOutEntity = new LoadOutEntity( -3, "add1");
         LoadOutDAOImpl.addLoadOut(loadOutEntity);
-        loadOutEntity = LoadOutDAOImpl.getAllLoadOuts().get(LoadOutDAOImpl.getAllLoadOuts().size()-1);
+        loadOutEntity = LoadOutDAOImpl.getLoadOutByID(-3);
         assertEquals("add1", loadOutEntity.getLoadOutName());
 
         //Clean up and test delete
@@ -65,10 +65,6 @@ public class LoadOutDAOImplTest {
         loadOutEntity = LoadOutDAOImpl.getLoadOutByID(loadOutEntity.getLoadOutID());
         assertNull(loadOutEntity);
     }
-//
-//    @Test
-//    public void deleteLoadOut() {
-//    }
 
     @Test
     public void getNewLoadOutID() throws Exception {

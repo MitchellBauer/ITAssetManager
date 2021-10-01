@@ -41,21 +41,23 @@ public class LoadOutDAOImpl {
     public static void addLoadOut(LoadOutEntity loadOutEntity) throws Exception {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
-        String sqlStatement = "INSERT INTO loadouts (name) " +
-                "VALUES (?)";
+        String sqlStatement = "INSERT INTO loadouts (id, name) " +
+                "VALUES (?, ?)";
         ps = conn.prepareStatement(sqlStatement);
-        ps.setString(1, loadOutEntity.getLoadOutName());
+        ps.setInt(1, loadOutEntity.getLoadOutID());
+        ps.setString(2, loadOutEntity.getLoadOutName());
         ps.executeUpdate();
         DBConn.closeConn();
     }
 
     public static void deleteLoadOut(LoadOutEntity loadOutEntity) throws Exception {
-        //TODO Validation for deletion to protect equipment from being orphans
         DBConn.makeConn();
         String sqlStatement = "DELETE FROM loadouts WHERE id  = '" + loadOutEntity.getLoadOutID() + "'";
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
+
+        EquipmentDAOImpl.deleteOrphanedEquipment(loadOutEntity.getLoadOutID());
     }
 
     public static int getNewLoadOutID() throws Exception {

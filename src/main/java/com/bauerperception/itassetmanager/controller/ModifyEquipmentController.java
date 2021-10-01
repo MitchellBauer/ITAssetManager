@@ -79,8 +79,6 @@ public class ModifyEquipmentController implements Initializable {
         editingEquipmentFromMain = false;
         addEquipmentFromMain = false;
 
-        //TODO existing choicebox doesn't autopopulate fields on choicebox change
-
         try {
             existingEquipmentChoice.setItems(EquipmentDAOImpl.getAllEquipment());
         } catch (Exception e) {
@@ -92,6 +90,9 @@ public class ModifyEquipmentController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Populate fields on existing choice box change
+        existingEquipmentChoice.getSelectionModel().selectedItemProperty().addListener((observableValue, oldChoice, newChoice) -> populateFields(newChoice));
     }
 
     @FXML
@@ -109,104 +110,189 @@ public class ModifyEquipmentController implements Initializable {
     @FXML
     void saveAdd(ActionEvent event) throws Exception {
         if (addingEquipmentToLoadOutWizard){
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            AddLoadOutController controller = loader.getController();
+            if (!equipmentMfrTxt.getText().isEmpty()){
+                if (!equipmentModelNumTxt.getText().isEmpty()){
+                    if (!typeChoice.getValue().isEmpty()){
+                        if (FXUtil.isNumeric(purchasePriceTxt.getText())){
+                            if (FXUtil.isNumeric(qtyNeededTxt.getText())){
+                                if (Integer.parseInt(qtyNeededTxt.getText()) > 0){
+                                    //save new equipment to work in progress equipment list
+                                    int equipmentID = EquipmentDAOImpl.newEquipmentID();
+                                    if (!equipmentList.isEmpty()) {
+                                        int highestID = equipmentID;
+                                        for (EquipmentEntity i : equipmentList) {
+                                            if (i.getEquipmentID() > highestID) {
+                                                highestID = i.getEquipmentID();
+                                            }
+                                        }
+                                        equipmentID++;
+                                    }
+                                    String name = equipmentMfrTxt.getText();
+                                    String modelNum = equipmentModelNumTxt.getText();
+                                    String equipmentType = typeChoice.getValue();
+                                    int quantity = Integer.parseInt(qtyNeededTxt.getText());
+                                    double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
+                                    String purchaseUrl = urlTxt.getText();
+                                    equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
 
-            //save new equipment to work in progress equipment list
-            int equipmentID = EquipmentDAOImpl.newEquipmentID();
-            if (!equipmentList.isEmpty()) {
-                int highestID = equipmentID;
-                for (EquipmentEntity i : equipmentList) {
-                    if (i.getEquipmentID() > highestID) {
-                        highestID = i.getEquipmentID();
+                                    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+                                    Scene scene = new Scene(loader.load());
+                                    scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+                                    stage.setScene(scene);
+                                    stage.show();
+                                    AddLoadOutController controller = loader.getController();
+                                    controller.loadData(event, loadOutID, equipmentList, loadOutName);
+                                } else {
+                                    FXUtil.throwAlert("Incorrect Data Entry", "Quantity needs to be higher than zero or delete the equipment.");
+                                }
+                            } else {
+                                FXUtil.throwAlert("Incorrect Data Entry", "The quantity has to be numeric.");
+                            }
+                        } else {
+                            FXUtil.throwAlert("Incorrect Data Entry", "The purchase price has to be numeric.");
+                        }
+                    } else {
+                        FXUtil.throwAlert("Entry Data Missing", "Equipment requires a type.");
                     }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "Equipment requires a model number.");
                 }
-                equipmentID++;
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Equipment requires a manufacturer.");
             }
-
-            String name = equipmentMfrTxt.getText();
-            String modelNum = equipmentModelNumTxt.getText();
-            String equipmentType = typeChoice.getValue();
-            int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
-            String purchaseUrl = urlTxt.getText();
-            equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
-            controller.loadData(event, loadOutID, equipmentList, loadOutName);
         }
 
         if(editingEquipmentFromLoadOutWizard){
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            AddLoadOutController controller = loader.getController();
+            if (!equipmentMfrTxt.getText().isEmpty()){
+                if (!equipmentModelNumTxt.getText().isEmpty()){
+                    if (FXUtil.isNumeric(purchasePriceTxt.getText())){
+                        if (FXUtil.isNumeric(qtyNeededTxt.getText())){
+                            if (Integer.parseInt(qtyNeededTxt.getText()) > 0){
+                                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
+                                Scene scene = new Scene(loader.load());
+                                scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css").toExternalForm());
+                                stage.setScene(scene);
+                                stage.show();
+                                AddLoadOutController controller = loader.getController();
+                                //save new equipment to work in progress equipment list
+                                int equipmentID = editingEquipmentEntity.getEquipmentID();
+                                String name = equipmentMfrTxt.getText();
+                                String modelNum = equipmentModelNumTxt.getText();
+                                String equipmentType = typeChoice.getValue();
+                                int quantity = Integer.parseInt(qtyNeededTxt.getText());
+                                double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
+                                String purchaseUrl = urlTxt.getText();
 
-            //save new equipment to work in progress equipment list
-            int equipmentID = editingEquipmentEntity.getEquipmentID();
-            String name = equipmentMfrTxt.getText();
-            String modelNum = equipmentModelNumTxt.getText();
-            String equipmentType = typeChoice.getValue();
-            int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
-            String purchaseUrl = urlTxt.getText();
-
-            for (EquipmentEntity i : equipmentList){
-                if (i.getEquipmentID() == equipmentID){
-                    equipmentList.remove(i);
-                    equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
+                                for (EquipmentEntity i : equipmentList){
+                                    if (i.getEquipmentID() == equipmentID){
+                                        equipmentList.remove(i);
+                                        equipmentList.add(new EquipmentEntity(equipmentID, name, modelNum, equipmentType, loadOutID, getEquipmentSlotNum(), quantity, purchasePrice, purchaseUrl));
+                                    }
+                                }
+                                controller.loadData(event, loadOutID, equipmentList, loadOutName);
+                            } else {
+                                FXUtil.throwAlert("Incorrect Data Entry", "Quantity needs to be higher than zero or delete the equipment.");
+                            }
+                        } else {
+                            FXUtil.throwAlert("Incorrect Data Entry", "The quantity has to be numeric.");
+                        }
+                    } else {
+                        FXUtil.throwAlert("Incorrect Data Entry", "The purchase price has to be numeric.");
+                    }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "Equipment requires a model number.");
                 }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Equipment requires a manufacturer.");
             }
-            controller.loadData(event, loadOutID, equipmentList, loadOutName);
         }
 
         if (editingEquipmentFromMain){
-            String name = equipmentMfrTxt.getText();
-            String modelNum = equipmentModelNumTxt.getText();
-            String equipmentType = typeChoice.getValue();
-            int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
-            String purchaseUrl = urlTxt.getText();
-            EquipmentDAOImpl.updateEquipment(new EquipmentEntity(editingEquipmentEntity.getEquipmentID(), name, modelNum,
-                    equipmentType, editingEquipmentEntity.getAssignedLoadOutID(), editingEquipmentEntity.getLoadOutSlotNum(),
-                    quantity, purchasePrice, purchaseUrl));
-
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            MainController controller = loader.getController();
-            controller.openLoadOuts(event);
+            if (!equipmentMfrTxt.getText().isEmpty()){
+                if (!equipmentModelNumTxt.getText().isEmpty()){
+                    if (FXUtil.isNumeric(purchasePriceTxt.getText())){
+                        if (FXUtil.isNumeric(qtyNeededTxt.getText())){
+                            if (Integer.parseInt(qtyNeededTxt.getText()) > 0){
+                                String name = equipmentMfrTxt.getText();
+                                String modelNum = equipmentModelNumTxt.getText();
+                                String equipmentType = typeChoice.getValue();
+                                int quantity = Integer.parseInt(qtyNeededTxt.getText());
+                                double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
+                                String purchaseUrl = urlTxt.getText();
+                                EquipmentDAOImpl.updateEquipment(new EquipmentEntity(editingEquipmentEntity.getEquipmentID(), name, modelNum,
+                                        equipmentType, editingEquipmentEntity.getAssignedLoadOutID(), editingEquipmentEntity.getLoadOutSlotNum(),
+                                        quantity, purchasePrice, purchaseUrl));
+                                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
+                                Scene scene = new Scene(loader.load());
+                                scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
+                                stage.setScene(scene);
+                                stage.show();
+                                MainController controller = loader.getController();
+                                controller.openLoadOuts(event);
+                            } else {
+                                FXUtil.throwAlert("Incorrect Data Entry", "Quantity needs to be higher than zero or delete the equipment.");
+                            }
+                        } else {
+                            FXUtil.throwAlert("Incorrect Data Entry", "The quantity has to be numeric.");
+                        }
+                    } else {
+                        FXUtil.throwAlert("Incorrect Data Entry", "The purchase price has to be numeric.");
+                    }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "Equipment requires a model number.");
+                }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Equipment requires a manufacturer.");
+            }
         }
 
         if (addEquipmentFromMain){
-            String name = equipmentMfrTxt.getText();
-            String modelNum = equipmentModelNumTxt.getText();
-            String equipmentType = typeChoice.getValue();
-            int quantity = Integer.parseInt(qtyNeededTxt.getText());
-            double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
-            String purchaseUrl = urlTxt.getText();
+            if (!equipmentMfrTxt.getText().isEmpty()){
+                if (!equipmentModelNumTxt.getText().isEmpty()){
+                    if (!typeChoice.getValue().isEmpty()){
+                        if (FXUtil.isNumeric(purchasePriceTxt.getText())){
+                            if (FXUtil.isNumeric(qtyNeededTxt.getText())){
+                                if (Integer.parseInt(qtyNeededTxt.getText()) > 0){
+                                    String name = equipmentMfrTxt.getText();
+                                    String modelNum = equipmentModelNumTxt.getText();
+                                    String equipmentType = typeChoice.getValue();
+                                    int quantity = Integer.parseInt(qtyNeededTxt.getText());
+                                    double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
+                                    String purchaseUrl = urlTxt.getText();
 
-            EquipmentDAOImpl.updateEquipment(new EquipmentEntity(name, modelNum,
-                    equipmentType, loadOutID, getEquipmentSlotNumByLoadOutID(loadOutID),
-                    quantity, purchasePrice, purchaseUrl));
+                                    EquipmentDAOImpl.updateEquipment(new EquipmentEntity(name, modelNum,
+                                            equipmentType, loadOutID, getEquipmentSlotNumByLoadOutID(loadOutID),
+                                            quantity, purchasePrice, purchaseUrl));
 
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-            MainController controller = loader.getController();
-            controller.openLoadOuts(event);
+                                    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
+                                    Scene scene = new Scene(loader.load());
+                                    scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
+                                    stage.setScene(scene);
+                                    stage.show();
+                                    MainController controller = loader.getController();
+                                    controller.openLoadOuts(event);
+                                } else {
+                                    FXUtil.throwAlert("Incorrect Data Entry", "Quantity needs to be higher than zero or delete the equipment.");
+                                }
+                            } else {
+                                FXUtil.throwAlert("Incorrect Data Entry", "The quantity has to be numeric.");
+                            }
+                        } else {
+                            FXUtil.throwAlert("Incorrect Data Entry", "The purchase price has to be numeric.");
+                        }
+                    } else {
+                        FXUtil.throwAlert("Entry Data Missing", "Equipment requires a type.");
+                    }
+                } else {
+                    FXUtil.throwAlert("Entry Data Missing", "Equipment requires a model number.");
+                }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Equipment requires a manufacturer.");
+            }
         }
     }
 
@@ -272,10 +358,10 @@ public class ModifyEquipmentController implements Initializable {
 
         editingEquipmentFromLoadOutWizard = true;
 
-        editEquipment(selectedEquipment);
+        populateFields(selectedEquipment);
     }
 
-    void editEquipment(EquipmentEntity selectedEquipment) {
+    void populateFields(EquipmentEntity selectedEquipment) {
         equipmentMfrTxt.setText(selectedEquipment.getMfr());
         equipmentModelNumTxt.setText(selectedEquipment.getModelNum());
         typeChoice.setValue(selectedEquipment.getEquipmentType());
@@ -286,7 +372,7 @@ public class ModifyEquipmentController implements Initializable {
 
     public void editEquipmentFromMain(EquipmentEntity selectedEquipment) {
         editingEquipmentFromMain = true;
-        editEquipment(selectedEquipment);
+        populateFields(selectedEquipment);
         editingEquipmentEntity = selectedEquipment;
     }
 

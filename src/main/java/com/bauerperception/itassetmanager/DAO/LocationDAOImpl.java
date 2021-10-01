@@ -47,6 +47,10 @@ public class LocationDAOImpl {
         String sqlStatement = "DELETE FROM locations WHERE id  = '" + selectedLocation.getLocationID() + "'";
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
+
+        //Need to check if the location ID is being referenced in the employees list
+        EmployeeDAOImpl.deleteLocation(selectedLocation.getLocationID());
+
         DBConn.closeConn();
     }
 

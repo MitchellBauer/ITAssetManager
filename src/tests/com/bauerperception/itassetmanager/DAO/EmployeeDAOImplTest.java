@@ -36,8 +36,8 @@ public class EmployeeDAOImplTest {
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
 
-        //TODO Take a snap shot at the beginning of test. Then delete anything extra if needed.
-        //TODO auto clean auto-increment in database
+        //Future Take a snap shot at the beginning of test. Then delete anything extra if needed.
+        //Future auto clean auto-increment in database
     }
 
     @Test
@@ -106,5 +106,21 @@ public class EmployeeDAOImplTest {
 
         employeeEntity = EmployeeDAOImpl.getEmployeeByID(-2);
         assertNull(employeeEntity);
+    }
+
+    @Test
+    public void deleteLocation() throws Exception{
+        EmployeeEntity employeeEntity = new EmployeeEntity("Conrad", "Jordan", "Whitfield", "cwhitfield@outdoorproducts.com", 50, 50);
+        employeeEntity.setEmployeeID(-1);
+        EmployeeDAOImpl.updateEmployee(employeeEntity);
+        EmployeeDAOImpl.deleteLocation(50);
+        employeeEntity = EmployeeDAOImpl.getEmployeeByID(-1);
+        assertEquals(0, employeeEntity.getPrimaryWorkLocation());
+        assertEquals(0, employeeEntity.getSecondaryWorkLocation());
+
+        //Clean up
+        employeeEntity = new EmployeeEntity("Conrad", "Jordan", "Whitfield", "cwhitfield@outdoorproducts.com", 10, 11);
+        employeeEntity.setEmployeeID(-1);
+        EmployeeDAOImpl.updateEmployee(employeeEntity);
     }
 }
