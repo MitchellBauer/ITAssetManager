@@ -22,16 +22,25 @@ public class AssetDAOImplTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        AssetEntity assetEntity = new AssetEntity("Lenovo", "Laptop", "82JW0012US",
-                "Gaming Laptop, AMD 5800H CPU, 16GB DDR4 RAM", 9999, 2,
-                TimeUtil.importMySQLToLocalDate("2021-09-27"), 1049.99);
-        AssetDAOImpl.addAssetWithCustomID(assetEntity, -1);
+        AssetEntity assetEntity = AssetDAOImpl.getAssetByID(-1);
+        if (assetEntity == null){
+            assetEntity = new AssetEntity("Lenovo", "Laptop", "82JW0012US",
+                    "Gaming Laptop, AMD 5800H CPU, 16GB DDR4 RAM", 9999, 2,
+                    TimeUtil.importMySQLToLocalDate("2021-09-27"), 1049.99);
+            AssetDAOImpl.addAssetWithCustomID(assetEntity, -1);
+        } else {
+            assetEntity = new AssetEntity("Lenovo", "Laptop", "82JW0012US",
+                    "Gaming Laptop, AMD 5800H CPU, 16GB DDR4 RAM", 9999, 2,
+                    TimeUtil.importMySQLToLocalDate("2021-09-27"), 1049.99);
+            assetEntity.setAssetID(-1);
+            AssetDAOImpl.updateAsset(assetEntity);
+        }
     }
 
     @AfterClass
     public static void tearDown() throws Exception{
         DBConn.makeConn();
-        String sqlStatement = "DELETE FROM asset WHERE idasset  = '" + -1 + "'";
+        String sqlStatement = "DELETE FROM asset WHERE id  = '" + -1 + "'";
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
@@ -71,28 +80,13 @@ public class AssetDAOImplTest {
     }
 
     @Test
-    public void getAssetTypes() throws Exception {
-        ObservableList<String> allTypes = AssetDAOImpl.getAssetTypes();
-        assertEquals(17, allTypes.size());
-        //A few chosen at random
-        assertEquals("Mobile Phone", allTypes.stream().filter(a -> Objects.equals(a, "Mobile Phone")).collect(Collectors.toList()).get(0));
-        assertEquals("Keyboard", allTypes.stream().filter(a -> Objects.equals(a, "Keyboard")).collect(Collectors.toList()).get(0));
-        assertEquals("Docking Station", allTypes.stream().filter(a -> Objects.equals(a, "Docking Station")).collect(Collectors.toList()).get(0));
-        assertEquals("Computer Tower", allTypes.stream().filter(a -> Objects.equals(a, "Computer Tower")).collect(Collectors.toList()).get(0));
-    }
-
-    @Test
     public void addAsset() throws Exception {
         AssetDAOImpl.addAsset(new AssetEntity("HP", "Laptop", "FDK990",
                 "Laptop, Intel 11800H CPU, 16GB DDR4 RAM, Completely UNiQiS", 2, 3,
                 TimeUtil.importMySQLToLocalDate("2021-03-27"), 1559.99));
         ObservableList<AssetEntity> allAssets = AssetDAOImpl.getAllAssets();
 
-        //Add asset uses the default incremental primary key to assign IDs.
-        //So we have to retrieve the newly created asset using no primary key.
-        //Hence the very unique asset description
-        AssetEntity asset = allAssets.stream().filter(a -> Objects.equals(a.getAssetDescription(),
-                "Laptop, Intel 11800H CPU, 16GB DDR4 RAM, Completely UNiQiS")).collect(Collectors.toList()).get(0);
+        AssetEntity asset = allAssets.get(allAssets.size() - 1);
         assertEquals("HP", asset.getAssetManufacturer());
         assertEquals("Laptop", asset.getAssetType());
         assertEquals("FDK990", asset.getAssetModel());
@@ -103,9 +97,6 @@ public class AssetDAOImplTest {
         assertEquals(1559.99, asset.getPurchasedPrice(), .001);
 
         //Clean up after itself
-        allAssets = AssetDAOImpl.getAllAssets();
-        asset = allAssets.stream().filter(a -> Objects.equals(a.getAssetDescription(),
-                "Laptop, Intel 11800H CPU, 16GB DDR4 RAM, Completely UNiQiS")).collect(Collectors.toList()).get(0);
         AssetDAOImpl.deleteAsset(asset);
     }
 

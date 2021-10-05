@@ -3,6 +3,7 @@ package com.bauerperception.itassetmanager.controller;
 import com.bauerperception.itassetmanager.DAO.AssetDAOImpl;
 import com.bauerperception.itassetmanager.DAO.EmployeeDAOImpl;
 import com.bauerperception.itassetmanager.DAO.LocationDAOImpl;
+import com.bauerperception.itassetmanager.DAO.TypeDAOImpl;
 import com.bauerperception.itassetmanager.model.AssetEntity;
 import com.bauerperception.itassetmanager.model.EmployeeEntity;
 import com.bauerperception.itassetmanager.model.LocationEntity;
@@ -52,7 +53,7 @@ public class AddAssetController implements Initializable {
 
         //Load all asset types and set value
         try {
-            inventoryAssetType.setItems(AssetDAOImpl.getAssetTypes());
+            inventoryAssetType.setItems(TypeDAOImpl.getAllTypes());
         } catch (Exception e) {
             e.printStackTrace();
         }

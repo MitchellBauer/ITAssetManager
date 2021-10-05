@@ -9,7 +9,7 @@
     -fx-font-weight: bold;
 }
 
-#addButton, #cancelButton, #nextButton, #backButton{
+#addButton, #cancelButton, #nextButton, #backButton, #saveButton{
     -fx-min-width: 100;
 }
 

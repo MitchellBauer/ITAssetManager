@@ -60,7 +60,7 @@ public class EquipmentDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
         String sqlStatement = "INSERT INTO equipment (mfr, model_num, equipment_type, load_out_id, load_out_slot_num, quantity, " +
-                "purchase_price, last_purchase_price, purchase_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "purchase_price, last_purchase_price, purchase_url, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ps = conn.prepareStatement(sqlStatement);
         ps.setString(1, equipmentEntity.getMfr());
         ps.setString(2, equipmentEntity.getModelNum());
@@ -71,6 +71,7 @@ public class EquipmentDAOImpl {
         ps.setDouble(7, equipmentEntity.getPurchasePrice());
         ps.setDouble(8, equipmentEntity.getPurchasePrice());
         ps.setString(9, equipmentEntity.getWhereToPurchaseURL());
+        ps.setInt(10, getNewEquipmentID());
         ps.executeUpdate();
         DBConn.closeConn();
     }
@@ -83,7 +84,7 @@ public class EquipmentDAOImpl {
         DBConn.closeConn();
     }
 
-    public static int newEquipmentID() throws Exception {
+    public static int getNewEquipmentID() throws Exception {
         DBConn.makeConn();
         String sqlStatement = "SELECT MAX(id) AS highestID FROM equipment";
         stmt = DBConn.conn.createStatement();
@@ -123,23 +124,6 @@ public class EquipmentDAOImpl {
         }
         DBConn.closeConn();
         return allEquipment;
-    }
-
-    public static ObservableList<String> getTypes() throws Exception {
-        ObservableList<String> allTypes = FXCollections.observableArrayList();
-        DBConn.makeConn();
-        String sqlStatement = "SELECT * FROM assettypes";
-        stmt = DBConn.conn.createStatement();
-        ResultSet result = stmt.executeQuery(sqlStatement);
-
-        while(result.next()){
-            //int assetID = result.getInt("idassettypes");
-            String assetName = result.getString("type_name");
-
-            allTypes.add(assetName);
-        }
-        DBConn.closeConn();
-        return allTypes;
     }
 
     public static void saveListOfEquipment(ObservableList<EquipmentEntity> equipmentList) throws Exception {

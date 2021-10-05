@@ -25,7 +25,7 @@
       <Label fx:id="titleLbl" alignment="CENTER" text="Default Title" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <StackPane layoutX="420.0" layoutY="298.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <BorderPane fx:id="inventoryPane">
+            <BorderPane fx:id="inventoryPane" visible="false">
                <right>
                   <AnchorPane minWidth="550.0" BorderPane.alignment="CENTER">
                      <children>
@@ -261,6 +261,11 @@
                                     <Insets top="10.0" />
                                  </HBox.margin>
                               </Button>
+                              <Button fx:id="editLoadOutButton" alignment="CENTER" layoutX="104.0" layoutY="20.0" mnemonicParsing="false" onAction="#editLoadOut" text="Edit&#10;Loadout" textAlignment="CENTER" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                         </HBox>
                         <HBox fx:id="equipmentControls" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="0.0">
@@ -492,31 +497,31 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="85.0">
                <children>
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openInventory" text="Inventory">
+                  <Button fx:id="naviOpenInventoryBtn" maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openInventory" text="Inventory">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin>
                   </Button>
                   <Separator layoutX="10.0" layoutY="47.0" maxWidth="110.0" prefWidth="200.0" />
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openEmployees" text="Employees">
+                  <Button fx:id="naviOpenEmployeeBtn" maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openEmployees" text="Employees">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin>
                   </Button>
                   <Separator layoutX="10.0" layoutY="87.0" maxWidth="110.0" prefWidth="200.0" />
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openLoadOuts" text="Loadouts">
+                  <Button fx:id="naviOpenLoadoutBtn" maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openLoadOuts" text="Loadouts">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin>
                   </Button>
                   <Separator layoutX="10.0" layoutY="147.0" maxWidth="110.0" prefWidth="200.0" />
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openLocations" text="Locations">
+                  <Button fx:id="naviOpenLocationBtn" maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openLocations" text="Locations">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin>
                   </Button>
                   <Separator layoutX="10.0" layoutY="207.0" maxWidth="110.0" prefWidth="200.0" />
-                  <Button maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openReports" text="Reports">
+                  <Button fx:id="naviOpenReportBtn" maxWidth="90000.0" minHeight="50.0" mnemonicParsing="false" onAction="#openReports" text="Reports">
                      <VBox.margin>
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin></Button>

@@ -126,11 +126,7 @@ public class AddEmployeeController implements Initializable {
             e.printStackTrace();
         }
 
-        if (primaryWorkLocationChoice.getItems().size() > 0) {
-            doLocationsExist = true;
-        } else {
-            doLocationsExist = false;
-        }
+        doLocationsExist = primaryWorkLocationChoice.getItems().size() > 0;
 
         //Add listeners to primary location and primary loadou
 
@@ -147,11 +143,7 @@ public class AddEmployeeController implements Initializable {
             e.printStackTrace();
         }
 
-        if (primaryLoadOutChoice.getItems().size() > 0) {
-            doLoadOutsExist = true;
-        } else {
-            doLoadOutsExist = false;
-        }
+        doLoadOutsExist = primaryLoadOutChoice.getItems().size() > 0;
 
         //Add listeners to choice boxes, to be able to move on to the next step.
         primaryWorkLocationChoice.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {

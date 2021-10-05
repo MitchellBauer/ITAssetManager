@@ -27,7 +27,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
@@ -72,6 +75,22 @@ public class MainController implements Initializable {
 
     @FXML
     private AnchorPane navigationMenu;
+
+
+    @FXML
+    private Button naviOpenInventoryBtn;
+
+    @FXML
+    private Button naviOpenEmployeeBtn;
+
+    @FXML
+    private Button naviOpenLoadoutBtn;
+
+    @FXML
+    private Button naviOpenLocationBtn;
+
+    @FXML
+    private Button naviOpenReportBtn;
 
     @FXML
     private Label titleLbl;
@@ -177,6 +196,9 @@ public class MainController implements Initializable {
 
     @FXML
     private Button deleteLoadOutButton;
+
+    @FXML
+    private Button editLoadOutButton;
 
     @FXML
     private Button deleteEquipmentButton;
@@ -467,65 +489,102 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Link https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
-        inventoryTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
-            if (newSelection != null){
-                loadAssetData();
-            }
-        });
+        //Setup database connection and open up default module.
 
-        employeeTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
-            if (newSelection != null){
-                loadEmployeeData();
-            }
-        });
+        inventoryPane.setVisible(false);
 
-        locationTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
-            if (newSelection != null){
-                try {
-                    loadLocationData();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        String applicationPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        String jarName = new java.io.File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
+        applicationPath = applicationPath.replaceAll(jarName,"");
+        applicationPath = applicationPath.replaceAll("%20", " ");
+        applicationPath = applicationPath.trim();
+        DBConn.applicationPath = applicationPath;
 
-        loadOutTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
-            if (newSelection != null){
-                try {
-                    loadLoadOutEquipmentData();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        File propFile = new File(DBConn.applicationPath + "dbconnection.properties");
+        //System.out.println(DBConn.applicationPath + "dbconnection.properties");
+        if (!propFile.exists()){
+            try {
+                createDBConnectionFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
 
-        equipmentTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
-            if (newSelection != null){
-                editEquipmentButton.setDisable(false);
-                deleteEquipmentButton.setDisable(false);
-            }
-        });
-
-        /*
-        Load defaults
-         */
+        Connection conn = null;
         try {
-            assetEntityTypeList = AssetDAOImpl.getAssetTypes();
-            assetList = AssetDAOImpl.getAllAssets();
-            employeeList = EmployeeDAOImpl.getAllEmployees();
-            locationList = LocationDAOImpl.getAllLocations();
-            loadOutList = LoadOutDAOImpl.getAllLoadOuts();
+            conn = DBConn.getConn();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Call initial open
-        //openToDo(new ActionEvent());
-        try {
-            openInventory(new ActionEvent());
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+        if (conn != null){
+            try {
+                //openToDo(new ActionEvent());
+                //Link https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
+                inventoryTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+                    if (newSelection != null){
+                        loadAssetData();
+                    }
+                });
+
+                employeeTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+                    if (newSelection != null){
+                        loadEmployeeData();
+                    }
+                });
+
+                locationTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+                    if (newSelection != null){
+                        try {
+                            loadLocationData();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                loadOutTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+                    if (newSelection != null){
+                        try {
+                            loadLoadOutEquipmentData();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                equipmentTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+                    if (newSelection != null){
+                        editEquipmentButton.setDisable(false);
+                        deleteEquipmentButton.setDisable(false);
+                    }
+                });
+
+                /*
+                Load defaults
+                 */
+                try {
+                    assetEntityTypeList = TypeDAOImpl.getAllTypes();
+                    assetList = AssetDAOImpl.getAllAssets();
+                    employeeList = EmployeeDAOImpl.getAllEmployees();
+                    locationList = LocationDAOImpl.getAllLocations();
+                    loadOutList = LoadOutDAOImpl.getAllLoadOuts();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                openInventory(new ActionEvent());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            titleLbl.setText("Database Connection Error - Please Fix in Settings Menu");
+            naviOpenInventoryBtn.setDisable(true);
+            naviOpenEmployeeBtn.setDisable(true);
+            naviOpenLoadoutBtn.setDisable(true);
+            naviOpenLocationBtn.setDisable(true);
+            naviOpenReportBtn.setDisable(true);
         }
     }
 
@@ -536,8 +595,8 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void goToSettings(ActionEvent event) {
-
+    void goToSettings(ActionEvent event) throws IOException {
+        FXUtil.goToScene(event, "settings", "addwizard");
     }
 
 //    @FXML
@@ -628,9 +687,7 @@ public class MainController implements Initializable {
 
                 //Compare ID
                 if (FXUtil.isNumeric(newValue)){
-                    if (employee.getEmployeeID() == Integer.parseInt(newValue)){
-                        return true;
-                    }
+                    return employee.getEmployeeID() == Integer.parseInt(newValue);
                 }
 
                 return false;
@@ -782,11 +839,7 @@ public class MainController implements Initializable {
                 }
 
                 //Compare manufacturer
-                if (asset.getAssetManufacturer().toLowerCase().contains(lowerCaseFilter)){
-                    return true;
-                }
-
-                return false;
+                return asset.getAssetManufacturer().toLowerCase().contains(lowerCaseFilter);
             });
         });
 
@@ -869,6 +922,9 @@ public class MainController implements Initializable {
         deleteEquipmentButton.setDisable(true);
         addEquipmentButton.setVisible(false);
 
+        deleteLoadOutButton.setDisable(true);
+        editLoadOutButton.setDisable(true);
+
         //Populate LoadOut table
         //Populate Inventory Table View
         try{
@@ -890,6 +946,8 @@ public class MainController implements Initializable {
         editEquipmentButton.setVisible(true);
         deleteEquipmentButton.setVisible(true);
         addEquipmentButton.setVisible(true);
+        deleteLoadOutButton.setDisable(false);
+        editLoadOutButton.setDisable(false);
 
         equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(selectedLoadOut.getLoadOutID()));
         loadOutEquipSlotCol.setCellValueFactory(new PropertyValueFactory<>("loadOutSlotNum"));
@@ -917,9 +975,7 @@ public class MainController implements Initializable {
 
                 //Compare ID
                 if (FXUtil.isNumeric(newValue)){
-                    if (loadout.getLoadOutID() == Integer.parseInt(newValue)){
-                        return true;
-                    }
+                    return loadout.getLoadOutID() == Integer.parseInt(newValue);
                 }
 
                 return false;
@@ -932,22 +988,11 @@ public class MainController implements Initializable {
     }
 
     public void addLoadOut(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/addloadout.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
+        FXUtil.goToScene(event, "addloadout", "addwizard");
     }
 
     public void addEquipment(ActionEvent event) throws Exception{
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/modifyequipment.fxml"));
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/bauerperception/itassetmanager/addwizard.css")).toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-        ModifyEquipmentController controller = loader.getController();
+        ModifyEquipmentController controller = FXUtil.goToScene(event, "modifyequipment", "addwizard").getController();
         controller.addEquipmentFromMain(loadOutTblView.getSelectionModel().getSelectedItem());
     }
 
@@ -957,6 +1002,12 @@ public class MainController implements Initializable {
         controller.editEquipmentFromMain(selectedEquipment);
     }
 
+    public void editLoadOut(ActionEvent event) throws Exception {
+        LoadOutEntity selectedLoadOut = loadOutTblView.getSelectionModel().getSelectedItem();
+        AddLoadOutController controller = FXUtil.goToScene(event, "addloadout", "addwizard").getController();
+        controller.loadData(event, selectedLoadOut.getLoadOutID(), EquipmentDAOImpl.equipmentByLoadOutID(selectedLoadOut.getLoadOutID()), selectedLoadOut.getLoadOutName());
+    }
+
     public void deleteLoadOut(ActionEvent event) throws Exception {
         LoadOutEntity selectedLoadOut = loadOutTblView.getSelectionModel().getSelectedItem();
         if (selectedLoadOut != null) {
@@ -964,9 +1015,9 @@ public class MainController implements Initializable {
                 LoadOutDAOImpl.deleteLoadOut(selectedLoadOut);
                 loadOutList = LoadOutDAOImpl.getAllLoadOuts();
                 loadOutTblView.setItems(loadOutList);
+                openLoadOuts(event);
             }
         }
-        openLoadOuts(event);
     }
 
     public void deleteEquipmentFromLoadout(ActionEvent event) throws Exception {
@@ -975,6 +1026,7 @@ public class MainController implements Initializable {
             if (FXUtil.confirmDeletion(event)){
                 EquipmentDAOImpl.deleteEquipment(selectedEquipment);
                 equipmentTblView.setItems(EquipmentDAOImpl.equipmentByLoadOutID(loadOutTblView.getSelectionModel().getSelectedItem().getLoadOutID()));
+                openLoadOuts(event);
             }
         }
     }
@@ -1027,9 +1079,7 @@ public class MainController implements Initializable {
 
                 //Compare ID
                 if (FXUtil.isNumeric(newValue)){
-                    if (ilocation.getLocationID() == Integer.parseInt(newValue)){
-                        return true;
-                    }
+                    return ilocation.getLocationID() == Integer.parseInt(newValue);
                 }
 
                 return false;
@@ -1370,6 +1420,19 @@ public class MainController implements Initializable {
         return writer;
     }
 
+    private void createDBConnectionFile() throws IOException {
+        File file = new File(DBConn.applicationPath + "dbconnection.properties");
+        file.createNewFile();
+
+        PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.println("ipaddress=");
+        writer.println("user=");
+        writer.println("databasename=");
+        writer.println("password=");
+        writer.close();
+    }
+
     /*
     @FXML
     void openToDo(ActionEvent event) {
@@ -1479,6 +1542,7 @@ public class MainController implements Initializable {
                     AssetDAOImpl.deleteAsset(selectedAsset);
                     assetList = AssetDAOImpl.getAllAssets();
                     inventoryTblView.setItems(assetList);
+                    openInventory(event);
                 }
             }
         } else if (employeePane.isVisible()){
@@ -1488,6 +1552,7 @@ public class MainController implements Initializable {
                     EmployeeDAOImpl.deleteEmployee(selectedEmployee);
                     employeeList = EmployeeDAOImpl.getAllEmployees();
                     employeeTblView.setItems(employeeList);
+                    openEmployees(event);
                 }
             }
         } else if (locationsPane.isVisible()){
@@ -1497,6 +1562,7 @@ public class MainController implements Initializable {
                     LocationDAOImpl.deleteLocation(selectedLocation);
                     locationList = LocationDAOImpl.getAllLocations();
                     locationTblView.setItems(locationList);
+                    openLocations();
                 }
             }
         }

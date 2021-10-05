@@ -31,7 +31,7 @@ public class EmployeeDAOImplTest {
     @AfterClass
     public static void tearDown() throws Exception{
         DBConn.makeConn();
-        String sqlStatement = "DELETE FROM employees WHERE idemployees  = '" + -1 + "'";
+        String sqlStatement = "DELETE FROM employees WHERE id  = '" + -1 + "'";
         Statement stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();

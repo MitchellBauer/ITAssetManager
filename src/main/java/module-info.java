@@ -2,6 +2,7 @@ module com.bauerperception.itassetmanager {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires mysql.connector.java;
 
 
     opens com.bauerperception.itassetmanager to javafx.fxml;

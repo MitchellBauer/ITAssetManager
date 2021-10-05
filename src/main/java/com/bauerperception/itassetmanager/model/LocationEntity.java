@@ -1,7 +1,5 @@
 package com.bauerperception.itassetmanager.model;
 
-import java.util.ArrayList;
-
 public class LocationEntity implements Entity{
     private int locationID;
     private String locationName;

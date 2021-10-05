@@ -1,0 +1,143 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ITAssetManager:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ITAssetManager_jar</output-path>
+    <root id="archive" name="ITAssetManager.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="ITAssetManager" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/8.0.26/mysql-connector-java-8.0.26.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-console-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-console-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-datetime-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-debug-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-errorhandling-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-file-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-file-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-file-l2-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-handle-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-interlocked-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-libraryloader-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-localization-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-memory-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-namedpipe-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-processenvironment-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-processthreads-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-processthreads-l1-1-1.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-profile-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-rtlsupport-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-string-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-synch-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-synch-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-sysinfo-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-timezone-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-core-util-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-conio-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-convert-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-environment-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-filesystem-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-locale-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-math-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-multibyte-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-private-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-process-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-runtime-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-stdio-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-string-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-time-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/api-ms-win-crt-utility-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/attach.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/awt.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/dt_shmem.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/dt_socket.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/fontmanager.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/freetype.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/instrument.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/j2gss.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/j2pcsc.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/j2pkcs11.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jaas.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jabswitch.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jaccessinspector.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jaccesswalker.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jaotc.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jar.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jarsigner.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/java.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/java.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javaaccessbridge.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javac.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javadoc.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javajpeg.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javap.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/javaw.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jawt.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jcmd.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jconsole.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jdb.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jdeprscan.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jdeps.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jdwp.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jfr.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jhsdb.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jimage.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jimage.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jinfo.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jjs.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jli.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jlink.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jmap.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jmod.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jps.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jrunscript.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jshell.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jsound.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jstack.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jstat.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/jstatd.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/keytool.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/kinit.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/klist.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/ktab.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/lcms.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/le.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/management.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/management_agent.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/management_ext.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/mlib_image.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/msvcp140.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/net.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/nio.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/pack200.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/prefs.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/rmi.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/rmic.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/rmid.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/rmiregistry.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/saproc.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/serialver.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/splashscreen.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/sunec.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/sunmscapi.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/ucrtbase.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/unpack.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/unpack200.exe" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/vcruntime140.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/verify.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/w2k_lsa_auth.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/windowsaccessbridge-64.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../JAVA/jdk-11.0.12/bin/zip.dll" />
+    </root>
+  </artifact>
+</component>

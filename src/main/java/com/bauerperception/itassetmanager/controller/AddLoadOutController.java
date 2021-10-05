@@ -142,7 +142,6 @@ public class AddLoadOutController implements Initializable {
 
     public void loadData(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentList, String loadOutName) {
         this.loadOutID = loadOutID;
-        System.out.println("My loadOut ID is: " + this.loadOutID);
         this.equipmentList = equipmentList;
         this.loadOutName = loadOutName;
 

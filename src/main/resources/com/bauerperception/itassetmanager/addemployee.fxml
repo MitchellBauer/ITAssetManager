@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -63,7 +62,7 @@
             </HBox>
          </children>
       </GridPane>
-      <GridPane fx:id="loadOutAssignmentPane" vgap="10.0" visible="false" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0">
+      <GridPane fx:id="loadOutAssignmentPane" vgap="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0">
         <columnConstraints>
           <ColumnConstraints hgrow="NEVER" maxWidth="230.0" minWidth="230.0" prefWidth="230.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.5" minWidth="10.0" prefWidth="347.5" />
@@ -83,7 +82,7 @@
                </font>
             </CheckBox>
             -->
-            <Label fx:id="secondaryLoadOutLbl" text="Default text for secondary location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <Label fx:id="secondaryLoadOutLbl" text="Secondary location loadout" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <font>
                   <Font size="14.0" />
                </font>
@@ -93,7 +92,7 @@
             </Label>
             <ChoiceBox fx:id="primaryLoadOutChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ChoiceBox fx:id="secondaryLoadOutChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="primaryLoadOutLbl" layoutX="28.0" layoutY="10.0" text="Default text for primary location" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Label fx:id="primaryLoadOutLbl" layoutX="28.0" layoutY="10.0" text="Primary location loadout" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
                </font>

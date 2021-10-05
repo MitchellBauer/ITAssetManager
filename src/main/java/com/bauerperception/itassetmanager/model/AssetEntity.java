@@ -57,10 +57,6 @@ public class AssetEntity implements Entity{
         return assetType;
     }
 
-    public void setAssetType(String assetType) {
-        this.assetType = assetType;
-    }
-
     public String getAssetModel() {
         return assetModel;
     }
@@ -73,40 +69,20 @@ public class AssetEntity implements Entity{
         return assetDescription;
     }
 
-    public void setAssetDescription(String assetDescription) {
-        this.assetDescription = assetDescription;
-    }
-
     public int getAssignedToID() {
         return assignedToID;
-    }
-
-    public void setAssignedToID(int assignedToID) {
-        this.assignedToID = assignedToID;
     }
 
     public int getLocationID() {
         return locationID;
     }
 
-    public void setLocationID(int locationID) {
-        this.locationID = locationID;
-    }
-
     public LocalDate getPurchasedDate() {
         return purchasedDate;
     }
 
-    public void setPurchasedDate(LocalDate purchasedDate) {
-        this.purchasedDate = purchasedDate;
-    }
-
     public double getPurchasedPrice() {
         return purchasedPrice;
-    }
-
-    public void setPurchasedPrice(double purchasedPrice) {
-        this.purchasedPrice = purchasedPrice;
     }
 
     @Override

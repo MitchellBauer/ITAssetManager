@@ -71,7 +71,6 @@ public class LoadOutDAOImpl {
             highestID = result.getInt("highestID");
         }
         DBConn.closeConn();
-        //highestID++; //Has to increment before return otherwise it doesn't return. Or do ++ before
         return ++highestID;
     }
 

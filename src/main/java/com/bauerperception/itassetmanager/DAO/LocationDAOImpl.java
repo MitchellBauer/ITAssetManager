@@ -34,12 +34,27 @@ public class LocationDAOImpl {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
 
-        String sqlStatement = "INSERT INTO locations (name, loadout_id) VALUES (?, ?)";
+        String sqlStatement = "INSERT INTO locations (id, name, loadout_id) VALUES (?, ?, ?)";
         ps = conn.prepareStatement(sqlStatement);
-        ps.setString(1, newLocation.getLocationName());
-        ps.setInt(2, newLocation.getLoadOutID());
+        ps.setInt(1, getNewLocationID());
+        ps.setString(2, newLocation.getLocationName());
+        ps.setInt(3, newLocation.getLoadOutID());
         ps.executeUpdate();
         DBConn.closeConn();
+    }
+
+    private static int getNewLocationID() throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "SELECT MAX(id) AS highestID FROM locations";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+        int highestID = 0;
+
+        while(result.next()){
+            highestID = result.getInt("highestID");
+        }
+        DBConn.closeConn();
+        return ++highestID;
     }
 
     public static void deleteLocation(LocationEntity selectedLocation) throws Exception{

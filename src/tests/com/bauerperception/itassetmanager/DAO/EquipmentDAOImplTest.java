@@ -99,7 +99,7 @@ public class EquipmentDAOImplTest {
     public void newEquipmentID() throws Exception {
         //Produce the highest ID a different way then the method.
         int highestID = EquipmentDAOImpl.getAllEquipment().get(EquipmentDAOImpl.getAllEquipment().size() - 1).getEquipmentID() + 1;
-        assertEquals(highestID, EquipmentDAOImpl.newEquipmentID());
+        assertEquals(highestID, EquipmentDAOImpl.getNewEquipmentID());
     }
 
     @Test
@@ -115,17 +115,6 @@ public class EquipmentDAOImplTest {
         assertEquals(1, allEquipment.get(0).getQuantityNeeded());
         assertEquals("https://www.amazon.com/LG-34GP83A-B-Inch-Ultragear-Compatibility/dp/B08DWD38VX", allEquipment.get(0).getWhereToPurchaseURL());
         assertEquals(800.00, allEquipment.get(0).getPurchasePrice(), .001);
-    }
-
-    @Test
-    public void getTypes() throws Exception {
-        ObservableList<String> allTypes = EquipmentDAOImpl.getTypes();
-        assertEquals(17, allTypes.size());
-        //A few chosen at random
-        assertEquals("Mobile Phone", allTypes.stream().filter(a -> Objects.equals(a, "Mobile Phone")).collect(Collectors.toList()).get(0));
-        assertEquals("Keyboard", allTypes.stream().filter(a -> Objects.equals(a, "Keyboard")).collect(Collectors.toList()).get(0));
-        assertEquals("Docking Station", allTypes.stream().filter(a -> Objects.equals(a, "Docking Station")).collect(Collectors.toList()).get(0));
-        assertEquals("Computer Tower", allTypes.stream().filter(a -> Objects.equals(a, "Computer Tower")).collect(Collectors.toList()).get(0));
     }
 
     @Test

@@ -1,7 +1,5 @@
 package com.bauerperception.itassetmanager.model;
 
-import java.util.ArrayList;
-
 public class LoadOutEntity implements Entity{
     private int loadOutID;
 
@@ -18,10 +16,6 @@ public class LoadOutEntity implements Entity{
 
     public String getLoadOutName() {
         return loadOutName;
-    }
-
-    public void setLoadOutName(String loadOutName) {
-        this.loadOutName = loadOutName;
     }
 
     public int getLoadOutID() {

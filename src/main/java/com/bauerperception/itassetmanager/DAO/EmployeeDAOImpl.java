@@ -17,7 +17,7 @@ public class EmployeeDAOImpl {
         ResultSet result = stmt.executeQuery(sqlStatement);
 
         while(result.next()){
-            int employeeID = result.getInt("idemployees");
+            int employeeID = result.getInt("id");
             String firstName = result.getString("first_name");
             String middleName = result.getString("middle_name");
             String lastName = result.getString("last_name");
@@ -38,7 +38,7 @@ public class EmployeeDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "UPDATE employees SET first_name = ?, middle_name = ?, last_name = ?, " +
-                "email_address = ?, work_location = ?, second_work_location = ? WHERE idemployees = ?;";
+                "email_address = ?, work_location = ?, second_work_location = ? WHERE id = ?;";
         ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
         ps.setInt(7, employeeEntity.getEmployeeID());
         ps.executeUpdate();
@@ -50,10 +50,25 @@ public class EmployeeDAOImpl {
         Connection conn = DBConn.getConn();
 
         String sqlStatement = "INSERT INTO employees (first_name, middle_name, last_name, email_address, work_location, " +
-                "second_work_location) VALUES (?, ?, ?, ?, ?, ?)";
+                "second_work_location, id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         ps = getPreparedEmployeeStatement(employeeEntity, conn, sqlStatement);
+        ps.setInt(7, getNewEmployeeID());
         ps.executeUpdate();
         DBConn.closeConn();
+    }
+
+    private static int getNewEmployeeID() throws Exception {
+        DBConn.makeConn();
+        String sqlStatement = "SELECT MAX(id) AS highestID FROM employees";
+        stmt = DBConn.conn.createStatement();
+        ResultSet result = stmt.executeQuery(sqlStatement);
+        int highestID = 0;
+
+        while(result.next()){
+            highestID = result.getInt("highestID");
+        }
+        DBConn.closeConn();
+        return ++highestID;
     }
 
     private static PreparedStatement getPreparedEmployeeStatement(EmployeeEntity employeeEntity, Connection conn, String sqlStatement) throws SQLException {
@@ -70,7 +85,7 @@ public class EmployeeDAOImpl {
 
     public static void deleteEmployee(EmployeeEntity employeeEntity) throws Exception {
         DBConn.makeConn();
-        String sqlStatement = "DELETE FROM employees WHERE idemployees  = '" + employeeEntity.getEmployeeID() + "'";
+        String sqlStatement = "DELETE FROM employees WHERE id  = '" + employeeEntity.getEmployeeID() + "'";
         stmt = DBConn.conn.createStatement();
         stmt.executeUpdate(sqlStatement);
         DBConn.closeConn();
@@ -79,7 +94,7 @@ public class EmployeeDAOImpl {
     public static void addEmployeeWithCustomID(EmployeeEntity employeeEntity, int customID) throws Exception {
         PreparedStatement ps;
         Connection conn = DBConn.getConn();
-        String sqlStatement = "INSERT INTO itassetdb.employees (idemployees, first_name, middle_name, last_name, email_address, work_location, " +
+        String sqlStatement = "INSERT INTO itassetdb.employees (id, first_name, middle_name, last_name, email_address, work_location, " +
                 "second_work_location) VALUES (?, ?, ?, ?, ?, ?, ?)";
         ps = conn.prepareStatement(sqlStatement);
         ps.setInt(1, customID);
@@ -96,12 +111,12 @@ public class EmployeeDAOImpl {
     public static EmployeeEntity getEmployeeByID(int selectedEmployeeID) throws Exception {
         ObservableList<EmployeeEntity> allEmployees = FXCollections.observableArrayList();
         DBConn.makeConn();
-        String sqlStatement = "SELECT * FROM employees WHERE idemployees = " + selectedEmployeeID;
+        String sqlStatement = "SELECT * FROM employees WHERE id = " + selectedEmployeeID;
         stmt = DBConn.conn.createStatement();
         ResultSet result = stmt.executeQuery(sqlStatement);
 
         while(result.next()){
-            int employeeID = result.getInt("idemployees");
+            int employeeID = result.getInt("id");
             String firstName = result.getString("first_name");
             String middleName = result.getString("middle_name");
             String lastName = result.getString("last_name");

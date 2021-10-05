@@ -1,6 +1,7 @@
 package com.bauerperception.itassetmanager.controller;
 
 import com.bauerperception.itassetmanager.DAO.EquipmentDAOImpl;
+import com.bauerperception.itassetmanager.DAO.TypeDAOImpl;
 import com.bauerperception.itassetmanager.model.EquipmentEntity;
 import com.bauerperception.itassetmanager.model.LoadOutEntity;
 import com.bauerperception.itassetmanager.util.FXUtil;
@@ -86,7 +87,7 @@ public class ModifyEquipmentController implements Initializable {
         }
 
         try {
-            typeChoice.setItems(EquipmentDAOImpl.getTypes());
+            typeChoice.setItems(TypeDAOImpl.getAllTypes());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,7 +118,7 @@ public class ModifyEquipmentController implements Initializable {
                             if (FXUtil.isNumeric(qtyNeededTxt.getText())){
                                 if (Integer.parseInt(qtyNeededTxt.getText()) > 0){
                                     //save new equipment to work in progress equipment list
-                                    int equipmentID = EquipmentDAOImpl.newEquipmentID();
+                                    int equipmentID = EquipmentDAOImpl.getNewEquipmentID();
                                     if (!equipmentList.isEmpty()) {
                                         int highestID = equipmentID;
                                         for (EquipmentEntity i : equipmentList) {

@@ -87,48 +87,20 @@ public class EquipmentEntity {
         return loadOutSlotNum;
     }
 
-    public void setLoadOutSlotNum(int loadOutSlotNum) {
-        this.loadOutSlotNum = loadOutSlotNum;
-    }
-
     public String getMfr() {
         return mfr;
-    }
-
-    public void setMfr(String mfr) {
-        this.mfr = mfr;
     }
 
     public String getModelNum() {
         return modelNum;
     }
 
-    public void setModelNum(String modelNum) {
-        this.modelNum = modelNum;
-    }
-
     public double getPurchasePrice() {
         return purchasePrice;
     }
 
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
-    public double getLastPurchasedPrice() {
-        return lastPurchasedPrice;
-    }
-
-    public void setLastPurchasedPrice(double lastPurchasedPrice) {
-        this.lastPurchasedPrice = lastPurchasedPrice;
-    }
-
     public String getWhereToPurchaseURL() {
         return whereToPurchaseURL;
-    }
-
-    public void setWhereToPurchaseURL(String whereToPurchaseURL) {
-        this.whereToPurchaseURL = whereToPurchaseURL;
     }
 
     public int getQuantityNeeded() {
@@ -141,10 +113,6 @@ public class EquipmentEntity {
 
     public String getEquipmentType() {
         return equipmentType;
-    }
-
-    public void setEquipmentType(String equipmentType) {
-        this.equipmentType = equipmentType;
     }
 
     @Override
