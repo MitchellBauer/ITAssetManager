@@ -264,17 +264,11 @@ public class ModifyEquipmentController implements Initializable {
                                     double purchasePrice = Double.parseDouble(purchasePriceTxt.getText());
                                     String purchaseUrl = urlTxt.getText();
 
-                                    EquipmentDAOImpl.updateEquipment(new EquipmentEntity(name, modelNum,
+                                    EquipmentDAOImpl.addEquipment(new EquipmentEntity(name, modelNum,
                                             equipmentType, loadOutID, getEquipmentSlotNumByLoadOutID(loadOutID),
                                             quantity, purchasePrice, purchaseUrl));
 
-                                    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bauerperception/itassetmanager/main.fxml"));
-                                    Scene scene = new Scene(loader.load());
-                                    scene.getStylesheets().add(getClass().getResource("/com/bauerperception/itassetmanager/mainstyles.css").toExternalForm());
-                                    stage.setScene(scene);
-                                    stage.show();
-                                    MainController controller = loader.getController();
+                                    MainController controller = FXUtil.goToMainScene(event);
                                     controller.openLoadOuts(event);
                                 } else {
                                     FXUtil.throwAlert("Incorrect Data Entry", "Quantity needs to be higher than zero or delete the equipment.");

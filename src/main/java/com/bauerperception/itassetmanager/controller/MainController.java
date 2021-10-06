@@ -1005,7 +1005,7 @@ public class MainController implements Initializable {
     public void editLoadOut(ActionEvent event) throws Exception {
         LoadOutEntity selectedLoadOut = loadOutTblView.getSelectionModel().getSelectedItem();
         AddLoadOutController controller = FXUtil.goToScene(event, "addloadout", "addwizard").getController();
-        controller.loadData(event, selectedLoadOut.getLoadOutID(), EquipmentDAOImpl.equipmentByLoadOutID(selectedLoadOut.getLoadOutID()), selectedLoadOut.getLoadOutName());
+        controller.editLoadData(event, selectedLoadOut.getLoadOutID(), EquipmentDAOImpl.equipmentByLoadOutID(selectedLoadOut.getLoadOutID()), selectedLoadOut.getLoadOutName());
     }
 
     public void deleteLoadOut(ActionEvent event) throws Exception {
@@ -1461,7 +1461,7 @@ public class MainController implements Initializable {
         }
     }
 
-    public void saveEntity() throws Exception {
+    public void saveEntity(ActionEvent event) throws Exception {
         if (inventoryPane.isVisible()) {
             if (!inventoryAssetType.getValue().isEmpty()){
                 if (FXUtil.isNumeric(inventoryAssetPurchasedPrice.getText())){
@@ -1486,6 +1486,7 @@ public class MainController implements Initializable {
                     AssetDAOImpl.updateAsset(new AssetEntity(assetID, assetManufacturer, assetType, assetModelNum, assetDescription, employeeID, locationID, assetPurchasedDate, assetPurchasedPrice));
                     assetList = AssetDAOImpl.getAllAssets();
                     inventoryTblView.setItems(assetList);
+                    openInventory(event);
                 } else {
                     FXUtil.throwAlert("Incorrect Data Entry", "The purchased price has to be numeric.");
                 }
@@ -1503,11 +1504,21 @@ public class MainController implements Initializable {
                         String middleName = employeeMiddleNameTxt.getText();
                         String lastName = employeeLastNameTxt.getText();
                         String emailAddress = employeeEmailTxt.getText();
-                        int assignedWorkLocation = employeeWorkLocChoice.getValue().getLocationID();
-                        int secondaryWorkLocation = employeeSecondaryWorkLocChoice.getValue().getLocationID();
+
+                        int assignedWorkLocation = 0;
+                        if (employeeWorkLocChoice.getValue() != null){
+                            assignedWorkLocation = employeeWorkLocChoice.getValue().getLocationID();
+                        }
+
+                        int secondaryWorkLocation = 0;
+                        if (employeeSecondaryWorkLocChoice.getValue() != null){
+                            secondaryWorkLocation = employeeSecondaryWorkLocChoice.getValue().getLocationID();
+                        }
+
                         EmployeeDAOImpl.updateEmployee(new EmployeeEntity(employeeID, firstName, middleName, lastName, emailAddress, assignedWorkLocation, secondaryWorkLocation));
                         employeeTblView.setItems(EmployeeDAOImpl.getAllEmployees());
                         employeeList = EmployeeDAOImpl.getAllEmployees();
+                        openEmployees(event);
                     } else {
                         FXUtil.throwAlert("Entry Data Missing", "An employee requires a last name.");
                     }
@@ -1523,10 +1534,14 @@ public class MainController implements Initializable {
             if (!locationNameTxt.getText().isEmpty()){
                 int locationID = Integer.parseInt(locationIDLbl.getText());
                 String locationName = locationNameTxt.getText();
-                int loadOutID = assignedLoadOutChoice.getValue().getLoadOutID();
-                LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName,loadOutID));
+                int loadOutID = 0;
+                if (assignedLoadOutChoice.getValue() != null){
+                    loadOutID = assignedLoadOutChoice.getValue().getLoadOutID();
+                }
+                LocationDAOImpl.updateLocation(new LocationEntity(locationID, locationName, loadOutID));
                 locationTblView.setItems(LocationDAOImpl.getAllLocations());
                 locationList = LocationDAOImpl.getAllLocations();
+                openLocations();
             } else {
                 FXUtil.throwAlert("Entry Data Missing", "A location requires a name.");
             }

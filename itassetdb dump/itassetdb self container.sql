@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `itassetdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `itassetdb`;
 -- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: localhost    Database: itassetdb
@@ -23,17 +25,17 @@ DROP TABLE IF EXISTS `asset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `asset` (
-  `idasset` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `manufacturer` varchar(255) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   `model_num` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `assigned_to` int DEFAULT NULL,
   `location` int DEFAULT NULL,
   `purchased_date` varchar(255) DEFAULT NULL,
-  `purchased_price` decimal(10,0) DEFAULT NULL,
-  PRIMARY KEY (`idasset`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `purchased_price` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,33 +44,7 @@ CREATE TABLE `asset` (
 
 LOCK TABLES `asset` WRITE;
 /*!40000 ALTER TABLE `asset` DISABLE KEYS */;
-INSERT INTO `asset` VALUES (1,'Monitor','Monitor','LG 34ab','34in widescreen',1,1,'2021-06-24',600),(3,'Blackwidow Keyboard','Keyboard','Blackwidow','Razer Naga - Blackwidow',1,1,'2021-09-06',100);
 /*!40000 ALTER TABLE `asset` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `assettypes`
---
-
-DROP TABLE IF EXISTS `assettypes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `assettypes` (
-  `idassettypes` int NOT NULL AUTO_INCREMENT,
-  `type_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`idassettypes`),
-  UNIQUE KEY `type_name_UNIQUE` (`type_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `assettypes`
---
-
-LOCK TABLES `assettypes` WRITE;
-/*!40000 ALTER TABLE `assettypes` DISABLE KEYS */;
-INSERT INTO `assettypes` VALUES (16,'Cable'),(9,'Chair'),(5,'Computer Tower'),(8,'Desk'),(15,'Docking Station'),(14,'Headphones'),(11,'Headset'),(3,'Keyboard'),(6,'Laptop'),(13,'Microphone'),(7,'Mobile Phone'),(1,'Monitor'),(10,'Monitor Stand'),(2,'Mouse'),(4,'Mouse Pad'),(12,'Webcam');
-/*!40000 ALTER TABLE `assettypes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -79,14 +55,14 @@ DROP TABLE IF EXISTS `employees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employees` (
-  `idemployees` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `middle_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) NOT NULL,
   `email_address` varchar(255) NOT NULL,
   `work_location` int NOT NULL,
   `second_work_location` int DEFAULT NULL,
-  PRIMARY KEY (`idemployees`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `email_address_UNIQUE` (`email_address`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -97,7 +73,6 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'Mitchell','Jonathan','Bauer','mbauer@trimacpanel.com',1,NULL);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,18 +84,18 @@ DROP TABLE IF EXISTS `equipment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `equipment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `mfr` varchar(255) NOT NULL,
   `model_num` varchar(255) DEFAULT NULL,
   `equipment_type` varchar(255) NOT NULL,
   `load_out_id` int NOT NULL,
   `load_out_slot_num` int DEFAULT NULL,
   `quantity` int NOT NULL,
-  `purchase_price` double DEFAULT NULL,
-  `last_purchase_price` double DEFAULT NULL,
+  `purchase_price` float DEFAULT NULL,
+  `last_purchase_price` float DEFAULT NULL,
   `purchase_url` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +104,6 @@ CREATE TABLE `equipment` (
 
 LOCK TABLES `equipment` WRITE;
 /*!40000 ALTER TABLE `equipment` DISABLE KEYS */;
-INSERT INTO `equipment` VALUES (1,'HP Monitor','HP VH240a','Monitor',0,0,3,239,239,'https://www.amazon.com/HP-23-8-inch-Adjustment-Speakers-VH240a/dp/B072M34RQC/ref=sr_1_1_sspa?crid=3NHTV4AGEDTLX&dchild=1&keywords=24+inch+monitor&qid=1631915536&sprefix=24%2Caps%2C231&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzR1JMOU1EQzFLVDlBJmVuY3J5cHRlZElkPUEwNTk5OTg0NEhWQzVIWFlQRVVaJmVuY3J5cHRlZEFkSWQ9QTA2MjEyMDcyV0lPU0RaT1JESDRYJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==');
 /*!40000 ALTER TABLE `equipment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,10 +115,10 @@ DROP TABLE IF EXISTS `loadouts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `loadouts` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +127,6 @@ CREATE TABLE `loadouts` (
 
 LOCK TABLES `loadouts` WRITE;
 /*!40000 ALTER TABLE `loadouts` DISABLE KEYS */;
-INSERT INTO `loadouts` VALUES (0,'Home Office W/ Laptop');
 /*!40000 ALTER TABLE `loadouts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,12 +138,12 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `locations` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `loadout_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `location_name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,8 +152,32 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (1,'Mitchell Bauer\'s Home Office',NULL);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `types`
+--
+
+DROP TABLE IF EXISTS `types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `types` (
+  `id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type_name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `types`
+--
+
+LOCK TABLES `types` WRITE;
+/*!40000 ALTER TABLE `types` DISABLE KEYS */;
+INSERT INTO `types` VALUES (16,'Cable'),(9,'Chair'),(5,'Computer Tower'),(8,'Desk'),(15,'Docking Station'),(14,'Headphones'),(11,'Headset'),(3,'Keyboard'),(6,'Laptop'),(13,'Microphone'),(7,'Mobile Phone'),(1,'Monitor'),(10,'Monitor Stand'),(2,'Mouse'),(4,'Mouse Pad'),(17,'Other'),(12,'Webcam');
+/*!40000 ALTER TABLE `types` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -192,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-19 11:54:20
+-- Dump completed on 2021-10-05 16:42:15

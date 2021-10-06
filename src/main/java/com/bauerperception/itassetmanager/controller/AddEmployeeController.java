@@ -167,7 +167,9 @@ public class AddEmployeeController implements Initializable {
             }
         });
 
-
+        locationAssignmentPane.setVisible(false);
+        loadOutAssignmentPane.setVisible(false);
+        employeeDataPane.setVisible(false);
         /*
         This only needs to be checked at the beginning of the application. Probably could get around it by giving some starter data.
         But if someone fails to install the MySQL database properly then there wouldn't be any data anyways.

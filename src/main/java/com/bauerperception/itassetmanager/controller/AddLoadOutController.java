@@ -25,6 +25,7 @@ public class AddLoadOutController implements Initializable {
     ObservableList<EquipmentEntity> equipmentList;
     LoadOutEntity workInProgressLoadOut;
     String loadOutName;
+    private boolean edittingLoadData;
 
     //<editor-fold desc="Description">
     @FXML
@@ -71,6 +72,7 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     private TableColumn<EquipmentEntity, String> purchaseUrlCol;
+
     //</editor-fold>
 
     @Override
@@ -85,6 +87,7 @@ public class AddLoadOutController implements Initializable {
         editEquipmentButton.setVisible(false);
         deleteEquipmentButton.setVisible(false);
         saveButton.setDisable(true);
+        edittingLoadData = false;
     }
 
     @FXML
@@ -123,20 +126,38 @@ public class AddLoadOutController implements Initializable {
 
     @FXML
     void save(ActionEvent event) throws Exception {
-        if (!equipmentList.isEmpty()){
-            for (EquipmentEntity i : equipmentList){
-                i.setAssignedLoadOutID(loadOutID);
+        if (edittingLoadData){
+            if (!equipmentList.isEmpty()){
+                for (EquipmentEntity i : equipmentList){
+                    i.setAssignedLoadOutID(loadOutID);
+                    EquipmentDAOImpl.updateEquipment(i);
+                }
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Please assign at least one piece of equipment to the loadout.");
             }
-            EquipmentDAOImpl.saveListOfEquipment(equipmentList);
-        } else {
-            FXUtil.throwAlert("Entry Data Missing", "Please assign at least one piece of equipment to the loadout.");
-        }
 
-        if (!loadOutNameTxt.getText().isEmpty()){
-            LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutID, loadOutNameTxt.getText()));
-            FXUtil.goToMainScene(event).openLoadOuts(event);
+            if (!loadOutNameTxt.getText().isEmpty()){
+                LoadOutDAOImpl.updateLoadOut(new LoadOutEntity(loadOutID, loadOutNameTxt.getText()));
+                FXUtil.goToMainScene(event).openLoadOuts(event);
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Please enter a name for the loadout.");
+            }
         } else {
-            FXUtil.throwAlert("Entry Data Missing", "Please enter a name for the loadout.");
+            if (!equipmentList.isEmpty()){
+                for (EquipmentEntity i : equipmentList){
+                    i.setAssignedLoadOutID(loadOutID);
+                }
+                EquipmentDAOImpl.saveListOfEquipment(equipmentList);
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Please assign at least one piece of equipment to the loadout.");
+            }
+
+            if (!loadOutNameTxt.getText().isEmpty()){
+                LoadOutDAOImpl.addLoadOut(new LoadOutEntity(loadOutID, loadOutNameTxt.getText()));
+                FXUtil.goToMainScene(event).openLoadOuts(event);
+            } else {
+                FXUtil.throwAlert("Entry Data Missing", "Please enter a name for the loadout.");
+            }
         }
     }
 
@@ -160,5 +181,10 @@ public class AddLoadOutController implements Initializable {
         purchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantityNeeded"));
         purchaseUrlCol.setCellValueFactory(new PropertyValueFactory<>("whereToPurchaseURL"));
+    }
+
+    public void editLoadData(ActionEvent event, int loadOutID, ObservableList<EquipmentEntity> equipmentByLoadOutID, String loadOutName) {
+        loadData(event, loadOutID, equipmentByLoadOutID, loadOutName);
+        this.edittingLoadData = true;
     }
 }
