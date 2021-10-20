@@ -16,4 +16,12 @@ public class MissingData {
     public void setID(int ID) {
         this.ID = ID;
     }
+
+    public String getMissingDataType() {
+        return missingDataType;
+    }
+
+    public void setMissingDataType(String missingDataType) {
+        this.missingDataType = missingDataType;
+    }
 }

@@ -126,7 +126,7 @@ public class AssetDAOImpl {
     public static ObservableList<AssetEntity> getAllUnassignedAssets() throws Exception {
         ObservableList<AssetEntity> allAssets = FXCollections.observableArrayList();
         DBConn.makeConn();
-        String sqlStatement = "SELECT * FROM asset WHERE assigned_to IS NUll OR assigned_to = -1";
+        String sqlStatement = "SELECT * FROM asset WHERE assigned_to IS NUll OR assigned_to = 0";
         stmt = DBConn.conn.createStatement();
         ResultSet result = stmt.executeQuery(sqlStatement);
 

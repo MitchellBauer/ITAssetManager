@@ -12,9 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -27,15 +25,11 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -521,7 +515,6 @@ public class MainController implements Initializable {
         if (conn != null){
             try {
                 //openToDo(new ActionEvent());
-                //Link https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
                 inventoryTblView.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
                     if (newSelection != null){
                         loadAssetData();
@@ -618,7 +611,6 @@ public class MainController implements Initializable {
 
     @FXML
     void minimize(ActionEvent event) {
-        //Link https://stackoverflow.com/questions/16591438/how-to-minimize-maximize-and-restore-down-through-buttons-in-java
         Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         // is stage minimizable into task bar. (true | false)
         stage.setIconified(true);
@@ -653,7 +645,6 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
-        //Link https://stackoverflow.com/questions/19209155/populating-a-javafx-tableview-when-not-all-the-properties-are-in-the-same-class
         employeeIDCol.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         employeeNameCol.setCellValueFactory(employee -> {
             if(employee.getValue().getMiddleName().isEmpty()) {
@@ -799,7 +790,6 @@ public class MainController implements Initializable {
         });
 
         //Interactive filter search bar for Inventory
-        //Link https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/
         FilteredList<AssetEntity> inventoryFilteredData = new FilteredList<>(assetList, p -> true);
         inventorySearchTextBar.textProperty().addListener((observable, oldValue, newValue) -> {
             inventoryFilteredData.setPredicate(asset -> {
@@ -1211,18 +1201,19 @@ public class MainController implements Initializable {
             for (AssetEntity a : assetsAssignedToEmployee){
                 for (EquipmentEntity i : needToPurchase){
                     //Compare asset type to equipment type
-                    if (a.getAssetType().compareTo(i.getEquipmentType()) == 0){
+                    if (a.getAssetType().compareTo(i.getEquipmentType()) == 0 && !a.getIsAccounted()){
                         //Make sure to check if the equipment quantity is above 0
                         if (i.getQuantityNeeded() > 0){
                             //Subtract the quantity needed by 1 for a success asset match to equipment
                             i.setQuantityNeeded(i.getQuantityNeeded() - 1);
-                        } else {
-                            //If the equipment needed quantity is 0 then remove it from the purchase list
-                            needToPurchase.remove(i);
+                            a.setAccountedFor(true);
                         }
                     }
                 }
             }
+
+            //Remove if Quantity is 0
+            needToPurchase.removeIf(i -> i.getQuantityNeeded() == 0);
         }
 
         reportOneTblView.setVisible(true);
@@ -1283,10 +1274,11 @@ public class MainController implements Initializable {
         reportTwoPurchasePriceCol.setCellValueFactory(new PropertyValueFactory<>("purchasedPrice"));
     }
 
-    private void reportThreeMissingDataOnAssets() {
+    private void reportThreeMissingDataOnAssets() throws Exception {
         reportThreeTblView.setVisible(true);
         ObservableList<MissingData> missingDataList = FXCollections.observableArrayList();
         //Iterate over every asset
+
         for (AssetEntity i : assetList){
             //We are checking for purchase dates, purchase price, model number, manufacturer, and serial no.
             if (i.getAssetManufacturer().isEmpty()){

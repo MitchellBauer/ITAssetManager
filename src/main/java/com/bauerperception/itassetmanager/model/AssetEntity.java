@@ -12,6 +12,8 @@ public class AssetEntity implements Entity{
     private int locationID;
     private LocalDate purchasedDate;
     private double purchasedPrice;
+
+    private boolean isAccountedFor; //Used for the Need to Purchase Report
     //Future Serial no.?
 
     public AssetEntity(int assetID, String assetManufacturer, String assetType, String assetModel, String assetDescription, int assignedToID, int locationID, LocalDate purchasedDate, double purchasedPrice) {
@@ -88,5 +90,16 @@ public class AssetEntity implements Entity{
     @Override
     public int getID() {
         return assetID;
+    }
+
+    public boolean getIsAccounted() {
+        return this.isAccountedFor;
+    }
+
+    /*
+    Sets if the Asset has been counted in the "Need to Purchase" report
+     */
+    public void setAccountedFor(boolean accountedFor) {
+        isAccountedFor = accountedFor;
     }
 }
